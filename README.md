@@ -8,7 +8,7 @@
 [![PyPI Downloads](https://static.pepy.tech/personalized-badge/workspace-mcp?period=total&units=INTERNATIONAL_SYSTEM&left_color=BLACK&right_color=BLUE&left_text=downloads)](https://pepy.tech/projects/workspace-mcp)
 [![Website](https://img.shields.io/badge/Website-workspacemcp.com-green.svg)](https://workspacemcp.com)
 
-*Full natural language control over Google Calendar, Drive, Gmail, Docs, Sheets, Slides, Forms, Tasks, Contacts, and Chat through all MCP clients, AI assistants and developer tools.*
+*Full natural language control over Google Calendar, Drive, Gmail, Docs, Sheets, and Slides through all MCP clients, AI assistants and developer tools.*
 
 **The most feature-complete Google Workspace MCP server**, with Remote OAuth2.1 multi-user support and 1-click Claude installation.
 
@@ -69,20 +69,9 @@ A production-ready MCP server that integrates all major Google Workspace service
 
 ---
 
-**<span style="color:#72898f">≡</span> Forms** • **<span style="color:#72898f">@</span> Chat** • **<span style="color:#72898f">≡</span> Sheets** • **<span style="color:#72898f">≡</span> Slides**
-- Form creation, publish settings & response management
-- Space management & messaging capabilities
+**<span style="color:#72898f">≡</span> Sheets** • **<span style="color:#72898f">≡</span> Slides**
 - Spreadsheet operations with flexible cell management
 - Presentation creation, updates & content manipulation
-
----
-
-**<span style="color:#72898f">◆</span> Apps Script**
-- Automate cross-application workflows with custom code
-- Execute existing business logic and custom functions
-- Manage script projects, deployments & versions
-- Debug and modify Apps Script code programmatically
-- Bridge Google Workspace services through automation
 
 </td>
 <td width="50%" valign="top">
@@ -93,13 +82,6 @@ A production-ready MCP server that integrates all major Google Workspace service
 - Transport-aware callback handling
 - Multi-user bearer token authentication
 - Innovative CORS proxy architecture
-
----
-
-**<span style="color:#72898f">✓</span> Tasks** • **<span style="color:#72898f">👤</span> Contacts** • **<span style="color:#72898f">◆</span> Custom Search**
-- Task & task list management with hierarchy
-- Contact management via People API with groups
-- Programmable Search Engine (PSE) integration
 
 </td>
 </tr>
@@ -240,9 +222,7 @@ APIs & Services → Library
 
 Search & enable:
 Calendar, Drive, Gmail,
-Docs, Sheets, Slides,
-Forms, Tasks, People,
-Chat, Search
+Docs, Sheets, Slides
 ```
 <sub>See quick links below</sub>
 
@@ -291,12 +271,6 @@ Chat, Search
 * [Enable Google Docs API](https://console.cloud.google.com/flows/enableapi?apiid=docs.googleapis.com)
 * [Enable Google Sheets API](https://console.cloud.google.com/flows/enableapi?apiid=sheets.googleapis.com)
 * [Enable Google Slides API](https://console.cloud.google.com/flows/enableapi?apiid=slides.googleapis.com)
-* [Enable Google Forms API](https://console.cloud.google.com/flows/enableapi?apiid=forms.googleapis.com)
-* [Enable Google Tasks API](https://console.cloud.google.com/flows/enableapi?apiid=tasks.googleapis.com)
-* [Enable Google Chat API](https://console.cloud.google.com/flows/enableapi?apiid=chat.googleapis.com)
-* [Enable Google People API](https://console.cloud.google.com/flows/enableapi?apiid=people.googleapis.com)
-* [Enable Google Custom Search API](https://console.cloud.google.com/flows/enableapi?apiid=customsearch.googleapis.com)
-* [Enable Google Apps Script API](https://console.cloud.google.com/flows/enableapi?apiid=script.googleapis.com)
 
 </details>
 
@@ -403,86 +377,6 @@ export USER_GOOGLE_EMAIL=\
 
 </details>
 
-### Google Custom Search Setup
-
-<details>
-<summary>◆ <b>Custom Search Configuration</b> <sub><sup>← Enable web search capabilities</sup></sub></summary>
-
-<table>
-<tr>
-<td width="33%" align="center">
-
-**1. Create Search Engine**
-```text
-programmablesearchengine.google.com
-/controlpanel/create
-
-→ Configure sites or entire web
-→ Note your Engine ID (cx)
-```
-<sub>[Open Control Panel →](https://programmablesearchengine.google.com/controlpanel/create)</sub>
-
-</td>
-<td width="33%" align="center">
-
-**2. Get API Key**
-```text
-developers.google.com
-/custom-search/v1/overview
-
-→ Create/select project
-→ Enable Custom Search API
-→ Create credentials (API Key)
-```
-<sub>[Get API Key →](https://developers.google.com/custom-search/v1/overview)</sub>
-
-</td>
-<td width="34%" align="center">
-
-**3. Set Variables**
-```bash
-export GOOGLE_PSE_API_KEY=\
-  "your-api-key"
-export GOOGLE_PSE_ENGINE_ID=\
-  "your-engine-id"
-```
-<sub>Configure in environment</sub>
-
-</td>
-</tr>
-<tr>
-<td colspan="3">
-
-<details>
-<summary>≡ <b>Quick Setup Guide</b> <sub><sup>← Step-by-step instructions</sup></sub></summary>
-
-**Complete Setup Process:**
-
-1. **Create Search Engine** - Visit the [Control Panel](https://programmablesearchengine.google.com/controlpanel/create)
-   - Choose "Search the entire web" or specify sites
-   - Copy the Search Engine ID (looks like: `017643444788157684527:6ivsjbpxpqw`)
-
-2. **Enable API & Get Key** - Visit [Google Developers Console](https://console.cloud.google.com/)
-   - Enable "Custom Search API" in your project
-   - Create credentials → API Key
-   - Restrict key to Custom Search API (recommended)
-
-3. **Configure Environment** - Add to your shell or `.env`:
-   ```bash
-   export GOOGLE_PSE_API_KEY="AIzaSy..."
-   export GOOGLE_PSE_ENGINE_ID="01764344478..."
-   ```
-
-≡ [Full Documentation →](https://developers.google.com/custom-search/v1/overview)
-
-</details>
-
-</td>
-</tr>
-</table>
-
-</details>
-
 ### Start the Server
 
 > **📌 Transport Mode Guidance**: Use **streamable HTTP mode** (`--transport streamable-http`) for all modern MCP clients including Claude Code, VS Code MCP, and MCP Inspector. Stdio mode is only for clients with incomplete MCP specification support.
@@ -572,7 +466,7 @@ docker run -e TOOL_TIER=core workspace-mcp
 docker run -e TOOLS="gmail drive calendar" workspace-mcp
 ```
 
-**Available Services**: `gmail` • `drive` • `calendar` • `docs` • `sheets` • `forms` • `tasks` • `contacts` • `chat` • `search`
+**Available Services**: `gmail` • `drive` • `calendar` • `docs` • `sheets` • `slides`
 
 </details>
 
@@ -956,104 +850,6 @@ attachments=[{
 </td>
 </tr>
 <tr>
-<td width="50%" valign="top">
-
-### 📝 **Google Forms** <sub>[`forms_tools.py`](gforms/forms_tools.py)</sub>
-
-| Tool | Tier | Description |
-|------|------|-------------|
-| `create_form` | **Core** | Create new forms |
-| `get_form` | **Core** | Retrieve form details & URLs |
-| `set_publish_settings` | Complete | Configure form settings |
-| `get_form_response` | Complete | Get individual responses |
-| `list_form_responses` | Extended | List all responses with pagination |
-| `batch_update_form` | Complete | Apply batch updates (questions, settings) |
-
-</td>
-<td width="50%" valign="top">
-
-### ✓ **Google Tasks** <sub>[`tasks_tools.py`](gtasks/tasks_tools.py)</sub>
-
-| Tool | Tier | Description |
-|------|------|-------------|
-| `list_tasks` | **Core** | List tasks with filtering |
-| `get_task` | **Core** | Retrieve task details |
-| `create_task` | **Core** | Create tasks with hierarchy |
-| `update_task` | **Core** | Modify task properties |
-| `delete_task` | Extended | Remove tasks |
-| `move_task` | Complete | Reposition tasks |
-| `clear_completed_tasks` | Complete | Hide completed tasks |
-| `*_task_list` | Complete | List/get/create/update/delete task lists |
-
-</td>
-</tr>
-<tr>
-<td width="50%" valign="top">
-
-### 👤 **Google Contacts** <sub>[`contacts_tools.py`](gcontacts/contacts_tools.py)</sub>
-
-| Tool | Tier | Description |
-|------|------|-------------|
-| `search_contacts` | **Core** | Search contacts by name, email, phone |
-| `get_contact` | **Core** | Retrieve detailed contact info |
-| `list_contacts` | **Core** | List contacts with pagination |
-| `create_contact` | **Core** | Create new contacts |
-| `update_contact` | Extended | Update existing contacts |
-| `delete_contact` | Extended | Delete contacts |
-| `list_contact_groups` | Extended | List contact groups/labels |
-| `get_contact_group` | Extended | Get group details with members |
-| `batch_*_contacts` | Complete | Batch create/update/delete contacts |
-| `*_contact_group` | Complete | Create/update/delete contact groups |
-| `modify_contact_group_members` | Complete | Add/remove contacts from groups |
-
-</td>
-</tr>
-<tr>
-<td width="50%" valign="top">
-
-### 💬 **Google Chat** <sub>[`chat_tools.py`](gchat/chat_tools.py)</sub>
-
-| Tool | Tier | Description |
-|------|------|-------------|
-| `list_spaces` | Extended | List chat spaces/rooms |
-| `get_messages` | **Core** | Retrieve space messages |
-| `send_message` | **Core** | Send messages to spaces |
-| `search_messages` | **Core** | Search across chat history |
-
-</td>
-<td width="50%" valign="top">
-
-### 🔍 **Google Custom Search** <sub>[`search_tools.py`](gsearch/search_tools.py)</sub>
-
-| Tool | Tier | Description |
-|------|------|-------------|
-| `search_custom` | **Core** | Perform web searches |
-| `get_search_engine_info` | Complete | Retrieve search engine metadata |
-| `search_custom_siterestrict` | Extended | Search within specific domains |
-
-</td>
-</tr>
-<tr>
-<td colspan="2" valign="top">
-
-### **Google Apps Script** <sub>[`apps_script_tools.py`](gappsscript/apps_script_tools.py)</sub>
-
-| Tool | Tier | Description |
-|------|------|-------------|
-| `list_script_projects` | **Core** | List accessible Apps Script projects |
-| `get_script_project` | **Core** | Get complete project with all files |
-| `get_script_content` | **Core** | Retrieve specific file content |
-| `create_script_project` | **Core** | Create new standalone or bound project |
-| `update_script_content` | **Core** | Update or create script files |
-| `run_script_function` | **Core** | Execute function with parameters |
-| `create_deployment` | Extended | Create new script deployment |
-| `list_deployments` | Extended | List all project deployments |
-| `update_deployment` | Extended | Update deployment configuration |
-| `delete_deployment` | Extended | Remove deployment |
-| `list_script_processes` | Extended | View recent executions and status |
-
-</td>
-</tr>
 </table>
 
 
@@ -1402,7 +1198,7 @@ You also have options for:
 # Configure credentials first (see Credential Configuration section)
 
 # Start with specific tools only
-uvx workspace-mcp --tools gmail drive calendar tasks
+uvx workspace-mcp --tools gmail drive calendar
 
 # Start with tool tiers (recommended for most users)
 uvx workspace-mcp --tool-tier core      # Essential tools

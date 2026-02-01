@@ -6,7 +6,7 @@
 [![Python 3.10+](https://img.shields.io/badge/Python-3.10%2B-blue.svg)](https://www.python.org/downloads/)
 [![PyPI](https://img.shields.io/pypi/v/workspace-mcp.svg)](https://pypi.org/project/workspace-mcp/)
 
-**Complete Google Workspace control through natural language.** Gmail, Calendar, Drive, Docs, Sheets, Slides, Forms, Tasks, Chat, Apps Script, and Custom Search—all via MCP.
+**Complete Google Workspace control through natural language.** Gmail, Calendar, Drive, Docs, Sheets, and Slides—all via MCP.
 
 [Quick Start](#-quick-start) • [Tools Reference](#-tools-reference) • [Configuration](#-configuration) • [OAuth Setup](#-oauth-setup)
 
@@ -141,73 +141,6 @@ export OAUTHLIB_INSECURE_TRANSPORT=1  # Development only
 
 **Comments:** `read_presentation_comments`, `create_presentation_comment`, `reply_to_presentation_comment`, `resolve_presentation_comment`
 
-### Google Forms (6 tools)
-
-| Tool | Tier | Description |
-|------|------|-------------|
-| `create_form` | Core | Create forms with title and description |
-| `get_form` | Core | Get form details, questions, and URLs |
-| `list_form_responses` | Extended | List responses with pagination |
-| `set_publish_settings` | Complete | Configure template and authentication settings |
-| `get_form_response` | Complete | Get individual response details |
-| `batch_update_form` | Complete | Execute batch updates to forms (questions, items, settings) |
-
-### Google Tasks (12 tools)
-
-| Tool | Tier | Description |
-|------|------|-------------|
-| `list_tasks` | Core | List tasks with filtering, subtask hierarchy preserved |
-| `get_task` | Core | Get task details |
-| `create_task` | Core | Create tasks with notes, due dates, parent/sibling positioning |
-| `update_task` | Core | Update task properties |
-| `delete_task` | Extended | Remove tasks |
-| `list_task_lists` | Complete | List all task lists |
-| `get_task_list` | Complete | Get task list details |
-| `create_task_list` | Complete | Create new task lists |
-| `update_task_list` | Complete | Rename task lists |
-| `delete_task_list` | Complete | Delete task lists (and all tasks) |
-| `move_task` | Complete | Reposition or move between lists |
-| `clear_completed_tasks` | Complete | Hide completed tasks |
-
-### Google Apps Script (11 tools)
-
-| Tool | Tier | Description |
-|------|------|-------------|
-| `list_script_projects` | Core | List accessible Apps Script projects |
-| `get_script_project` | Core | Get complete project with all files |
-| `get_script_content` | Core | Retrieve specific file content |
-| `create_script_project` | Core | Create new standalone or bound project |
-| `update_script_content` | Core | Update or create script files |
-| `run_script_function` | Core | Execute function with parameters |
-| `create_deployment` | Extended | Create new script deployment |
-| `list_deployments` | Extended | List all project deployments |
-| `update_deployment` | Extended | Update deployment configuration |
-| `delete_deployment` | Extended | Remove deployment |
-| `list_script_processes` | Extended | View recent executions and status |
-
-**Enables:** Cross-app automation, persistent workflows, custom business logic execution, script development and debugging
-
-**Note:** Trigger management is not currently supported via MCP tools.
-
-### Google Chat (4 tools)
-
-| Tool | Tier | Description |
-|------|------|-------------|
-| `get_messages` | Core | Retrieve messages from a space |
-| `send_message` | Core | Send messages with optional threading |
-| `search_messages` | Core | Search across chat history |
-| `list_spaces` | Extended | List rooms and DMs |
-
-### Google Custom Search (3 tools)
-
-| Tool | Tier | Description |
-|------|------|-------------|
-| `search_custom` | Core | Web search with filters (date, file type, language, safe search) |
-| `search_custom_siterestrict` | Extended | Search within specific domains |
-| `get_search_engine_info` | Complete | Get search engine metadata |
-
-**Requires:** `GOOGLE_PSE_API_KEY` and `GOOGLE_PSE_ENGINE_ID` environment variables
-
 ---
 
 ## 📊 Tool Tiers
@@ -247,8 +180,6 @@ uvx workspace-mcp --tools gmail drive --tool-tier extended
 | Variable | Description |
 |----------|-------------|
 | `USER_GOOGLE_EMAIL` | Default email for single-user mode |
-| `GOOGLE_PSE_API_KEY` | Custom Search API key |
-| `GOOGLE_PSE_ENGINE_ID` | Programmable Search Engine ID |
 | `MCP_ENABLE_OAUTH21` | Enable OAuth 2.1 multi-user support |
 | `WORKSPACE_MCP_STATELESS_MODE` | No file writes (container-friendly) |
 | `EXTERNAL_OAUTH21_PROVIDER` | External OAuth flow with bearer tokens |
@@ -280,10 +211,6 @@ Click to enable each API:
 - [Docs](https://console.cloud.google.com/flows/enableapi?apiid=docs.googleapis.com)
 - [Sheets](https://console.cloud.google.com/flows/enableapi?apiid=sheets.googleapis.com)
 - [Slides](https://console.cloud.google.com/flows/enableapi?apiid=slides.googleapis.com)
-- [Forms](https://console.cloud.google.com/flows/enableapi?apiid=forms.googleapis.com)
-- [Tasks](https://console.cloud.google.com/flows/enableapi?apiid=tasks.googleapis.com)
-- [Chat](https://console.cloud.google.com/flows/enableapi?apiid=chat.googleapis.com)
-- [Custom Search](https://console.cloud.google.com/flows/enableapi?apiid=customsearch.googleapis.com)
 
 ### 3. First Authentication
 
@@ -394,15 +321,11 @@ google_workspace_mcp/
 ├── auth/                 # OAuth 2.0/2.1, credential storage, decorators
 ├── core/                 # MCP server, tool registry, utilities
 ├── gcalendar/           # Calendar tools
-├── gchat/               # Chat tools
 ├── gdocs/               # Docs tools + managers (tables, headers, batch)
 ├── gdrive/              # Drive tools + helpers
-├── gforms/              # Forms tools
 ├── gmail/               # Gmail tools
-├── gsearch/             # Custom Search tools
 ├── gsheets/             # Sheets tools + helpers
 ├── gslides/             # Slides tools
-├── gtasks/              # Tasks tools
 └── main.py              # Entry point
 ```
 

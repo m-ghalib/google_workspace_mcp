@@ -65,11 +65,7 @@ class EnhancedLogFormatter(logging.Formatter):
             "gmail.gmail_tools": "[GMAIL]",
             "gdocs.docs_tools": "[DOCS]",
             "gsheets.sheets_tools": "[SHEETS]",
-            "gchat.chat_tools": "[CHAT]",
-            "gforms.forms_tools": "[FORMS]",
             "gslides.slides_tools": "[SLIDES]",
-            "gtasks.tasks_tools": "[TASKS]",
-            "gsearch.search_tools": "[SEARCH]",
         }
 
         return ascii_prefixes.get(logger_name, f"[{level_name}]")

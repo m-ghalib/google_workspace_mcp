@@ -27,6 +27,12 @@ from gdocs.docs_helpers import (
     create_insert_page_break_request,
     create_insert_image_request,
     create_bullet_list_request,
+    create_delete_paragraph_bullets_request,
+    create_insert_table_row_request,
+    create_delete_table_row_request,
+    create_insert_table_column_request,
+    create_delete_table_column_request,
+    create_update_table_cell_style_request,
 )
 
 # Import document structure and table utilities
@@ -1483,6 +1489,447 @@ async def update_paragraph_style(
 
     link = f"https://docs.google.com/document/d/{document_id}/edit"
     return f"Applied paragraph style ({', '.join(summary_parts)}) to range {start_index}-{end_index} in document {document_id}. Link: {link}"
+
+
+# ==============================================================================
+# TABLE ROW/COLUMN MANIPULATION TOOLS
+# ==============================================================================
+
+
+@server.tool()
+@handle_http_errors("insert_table_row", service_type="docs")
+@require_google_service("docs", "docs_write")
+async def insert_table_row(
+    service: Any,
+    user_google_email: str,
+    document_id: str,
+    table_index: int,
+    row_index: int,
+    insert_below: bool = True,
+) -> str:
+    """
+    Inserts a new row into an existing table in a Google Doc.
+
+    Args:
+        user_google_email: User's Google email address
+        document_id: ID of the document containing the table
+        table_index: Which table to modify (0 = first table, 1 = second, etc.)
+        row_index: Row position to insert relative to (0-based)
+        insert_below: If True, insert below the specified row; if False, insert above
+
+    Returns:
+        str: Confirmation message with operation details
+
+    Example:
+        # Insert a new row below the header row (row 0) in the first table
+        insert_table_row(document_id="...", table_index=0, row_index=0, insert_below=True)
+
+        # Insert a new row at the very top (above row 0)
+        insert_table_row(document_id="...", table_index=0, row_index=0, insert_below=False)
+    """
+    logger.info(
+        f"[insert_table_row] Doc={document_id}, table={table_index}, row={row_index}, below={insert_below}"
+    )
+
+    # Validate inputs
+    if row_index < 0:
+        return "Error: row_index must be non-negative"
+
+    # Get document and find tables
+    doc = await asyncio.to_thread(
+        service.documents().get(documentId=document_id).execute
+    )
+    tables = find_tables(doc)
+
+    if table_index >= len(tables):
+        return f"Error: table_index {table_index} not found. Document has {len(tables)} table(s)."
+
+    table = tables[table_index]
+    if row_index >= table["rows"]:
+        return f"Error: row_index {row_index} out of bounds. Table has {table['rows']} rows (0-{table['rows']-1})."
+
+    # Execute request
+    requests = [
+        create_insert_table_row_request(table["start_index"], row_index, insert_below)
+    ]
+    await asyncio.to_thread(
+        service.documents()
+        .batchUpdate(documentId=document_id, body={"requests": requests})
+        .execute
+    )
+
+    position = "below" if insert_below else "above"
+    link = f"https://docs.google.com/document/d/{document_id}/edit"
+    return f"Inserted new row {position} row {row_index} in table {table_index}. Table now has {table['rows'] + 1} rows. Link: {link}"
+
+
+@server.tool()
+@handle_http_errors("delete_table_row", service_type="docs")
+@require_google_service("docs", "docs_write")
+async def delete_table_row(
+    service: Any,
+    user_google_email: str,
+    document_id: str,
+    table_index: int,
+    row_index: int,
+) -> str:
+    """
+    Deletes a row from an existing table in a Google Doc.
+
+    Args:
+        user_google_email: User's Google email address
+        document_id: ID of the document containing the table
+        table_index: Which table to modify (0 = first table, 1 = second, etc.)
+        row_index: Row to delete (0-based)
+
+    Returns:
+        str: Confirmation message with operation details
+
+    Example:
+        # Delete the second row (index 1) from the first table
+        delete_table_row(document_id="...", table_index=0, row_index=1)
+    """
+    logger.info(
+        f"[delete_table_row] Doc={document_id}, table={table_index}, row={row_index}"
+    )
+
+    # Validate inputs
+    if row_index < 0:
+        return "Error: row_index must be non-negative"
+
+    # Get document and find tables
+    doc = await asyncio.to_thread(
+        service.documents().get(documentId=document_id).execute
+    )
+    tables = find_tables(doc)
+
+    if table_index >= len(tables):
+        return f"Error: table_index {table_index} not found. Document has {len(tables)} table(s)."
+
+    table = tables[table_index]
+    if row_index >= table["rows"]:
+        return f"Error: row_index {row_index} out of bounds. Table has {table['rows']} rows (0-{table['rows']-1})."
+
+    # Cannot delete the last row
+    if table["rows"] <= 1:
+        return "Error: Cannot delete the last row. Table must have at least 1 row."
+
+    # Execute request
+    requests = [create_delete_table_row_request(table["start_index"], row_index)]
+    await asyncio.to_thread(
+        service.documents()
+        .batchUpdate(documentId=document_id, body={"requests": requests})
+        .execute
+    )
+
+    link = f"https://docs.google.com/document/d/{document_id}/edit"
+    return f"Deleted row {row_index} from table {table_index}. Table now has {table['rows'] - 1} rows. Link: {link}"
+
+
+@server.tool()
+@handle_http_errors("insert_table_column", service_type="docs")
+@require_google_service("docs", "docs_write")
+async def insert_table_column(
+    service: Any,
+    user_google_email: str,
+    document_id: str,
+    table_index: int,
+    column_index: int,
+    insert_right: bool = True,
+) -> str:
+    """
+    Inserts a new column into an existing table in a Google Doc.
+
+    Note: Google Docs limits tables to 20 columns maximum.
+
+    Args:
+        user_google_email: User's Google email address
+        document_id: ID of the document containing the table
+        table_index: Which table to modify (0 = first table, 1 = second, etc.)
+        column_index: Column position to insert relative to (0-based)
+        insert_right: If True, insert to the right; if False, insert to the left
+
+    Returns:
+        str: Confirmation message with operation details
+
+    Example:
+        # Insert a new column to the right of the first column
+        insert_table_column(document_id="...", table_index=0, column_index=0, insert_right=True)
+
+        # Insert a new column at the very left (to the left of column 0)
+        insert_table_column(document_id="...", table_index=0, column_index=0, insert_right=False)
+    """
+    logger.info(
+        f"[insert_table_column] Doc={document_id}, table={table_index}, col={column_index}, right={insert_right}"
+    )
+
+    # Validate inputs
+    if column_index < 0:
+        return "Error: column_index must be non-negative"
+
+    # Get document and find tables
+    doc = await asyncio.to_thread(
+        service.documents().get(documentId=document_id).execute
+    )
+    tables = find_tables(doc)
+
+    if table_index >= len(tables):
+        return f"Error: table_index {table_index} not found. Document has {len(tables)} table(s)."
+
+    table = tables[table_index]
+    if column_index >= table["columns"]:
+        return f"Error: column_index {column_index} out of bounds. Table has {table['columns']} columns (0-{table['columns']-1})."
+
+    # Check Google Docs column limit (20 max)
+    if table["columns"] >= 20:
+        return "Error: Cannot insert column. Google Docs has a maximum of 20 columns per table."
+
+    # Execute request
+    requests = [
+        create_insert_table_column_request(
+            table["start_index"], column_index, insert_right
+        )
+    ]
+    await asyncio.to_thread(
+        service.documents()
+        .batchUpdate(documentId=document_id, body={"requests": requests})
+        .execute
+    )
+
+    position = "right of" if insert_right else "left of"
+    link = f"https://docs.google.com/document/d/{document_id}/edit"
+    return f"Inserted new column {position} column {column_index} in table {table_index}. Table now has {table['columns'] + 1} columns. Link: {link}"
+
+
+@server.tool()
+@handle_http_errors("delete_table_column", service_type="docs")
+@require_google_service("docs", "docs_write")
+async def delete_table_column(
+    service: Any,
+    user_google_email: str,
+    document_id: str,
+    table_index: int,
+    column_index: int,
+) -> str:
+    """
+    Deletes a column from an existing table in a Google Doc.
+
+    Args:
+        user_google_email: User's Google email address
+        document_id: ID of the document containing the table
+        table_index: Which table to modify (0 = first table, 1 = second, etc.)
+        column_index: Column to delete (0-based)
+
+    Returns:
+        str: Confirmation message with operation details
+
+    Example:
+        # Delete the third column (index 2) from the first table
+        delete_table_column(document_id="...", table_index=0, column_index=2)
+    """
+    logger.info(
+        f"[delete_table_column] Doc={document_id}, table={table_index}, col={column_index}"
+    )
+
+    # Validate inputs
+    if column_index < 0:
+        return "Error: column_index must be non-negative"
+
+    # Get document and find tables
+    doc = await asyncio.to_thread(
+        service.documents().get(documentId=document_id).execute
+    )
+    tables = find_tables(doc)
+
+    if table_index >= len(tables):
+        return f"Error: table_index {table_index} not found. Document has {len(tables)} table(s)."
+
+    table = tables[table_index]
+    if column_index >= table["columns"]:
+        return f"Error: column_index {column_index} out of bounds. Table has {table['columns']} columns (0-{table['columns']-1})."
+
+    # Cannot delete the last column
+    if table["columns"] <= 1:
+        return "Error: Cannot delete the last column. Table must have at least 1 column."
+
+    # Execute request
+    requests = [create_delete_table_column_request(table["start_index"], column_index)]
+    await asyncio.to_thread(
+        service.documents()
+        .batchUpdate(documentId=document_id, body={"requests": requests})
+        .execute
+    )
+
+    link = f"https://docs.google.com/document/d/{document_id}/edit"
+    return f"Deleted column {column_index} from table {table_index}. Table now has {table['columns'] - 1} columns. Link: {link}"
+
+
+@server.tool()
+@handle_http_errors("update_table_cell_style", service_type="docs")
+@require_google_service("docs", "docs_write")
+async def update_table_cell_style(
+    service: Any,
+    user_google_email: str,
+    document_id: str,
+    table_index: int,
+    row_index: int,
+    column_index: int,
+    background_color: str = None,
+    padding_top: float = None,
+    padding_bottom: float = None,
+    padding_left: float = None,
+    padding_right: float = None,
+    border_width: float = None,
+    border_color: str = None,
+    content_alignment: str = None,
+) -> str:
+    """
+    Updates the style of a specific table cell (background, padding, borders, alignment).
+
+    Args:
+        user_google_email: User's Google email address
+        document_id: ID of the document containing the table
+        table_index: Which table to modify (0 = first table, 1 = second, etc.)
+        row_index: Row of the cell (0-based)
+        column_index: Column of the cell (0-based)
+        background_color: Cell background color as hex "#RRGGBB" (e.g., "#FFFF00" for yellow)
+        padding_top: Top padding in points
+        padding_bottom: Bottom padding in points
+        padding_left: Left padding in points
+        padding_right: Right padding in points
+        border_width: Width of all cell borders in points
+        border_color: Border color as hex "#RRGGBB"
+        content_alignment: Vertical text alignment - "TOP", "MIDDLE", or "BOTTOM"
+
+    Returns:
+        str: Confirmation message with operation details
+
+    Example:
+        # Set yellow background on cell (0,0) - the top-left cell
+        update_table_cell_style(document_id="...", table_index=0, row_index=0, column_index=0,
+                                background_color="#FFFF00")
+
+        # Add padding and center content vertically
+        update_table_cell_style(document_id="...", table_index=0, row_index=1, column_index=1,
+                                padding_top=5, padding_bottom=5, content_alignment="MIDDLE")
+    """
+    logger.info(
+        f"[update_table_cell_style] Doc={document_id}, table={table_index}, cell=({row_index},{column_index})"
+    )
+
+    # Validate inputs
+    if row_index < 0:
+        return "Error: row_index must be non-negative"
+    if column_index < 0:
+        return "Error: column_index must be non-negative"
+
+    # Get document and find tables
+    doc = await asyncio.to_thread(
+        service.documents().get(documentId=document_id).execute
+    )
+    tables = find_tables(doc)
+
+    if table_index >= len(tables):
+        return f"Error: table_index {table_index} not found. Document has {len(tables)} table(s)."
+
+    table = tables[table_index]
+    if row_index >= table["rows"]:
+        return f"Error: row_index {row_index} out of bounds. Table has {table['rows']} rows (0-{table['rows']-1})."
+    if column_index >= table["columns"]:
+        return f"Error: column_index {column_index} out of bounds. Table has {table['columns']} columns (0-{table['columns']-1})."
+
+    # Build the style request
+    try:
+        request = create_update_table_cell_style_request(
+            table_start_index=table["start_index"],
+            row_index=row_index,
+            column_index=column_index,
+            background_color=background_color,
+            padding_top=padding_top,
+            padding_bottom=padding_bottom,
+            padding_left=padding_left,
+            padding_right=padding_right,
+            border_width=border_width,
+            border_color=border_color,
+            content_alignment=content_alignment,
+        )
+    except ValueError as e:
+        return f"Error: {str(e)}"
+
+    if request is None:
+        return "Error: At least one style parameter must be provided (background_color, padding, border_width, border_color, or content_alignment)."
+
+    # Execute request
+    await asyncio.to_thread(
+        service.documents()
+        .batchUpdate(documentId=document_id, body={"requests": [request]})
+        .execute
+    )
+
+    # Build summary of applied styles
+    style_parts = []
+    if background_color:
+        style_parts.append(f"background={background_color}")
+    if any([padding_top, padding_bottom, padding_left, padding_right]):
+        style_parts.append("padding")
+    if border_width or border_color:
+        style_parts.append("borders")
+    if content_alignment:
+        style_parts.append(f"alignment={content_alignment}")
+
+    link = f"https://docs.google.com/document/d/{document_id}/edit"
+    return f"Updated cell ({row_index},{column_index}) style in table {table_index}: {', '.join(style_parts)}. Link: {link}"
+
+
+@server.tool()
+@handle_http_errors("delete_paragraph_bullets", service_type="docs")
+@require_google_service("docs", "docs_write")
+async def delete_paragraph_bullets(
+    service: Any,
+    user_google_email: str,
+    document_id: str,
+    start_index: int,
+    end_index: int,
+) -> str:
+    """
+    Removes bullet points or numbered list formatting from a range of paragraphs.
+
+    This is the inverse of creating a bullet list - it converts list items back to
+    regular paragraphs while preserving the text content.
+
+    Args:
+        user_google_email: User's Google email address
+        document_id: ID of the document to modify
+        start_index: Start position of the range (1-based)
+        end_index: End position of the range (exclusive)
+
+    Returns:
+        str: Confirmation message with operation details
+
+    Example:
+        # Remove bullets from paragraphs between indices 10 and 50
+        delete_paragraph_bullets(document_id="...", start_index=10, end_index=50)
+    """
+    logger.info(
+        f"[delete_paragraph_bullets] Doc={document_id}, range={start_index}-{end_index}"
+    )
+
+    # Validate inputs
+    if start_index < 1:
+        return "Error: start_index must be >= 1"
+    if end_index <= start_index:
+        return "Error: end_index must be greater than start_index"
+
+    # Execute request
+    requests = [create_delete_paragraph_bullets_request(start_index, end_index)]
+    await asyncio.to_thread(
+        service.documents()
+        .batchUpdate(documentId=document_id, body={"requests": requests})
+        .execute
+    )
+
+    link = f"https://docs.google.com/document/d/{document_id}/edit"
+    return f"Removed bullet/list formatting from range {start_index}-{end_index} in document {document_id}. Link: {link}"
 
 
 # Create comment management tools for documents

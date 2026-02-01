@@ -36,23 +36,8 @@ from auth.scopes import (
     CALENDAR_EVENTS_SCOPE,
     SHEETS_READONLY_SCOPE,
     SHEETS_WRITE_SCOPE,
-    CHAT_READONLY_SCOPE,
-    CHAT_WRITE_SCOPE,
-    CHAT_SPACES_SCOPE,
-    FORMS_BODY_SCOPE,
-    FORMS_BODY_READONLY_SCOPE,
-    FORMS_RESPONSES_READONLY_SCOPE,
     SLIDES_SCOPE,
     SLIDES_READONLY_SCOPE,
-    TASKS_SCOPE,
-    TASKS_READONLY_SCOPE,
-    CONTACTS_SCOPE,
-    CONTACTS_READONLY_SCOPE,
-    CUSTOM_SEARCH_SCOPE,
-    SCRIPT_PROJECTS_SCOPE,
-    SCRIPT_PROJECTS_READONLY_SCOPE,
-    SCRIPT_DEPLOYMENTS_SCOPE,
-    SCRIPT_DEPLOYMENTS_READONLY_SCOPE,
 )
 
 logger = logging.getLogger(__name__)
@@ -435,30 +420,9 @@ SCOPE_GROUPS = {
     # Sheets scopes
     "sheets_read": SHEETS_READONLY_SCOPE,
     "sheets_write": SHEETS_WRITE_SCOPE,
-    # Chat scopes
-    "chat_read": CHAT_READONLY_SCOPE,
-    "chat_write": CHAT_WRITE_SCOPE,
-    "chat_spaces": CHAT_SPACES_SCOPE,
-    # Forms scopes
-    "forms": FORMS_BODY_SCOPE,
-    "forms_read": FORMS_BODY_READONLY_SCOPE,
-    "forms_responses_read": FORMS_RESPONSES_READONLY_SCOPE,
     # Slides scopes
     "slides": SLIDES_SCOPE,
     "slides_read": SLIDES_READONLY_SCOPE,
-    # Tasks scopes
-    "tasks": TASKS_SCOPE,
-    "tasks_read": TASKS_READONLY_SCOPE,
-    # Contacts scopes
-    "contacts": CONTACTS_SCOPE,
-    "contacts_read": CONTACTS_READONLY_SCOPE,
-    # Custom Search scope
-    "customsearch": CUSTOM_SEARCH_SCOPE,
-    # Apps Script scopes
-    "script_readonly": SCRIPT_PROJECTS_READONLY_SCOPE,
-    "script_projects": SCRIPT_PROJECTS_SCOPE,
-    "script_deployments": SCRIPT_DEPLOYMENTS_SCOPE,
-    "script_deployments_readonly": SCRIPT_DEPLOYMENTS_READONLY_SCOPE,
 }
 
 

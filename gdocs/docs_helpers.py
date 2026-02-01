@@ -306,6 +306,230 @@ def create_bullet_list_request(
     }
 
 
+def create_delete_paragraph_bullets_request(
+    start_index: int, end_index: int
+) -> Dict[str, Any]:
+    """
+    Create a deleteParagraphBullets request for Google Docs API.
+
+    Args:
+        start_index: Start of text range to remove bullets from
+        end_index: End of text range to remove bullets from
+
+    Returns:
+        Dictionary representing the deleteParagraphBullets request
+    """
+    return {
+        "deleteParagraphBullets": {
+            "range": {"startIndex": start_index, "endIndex": end_index}
+        }
+    }
+
+
+# ==============================================================================
+# TABLE ROW/COLUMN MANIPULATION HELPERS
+# ==============================================================================
+
+
+def create_insert_table_row_request(
+    table_start_index: int, row_index: int, insert_below: bool = True
+) -> Dict[str, Any]:
+    """
+    Create an insertTableRow request for Google Docs API.
+
+    Args:
+        table_start_index: The document index where the table starts (from find_tables)
+        row_index: The row index to insert relative to (0-based)
+        insert_below: If True, insert below the specified row; if False, insert above
+
+    Returns:
+        Dictionary representing the insertTableRow request
+    """
+    return {
+        "insertTableRow": {
+            "tableCellLocation": {
+                "tableStartLocation": {"index": table_start_index},
+                "rowIndex": row_index,
+                "columnIndex": 0,
+            },
+            "insertBelow": insert_below,
+        }
+    }
+
+
+def create_delete_table_row_request(
+    table_start_index: int, row_index: int
+) -> Dict[str, Any]:
+    """
+    Create a deleteTableRow request for Google Docs API.
+
+    Args:
+        table_start_index: The document index where the table starts (from find_tables)
+        row_index: The row index to delete (0-based)
+
+    Returns:
+        Dictionary representing the deleteTableRow request
+    """
+    return {
+        "deleteTableRow": {
+            "tableCellLocation": {
+                "tableStartLocation": {"index": table_start_index},
+                "rowIndex": row_index,
+                "columnIndex": 0,
+            }
+        }
+    }
+
+
+def create_insert_table_column_request(
+    table_start_index: int, column_index: int, insert_right: bool = True
+) -> Dict[str, Any]:
+    """
+    Create an insertTableColumn request for Google Docs API.
+
+    Args:
+        table_start_index: The document index where the table starts (from find_tables)
+        column_index: The column index to insert relative to (0-based)
+        insert_right: If True, insert to the right; if False, insert to the left
+
+    Returns:
+        Dictionary representing the insertTableColumn request
+    """
+    return {
+        "insertTableColumn": {
+            "tableCellLocation": {
+                "tableStartLocation": {"index": table_start_index},
+                "rowIndex": 0,
+                "columnIndex": column_index,
+            },
+            "insertRight": insert_right,
+        }
+    }
+
+
+def create_delete_table_column_request(
+    table_start_index: int, column_index: int
+) -> Dict[str, Any]:
+    """
+    Create a deleteTableColumn request for Google Docs API.
+
+    Args:
+        table_start_index: The document index where the table starts (from find_tables)
+        column_index: The column index to delete (0-based)
+
+    Returns:
+        Dictionary representing the deleteTableColumn request
+    """
+    return {
+        "deleteTableColumn": {
+            "tableCellLocation": {
+                "tableStartLocation": {"index": table_start_index},
+                "rowIndex": 0,
+                "columnIndex": column_index,
+            }
+        }
+    }
+
+
+def create_update_table_cell_style_request(
+    table_start_index: int,
+    row_index: int,
+    column_index: int,
+    background_color: Optional[str] = None,
+    padding_top: Optional[float] = None,
+    padding_bottom: Optional[float] = None,
+    padding_left: Optional[float] = None,
+    padding_right: Optional[float] = None,
+    border_width: Optional[float] = None,
+    border_color: Optional[str] = None,
+    content_alignment: Optional[str] = None,
+) -> Optional[Dict[str, Any]]:
+    """
+    Create an updateTableCellStyle request for Google Docs API.
+
+    Args:
+        table_start_index: The document index where the table starts
+        row_index: The row index of the cell (0-based)
+        column_index: The column index of the cell (0-based)
+        background_color: Cell background color as hex string "#RRGGBB"
+        padding_top: Top padding in points
+        padding_bottom: Bottom padding in points
+        padding_left: Left padding in points
+        padding_right: Right padding in points
+        border_width: Width of all borders in points
+        border_color: Border color as hex string "#RRGGBB"
+        content_alignment: Vertical alignment - "TOP", "MIDDLE", or "BOTTOM"
+
+    Returns:
+        Dictionary representing the updateTableCellStyle request, or None if no styles provided
+    """
+    table_cell_style = {}
+    fields = []
+
+    # Background color
+    if background_color is not None:
+        rgb = _normalize_color(background_color, "background_color")
+        table_cell_style["backgroundColor"] = {"color": {"rgbColor": rgb}}
+        fields.append("backgroundColor")
+
+    # Padding
+    if padding_top is not None:
+        table_cell_style["paddingTop"] = {"magnitude": padding_top, "unit": "PT"}
+        fields.append("paddingTop")
+
+    if padding_bottom is not None:
+        table_cell_style["paddingBottom"] = {"magnitude": padding_bottom, "unit": "PT"}
+        fields.append("paddingBottom")
+
+    if padding_left is not None:
+        table_cell_style["paddingLeft"] = {"magnitude": padding_left, "unit": "PT"}
+        fields.append("paddingLeft")
+
+    if padding_right is not None:
+        table_cell_style["paddingRight"] = {"magnitude": padding_right, "unit": "PT"}
+        fields.append("paddingRight")
+
+    # Content alignment
+    if content_alignment is not None:
+        valid_alignments = ["TOP", "MIDDLE", "BOTTOM"]
+        if content_alignment.upper() not in valid_alignments:
+            raise ValueError(
+                f"content_alignment must be one of {valid_alignments}, got '{content_alignment}'"
+            )
+        table_cell_style["contentAlignment"] = content_alignment.upper()
+        fields.append("contentAlignment")
+
+    # Border styling (applies to all borders)
+    if border_width is not None or border_color is not None:
+        border_style = {}
+        if border_width is not None:
+            border_style["width"] = {"magnitude": border_width, "unit": "PT"}
+        if border_color is not None:
+            rgb = _normalize_color(border_color, "border_color")
+            border_style["color"] = {"color": {"rgbColor": rgb}}
+        border_style["dashStyle"] = "SOLID"
+
+        # Apply to all four borders
+        for border_name in ["borderTop", "borderBottom", "borderLeft", "borderRight"]:
+            table_cell_style[border_name] = border_style
+            fields.append(border_name)
+
+    if not table_cell_style:
+        return None
+
+    return {
+        "updateTableCellStyle": {
+            "tableCellLocation": {
+                "tableStartLocation": {"index": table_start_index},
+                "rowIndex": row_index,
+                "columnIndex": column_index,
+            },
+            "tableCellStyle": table_cell_style,
+            "fields": ",".join(fields),
+        }
+    }
+
+
 def validate_operation(operation: Dict[str, Any]) -> tuple[bool, str]:
     """
     Validate a batch operation dictionary.
