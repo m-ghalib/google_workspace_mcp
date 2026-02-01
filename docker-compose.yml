@@ -4,6 +4,9 @@ services:
     container_name: gws_mcp
     ports:
       - "8000:8000"
+    environment:
+      - GOOGLE_OAUTH_CLIENT_ID=${GOOGLE_OAUTH_CLIENT_ID}
+      - GOOGLE_OAUTH_CLIENT_SECRET=${GOOGLE_OAUTH_CLIENT_SECRET}
     volumes:
       - store_creds:/app/store_creds:rw
 volumes:
