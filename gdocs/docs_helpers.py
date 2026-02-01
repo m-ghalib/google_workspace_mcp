@@ -530,6 +530,218 @@ def create_update_table_cell_style_request(
     }
 
 
+# ==============================================================================
+# HEADER/FOOTER DELETION HELPERS
+# ==============================================================================
+
+
+def create_delete_header_request(header_id: str) -> Dict[str, Any]:
+    """
+    Create a deleteHeader request for Google Docs API.
+
+    Args:
+        header_id: The ID of the header to delete (e.g., "kix.abc123")
+
+    Returns:
+        Dictionary representing the deleteHeader request
+    """
+    return {"deleteHeader": {"headerId": header_id}}
+
+
+def create_delete_footer_request(footer_id: str) -> Dict[str, Any]:
+    """
+    Create a deleteFooter request for Google Docs API.
+
+    Args:
+        footer_id: The ID of the footer to delete (e.g., "kix.abc123")
+
+    Returns:
+        Dictionary representing the deleteFooter request
+    """
+    return {"deleteFooter": {"footerId": footer_id}}
+
+
+# ==============================================================================
+# ADVANCED TABLE OPERATIONS HELPERS
+# ==============================================================================
+
+
+def create_merge_table_cells_request(
+    table_start_index: int,
+    start_row: int,
+    start_col: int,
+    row_span: int,
+    col_span: int,
+) -> Dict[str, Any]:
+    """
+    Create a mergeTableCells request for Google Docs API.
+
+    Args:
+        table_start_index: The document index where the table starts
+        start_row: Starting row index for the merge (0-based)
+        start_col: Starting column index for the merge (0-based)
+        row_span: Number of rows to merge (must be >= 1)
+        col_span: Number of columns to merge (must be >= 1)
+
+    Returns:
+        Dictionary representing the mergeTableCells request
+    """
+    return {
+        "mergeTableCells": {
+            "tableRange": {
+                "tableCellLocation": {
+                    "tableStartLocation": {"index": table_start_index},
+                    "rowIndex": start_row,
+                    "columnIndex": start_col,
+                },
+                "rowSpan": row_span,
+                "columnSpan": col_span,
+            }
+        }
+    }
+
+
+def create_unmerge_table_cells_request(
+    table_start_index: int,
+    row_index: int,
+    col_index: int,
+    row_span: int,
+    col_span: int,
+) -> Dict[str, Any]:
+    """
+    Create an unmergeTableCells request for Google Docs API.
+
+    Args:
+        table_start_index: The document index where the table starts
+        row_index: Row index of the merged cell (0-based)
+        col_index: Column index of the merged cell (0-based)
+        row_span: Number of rows the merged cell spans
+        col_span: Number of columns the merged cell spans
+
+    Returns:
+        Dictionary representing the unmergeTableCells request
+    """
+    return {
+        "unmergeTableCells": {
+            "tableRange": {
+                "tableCellLocation": {
+                    "tableStartLocation": {"index": table_start_index},
+                    "rowIndex": row_index,
+                    "columnIndex": col_index,
+                },
+                "rowSpan": row_span,
+                "columnSpan": col_span,
+            }
+        }
+    }
+
+
+def create_update_table_row_style_request(
+    table_start_index: int,
+    row_indices: list[int],
+    min_row_height: Optional[float] = None,
+    prevent_overflow: Optional[bool] = None,
+) -> Optional[Dict[str, Any]]:
+    """
+    Create an updateTableRowStyle request for Google Docs API.
+
+    Args:
+        table_start_index: The document index where the table starts
+        row_indices: List of row indices to update (0-based)
+        min_row_height: Minimum row height in points
+        prevent_overflow: Whether to prevent row content from overflowing
+
+    Returns:
+        Dictionary representing the updateTableRowStyle request, or None if no styles provided
+    """
+    table_row_style = {}
+    fields = []
+
+    if min_row_height is not None:
+        table_row_style["minRowHeight"] = {"magnitude": min_row_height, "unit": "PT"}
+        fields.append("minRowHeight")
+
+    if prevent_overflow is not None:
+        table_row_style["preventOverflow"] = prevent_overflow
+        fields.append("preventOverflow")
+
+    if not table_row_style:
+        return None
+
+    return {
+        "updateTableRowStyle": {
+            "tableStartLocation": {"index": table_start_index},
+            "rowIndices": row_indices,
+            "tableRowStyle": table_row_style,
+            "fields": ",".join(fields),
+        }
+    }
+
+
+def create_update_table_column_properties_request(
+    table_start_index: int,
+    column_indices: list[int],
+    width: Optional[float] = None,
+    width_type: str = "FIXED_WIDTH",
+) -> Optional[Dict[str, Any]]:
+    """
+    Create an updateTableColumnProperties request for Google Docs API.
+
+    Args:
+        table_start_index: The document index where the table starts
+        column_indices: List of column indices to update (0-based)
+        width: Column width in points (required if width_type is FIXED_WIDTH)
+        width_type: Width type - "EVENLY_DISTRIBUTED" or "FIXED_WIDTH"
+
+    Returns:
+        Dictionary representing the updateTableColumnProperties request, or None if invalid
+    """
+    valid_width_types = ["EVENLY_DISTRIBUTED", "FIXED_WIDTH"]
+    if width_type not in valid_width_types:
+        raise ValueError(f"width_type must be one of {valid_width_types}, got '{width_type}'")
+
+    table_column_properties = {"widthType": width_type}
+    fields = ["widthType"]
+
+    if width is not None:
+        table_column_properties["width"] = {"magnitude": width, "unit": "PT"}
+        fields.append("width")
+
+    return {
+        "updateTableColumnProperties": {
+            "tableStartLocation": {"index": table_start_index},
+            "columnIndices": column_indices,
+            "tableColumnProperties": table_column_properties,
+            "fields": ",".join(fields),
+        }
+    }
+
+
+def create_pin_table_header_rows_request(
+    table_start_index: int,
+    pinned_header_rows_count: int,
+) -> Dict[str, Any]:
+    """
+    Create a pinTableHeaderRows request for Google Docs API.
+
+    This pins the specified number of rows as repeating header rows that
+    appear at the top of each page when the table spans multiple pages.
+
+    Args:
+        table_start_index: The document index where the table starts
+        pinned_header_rows_count: Number of rows to pin as headers (0 to unpin all)
+
+    Returns:
+        Dictionary representing the pinTableHeaderRows request
+    """
+    return {
+        "pinTableHeaderRows": {
+            "tableStartLocation": {"index": table_start_index},
+            "pinnedHeaderRowsCount": pinned_header_rows_count,
+        }
+    }
+
+
 def validate_operation(operation: Dict[str, Any]) -> tuple[bool, str]:
     """
     Validate a batch operation dictionary.

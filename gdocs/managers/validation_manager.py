@@ -513,6 +513,244 @@ class ValidationManager:
 
         return True, ""
 
+    def validate_cell_merge_params(
+        self,
+        table_index: int,
+        start_row: int,
+        start_col: int,
+        row_span: int,
+        col_span: int,
+        table_rows: Optional[int] = None,
+        table_cols: Optional[int] = None,
+    ) -> Tuple[bool, str]:
+        """
+        Validate parameters for table cell merge/unmerge operations.
+
+        Args:
+            table_index: Index of the table (0-based)
+            start_row: Starting row index for the merge (0-based)
+            start_col: Starting column index for the merge (0-based)
+            row_span: Number of rows to merge (must be >= 1)
+            col_span: Number of columns to merge (must be >= 1)
+            table_rows: Total rows in table (for bounds checking)
+            table_cols: Total columns in table (for bounds checking)
+
+        Returns:
+            Tuple of (is_valid, error_message)
+        """
+        # Validate table_index
+        if not isinstance(table_index, int) or table_index < 0:
+            return False, f"table_index must be a non-negative integer, got {table_index}"
+
+        # Validate start_row
+        if not isinstance(start_row, int) or start_row < 0:
+            return False, f"start_row must be a non-negative integer, got {start_row}"
+
+        # Validate start_col
+        if not isinstance(start_col, int) or start_col < 0:
+            return False, f"start_col must be a non-negative integer, got {start_col}"
+
+        # Validate row_span
+        if not isinstance(row_span, int) or row_span < 1:
+            return False, f"row_span must be a positive integer (>= 1), got {row_span}"
+
+        # Validate col_span
+        if not isinstance(col_span, int) or col_span < 1:
+            return False, f"col_span must be a positive integer (>= 1), got {col_span}"
+
+        # Must merge at least 2 cells total
+        if row_span == 1 and col_span == 1:
+            return (
+                False,
+                "Merge operation requires either row_span > 1 or col_span > 1 (cannot merge single cell)",
+            )
+
+        # Bounds checking if table dimensions provided
+        if table_rows is not None:
+            if start_row >= table_rows:
+                return (
+                    False,
+                    f"start_row ({start_row}) exceeds table rows ({table_rows})",
+                )
+            if start_row + row_span > table_rows:
+                return (
+                    False,
+                    f"Merge would exceed table bounds: start_row ({start_row}) + row_span ({row_span}) > table_rows ({table_rows})",
+                )
+
+        if table_cols is not None:
+            if start_col >= table_cols:
+                return (
+                    False,
+                    f"start_col ({start_col}) exceeds table columns ({table_cols})",
+                )
+            if start_col + col_span > table_cols:
+                return (
+                    False,
+                    f"Merge would exceed table bounds: start_col ({start_col}) + col_span ({col_span}) > table_cols ({table_cols})",
+                )
+
+        return True, ""
+
+    def validate_row_style_params(
+        self,
+        table_index: int,
+        row_indices: List[int],
+        min_row_height: Optional[float] = None,
+        prevent_overflow: Optional[bool] = None,
+        table_rows: Optional[int] = None,
+    ) -> Tuple[bool, str]:
+        """
+        Validate parameters for table row styling operations.
+
+        Args:
+            table_index: Index of the table (0-based)
+            row_indices: List of row indices to update
+            min_row_height: Minimum row height in points
+            prevent_overflow: Whether to prevent overflow
+            table_rows: Total rows in table (for bounds checking)
+
+        Returns:
+            Tuple of (is_valid, error_message)
+        """
+        # Validate table_index
+        if not isinstance(table_index, int) or table_index < 0:
+            return False, f"table_index must be a non-negative integer, got {table_index}"
+
+        # Validate row_indices
+        if not isinstance(row_indices, list):
+            return (
+                False,
+                f"row_indices must be a list of integers, got {type(row_indices).__name__}",
+            )
+
+        if not row_indices:
+            return False, "row_indices cannot be empty"
+
+        for i, idx in enumerate(row_indices):
+            if not isinstance(idx, int) or idx < 0:
+                return (
+                    False,
+                    f"row_indices[{i}] must be a non-negative integer, got {idx}",
+                )
+
+        # Check for duplicates
+        if len(row_indices) != len(set(row_indices)):
+            return False, "row_indices contains duplicate values"
+
+        # Validate style parameters - at least one must be provided
+        if min_row_height is None and prevent_overflow is None:
+            return (
+                False,
+                "At least one style parameter must be provided (min_row_height or prevent_overflow)",
+            )
+
+        # Validate min_row_height
+        if min_row_height is not None:
+            if not isinstance(min_row_height, (int, float)):
+                return (
+                    False,
+                    f"min_row_height must be a number, got {type(min_row_height).__name__}",
+                )
+            if min_row_height < 0:
+                return False, f"min_row_height must be non-negative, got {min_row_height}"
+
+        # Validate prevent_overflow
+        if prevent_overflow is not None and not isinstance(prevent_overflow, bool):
+            return (
+                False,
+                f"prevent_overflow must be a boolean, got {type(prevent_overflow).__name__}",
+            )
+
+        # Bounds checking
+        if table_rows is not None:
+            for idx in row_indices:
+                if idx >= table_rows:
+                    return (
+                        False,
+                        f"Row index {idx} exceeds table rows ({table_rows})",
+                    )
+
+        return True, ""
+
+    def validate_column_properties_params(
+        self,
+        table_index: int,
+        column_indices: List[int],
+        width: Optional[float] = None,
+        width_type: str = "FIXED_WIDTH",
+        table_cols: Optional[int] = None,
+    ) -> Tuple[bool, str]:
+        """
+        Validate parameters for table column property operations.
+
+        Args:
+            table_index: Index of the table (0-based)
+            column_indices: List of column indices to update
+            width: Column width in points
+            width_type: Width type ("EVENLY_DISTRIBUTED" or "FIXED_WIDTH")
+            table_cols: Total columns in table (for bounds checking)
+
+        Returns:
+            Tuple of (is_valid, error_message)
+        """
+        # Validate table_index
+        if not isinstance(table_index, int) or table_index < 0:
+            return False, f"table_index must be a non-negative integer, got {table_index}"
+
+        # Validate column_indices
+        if not isinstance(column_indices, list):
+            return (
+                False,
+                f"column_indices must be a list of integers, got {type(column_indices).__name__}",
+            )
+
+        if not column_indices:
+            return False, "column_indices cannot be empty"
+
+        for i, idx in enumerate(column_indices):
+            if not isinstance(idx, int) or idx < 0:
+                return (
+                    False,
+                    f"column_indices[{i}] must be a non-negative integer, got {idx}",
+                )
+
+        # Check for duplicates
+        if len(column_indices) != len(set(column_indices)):
+            return False, "column_indices contains duplicate values"
+
+        # Validate width_type
+        valid_width_types = ["EVENLY_DISTRIBUTED", "FIXED_WIDTH"]
+        if width_type not in valid_width_types:
+            return (
+                False,
+                f"width_type must be one of {valid_width_types}, got '{width_type}'",
+            )
+
+        # Validate width
+        if width_type == "FIXED_WIDTH" and width is None:
+            return (
+                False,
+                "width is required when width_type is 'FIXED_WIDTH'",
+            )
+
+        if width is not None:
+            if not isinstance(width, (int, float)):
+                return False, f"width must be a number, got {type(width).__name__}"
+            if width <= 0:
+                return False, f"width must be positive, got {width}"
+
+        # Bounds checking
+        if table_cols is not None:
+            for idx in column_indices:
+                if idx >= table_cols:
+                    return (
+                        False,
+                        f"Column index {idx} exceeds table columns ({table_cols})",
+                    )
+
+        return True, ""
+
     def get_validation_summary(self) -> Dict[str, Any]:
         """
         Get a summary of all validation rules and constraints.

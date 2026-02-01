@@ -731,17 +731,9 @@ cp .env.oauth21 .env
 | `get_drive_file_download_url` | **Core** | Get download URL for Drive files |
 | `create_drive_file` | **Core** | Create files or fetch from URLs |
 | `import_to_google_doc` | **Core** | Import files (MD, DOCX, HTML, etc.) as Google Docs |
-| `share_drive_file` | **Core** | Share file with users/groups/domains/anyone |
-| `get_drive_shareable_link` | **Core** | Get shareable links for a file |
 | `list_drive_items` | Extended | List folder contents |
 | `copy_drive_file` | Extended | Copy existing files (templates) with optional renaming |
 | `update_drive_file` | Extended | Update file metadata, move between folders |
-| `batch_share_drive_file` | Extended | Share file with multiple recipients |
-| `update_drive_permission` | Extended | Modify permission role |
-| `remove_drive_permission` | Extended | Revoke file access |
-| `transfer_drive_ownership` | Extended | Transfer file ownership to another user |
-| `get_drive_file_permissions` | Complete | Get detailed file permissions |
-| `check_drive_file_public_access` | Complete | Check public sharing status |
 
 </td>
 </tr>

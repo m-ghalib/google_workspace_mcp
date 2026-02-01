@@ -9,7 +9,14 @@ import logging
 import asyncio
 from typing import List, Dict, Any, Tuple
 
-from gdocs.docs_helpers import create_insert_table_request
+from gdocs.docs_helpers import (
+    create_insert_table_request,
+    create_merge_table_cells_request,
+    create_unmerge_table_cells_request,
+    create_update_table_row_style_request,
+    create_update_table_column_properties_request,
+    create_pin_table_header_rows_request,
+)
 from gdocs.docs_structure import find_tables
 from gdocs.docs_tables import validate_table_data
 
@@ -370,3 +377,401 @@ class TableOperationManager:
                     )
 
         return population_count
+
+    # ==========================================================================
+    # ADVANCED TABLE OPERATIONS
+    # ==========================================================================
+
+    async def merge_cells(
+        self,
+        document_id: str,
+        table_index: int,
+        start_row: int,
+        start_col: int,
+        row_span: int,
+        col_span: int,
+    ) -> Tuple[bool, str, Dict[str, Any]]:
+        """
+        Merge cells in a table.
+
+        Args:
+            document_id: ID of the document
+            table_index: Index of the table (0-based)
+            start_row: Starting row index for merge (0-based)
+            start_col: Starting column index for merge (0-based)
+            row_span: Number of rows to merge
+            col_span: Number of columns to merge
+
+        Returns:
+            Tuple of (success, message, metadata)
+        """
+        try:
+            # Get table to find its start index
+            tables = await self._get_document_tables(document_id)
+            if table_index >= len(tables):
+                return (
+                    False,
+                    f"Table index {table_index} not found. Document has {len(tables)} tables",
+                    {},
+                )
+
+            table_info = tables[table_index]
+            table_start_index = table_info["start_index"]
+
+            # Validate merge bounds
+            table_rows = table_info["rows"]
+            table_cols = table_info["columns"]
+
+            if start_row + row_span > table_rows:
+                return (
+                    False,
+                    f"Merge range exceeds table rows: {start_row}+{row_span} > {table_rows}",
+                    {},
+                )
+            if start_col + col_span > table_cols:
+                return (
+                    False,
+                    f"Merge range exceeds table columns: {start_col}+{col_span} > {table_cols}",
+                    {},
+                )
+
+            # Create and execute merge request
+            request = create_merge_table_cells_request(
+                table_start_index, start_row, start_col, row_span, col_span
+            )
+
+            await asyncio.to_thread(
+                self.service.documents()
+                .batchUpdate(documentId=document_id, body={"requests": [request]})
+                .execute
+            )
+
+            metadata = {
+                "table_index": table_index,
+                "start_row": start_row,
+                "start_col": start_col,
+                "row_span": row_span,
+                "col_span": col_span,
+            }
+
+            return (
+                True,
+                f"Successfully merged {row_span}x{col_span} cells starting at ({start_row},{start_col})",
+                metadata,
+            )
+
+        except Exception as e:
+            logger.error(f"Failed to merge cells: {str(e)}")
+            return False, f"Failed to merge cells: {str(e)}", {}
+
+    async def unmerge_cells(
+        self,
+        document_id: str,
+        table_index: int,
+        row_index: int,
+        col_index: int,
+        row_span: int,
+        col_span: int,
+    ) -> Tuple[bool, str, Dict[str, Any]]:
+        """
+        Unmerge previously merged cells in a table.
+
+        Args:
+            document_id: ID of the document
+            table_index: Index of the table (0-based)
+            row_index: Row index of the merged cell (0-based)
+            col_index: Column index of the merged cell (0-based)
+            row_span: Number of rows that were merged
+            col_span: Number of columns that were merged
+
+        Returns:
+            Tuple of (success, message, metadata)
+        """
+        try:
+            # Get table to find its start index
+            tables = await self._get_document_tables(document_id)
+            if table_index >= len(tables):
+                return (
+                    False,
+                    f"Table index {table_index} not found. Document has {len(tables)} tables",
+                    {},
+                )
+
+            table_info = tables[table_index]
+            table_start_index = table_info["start_index"]
+
+            # Create and execute unmerge request
+            request = create_unmerge_table_cells_request(
+                table_start_index, row_index, col_index, row_span, col_span
+            )
+
+            await asyncio.to_thread(
+                self.service.documents()
+                .batchUpdate(documentId=document_id, body={"requests": [request]})
+                .execute
+            )
+
+            metadata = {
+                "table_index": table_index,
+                "row_index": row_index,
+                "col_index": col_index,
+                "row_span": row_span,
+                "col_span": col_span,
+            }
+
+            return (
+                True,
+                f"Successfully unmerged cells at ({row_index},{col_index}) spanning {row_span}x{col_span}",
+                metadata,
+            )
+
+        except Exception as e:
+            logger.error(f"Failed to unmerge cells: {str(e)}")
+            return False, f"Failed to unmerge cells: {str(e)}", {}
+
+    async def update_row_style(
+        self,
+        document_id: str,
+        table_index: int,
+        row_indices: List[int],
+        min_row_height: float = None,
+        prevent_overflow: bool = None,
+    ) -> Tuple[bool, str, Dict[str, Any]]:
+        """
+        Update the style of table rows.
+
+        Args:
+            document_id: ID of the document
+            table_index: Index of the table (0-based)
+            row_indices: List of row indices to style (0-based)
+            min_row_height: Minimum row height in points (optional)
+            prevent_overflow: Whether to prevent content overflow (optional)
+
+        Returns:
+            Tuple of (success, message, metadata)
+        """
+        try:
+            # Validate that at least one style property is provided
+            if min_row_height is None and prevent_overflow is None:
+                return (
+                    False,
+                    "At least one style property (min_row_height or prevent_overflow) must be provided",
+                    {},
+                )
+
+            # Get table to find its start index
+            tables = await self._get_document_tables(document_id)
+            if table_index >= len(tables):
+                return (
+                    False,
+                    f"Table index {table_index} not found. Document has {len(tables)} tables",
+                    {},
+                )
+
+            table_info = tables[table_index]
+            table_start_index = table_info["start_index"]
+            table_rows = table_info["rows"]
+
+            # Validate row indices
+            for idx in row_indices:
+                if idx < 0 or idx >= table_rows:
+                    return (
+                        False,
+                        f"Row index {idx} is out of bounds. Table has {table_rows} rows",
+                        {},
+                    )
+
+            # Create and execute row style request
+            request = create_update_table_row_style_request(
+                table_start_index, row_indices, min_row_height, prevent_overflow
+            )
+
+            if request is None:
+                return False, "No valid style properties to apply", {}
+
+            await asyncio.to_thread(
+                self.service.documents()
+                .batchUpdate(documentId=document_id, body={"requests": [request]})
+                .execute
+            )
+
+            metadata = {
+                "table_index": table_index,
+                "row_indices": row_indices,
+                "min_row_height": min_row_height,
+                "prevent_overflow": prevent_overflow,
+            }
+
+            return (
+                True,
+                f"Successfully updated style for rows {row_indices}",
+                metadata,
+            )
+
+        except Exception as e:
+            logger.error(f"Failed to update row style: {str(e)}")
+            return False, f"Failed to update row style: {str(e)}", {}
+
+    async def set_column_width(
+        self,
+        document_id: str,
+        table_index: int,
+        column_indices: List[int],
+        width: float = None,
+        width_type: str = "FIXED_WIDTH",
+    ) -> Tuple[bool, str, Dict[str, Any]]:
+        """
+        Set the width properties for table columns.
+
+        Args:
+            document_id: ID of the document
+            table_index: Index of the table (0-based)
+            column_indices: List of column indices to modify (0-based)
+            width: Column width in points (required for FIXED_WIDTH)
+            width_type: Width type - "FIXED_WIDTH" or "EVENLY_DISTRIBUTED"
+
+        Returns:
+            Tuple of (success, message, metadata)
+        """
+        try:
+            # Validate width_type
+            valid_width_types = ["FIXED_WIDTH", "EVENLY_DISTRIBUTED"]
+            if width_type not in valid_width_types:
+                return (
+                    False,
+                    f"width_type must be one of {valid_width_types}, got '{width_type}'",
+                    {},
+                )
+
+            # FIXED_WIDTH requires a width value
+            if width_type == "FIXED_WIDTH" and width is None:
+                return (
+                    False,
+                    "width is required when width_type is 'FIXED_WIDTH'",
+                    {},
+                )
+
+            # Get table to find its start index
+            tables = await self._get_document_tables(document_id)
+            if table_index >= len(tables):
+                return (
+                    False,
+                    f"Table index {table_index} not found. Document has {len(tables)} tables",
+                    {},
+                )
+
+            table_info = tables[table_index]
+            table_start_index = table_info["start_index"]
+            table_cols = table_info["columns"]
+
+            # Validate column indices
+            for idx in column_indices:
+                if idx < 0 or idx >= table_cols:
+                    return (
+                        False,
+                        f"Column index {idx} is out of bounds. Table has {table_cols} columns",
+                        {},
+                    )
+
+            # Create and execute column properties request
+            request = create_update_table_column_properties_request(
+                table_start_index, column_indices, width, width_type
+            )
+
+            await asyncio.to_thread(
+                self.service.documents()
+                .batchUpdate(documentId=document_id, body={"requests": [request]})
+                .execute
+            )
+
+            metadata = {
+                "table_index": table_index,
+                "column_indices": column_indices,
+                "width": width,
+                "width_type": width_type,
+            }
+
+            return (
+                True,
+                f"Successfully set column width for columns {column_indices}",
+                metadata,
+            )
+
+        except Exception as e:
+            logger.error(f"Failed to set column width: {str(e)}")
+            return False, f"Failed to set column width: {str(e)}", {}
+
+    async def pin_header_rows(
+        self,
+        document_id: str,
+        table_index: int,
+        pinned_header_rows_count: int,
+    ) -> Tuple[bool, str, Dict[str, Any]]:
+        """
+        Pin rows as repeating table headers.
+
+        When a table spans multiple pages, pinned header rows will repeat
+        at the top of each page.
+
+        Args:
+            document_id: ID of the document
+            table_index: Index of the table (0-based)
+            pinned_header_rows_count: Number of rows to pin as headers (0 to unpin)
+
+        Returns:
+            Tuple of (success, message, metadata)
+        """
+        try:
+            # Get table to find its start index
+            tables = await self._get_document_tables(document_id)
+            if table_index >= len(tables):
+                return (
+                    False,
+                    f"Table index {table_index} not found. Document has {len(tables)} tables",
+                    {},
+                )
+
+            table_info = tables[table_index]
+            table_start_index = table_info["start_index"]
+            table_rows = table_info["rows"]
+
+            # Validate pinned rows count
+            if pinned_header_rows_count < 0:
+                return (
+                    False,
+                    "pinned_header_rows_count cannot be negative",
+                    {},
+                )
+            if pinned_header_rows_count > table_rows:
+                return (
+                    False,
+                    f"pinned_header_rows_count ({pinned_header_rows_count}) exceeds table rows ({table_rows})",
+                    {},
+                )
+
+            # Create and execute pin header rows request
+            request = create_pin_table_header_rows_request(
+                table_start_index, pinned_header_rows_count
+            )
+
+            await asyncio.to_thread(
+                self.service.documents()
+                .batchUpdate(documentId=document_id, body={"requests": [request]})
+                .execute
+            )
+
+            metadata = {
+                "table_index": table_index,
+                "pinned_header_rows_count": pinned_header_rows_count,
+            }
+
+            action = "pinned" if pinned_header_rows_count > 0 else "unpinned"
+            return (
+                True,
+                f"Successfully {action} {pinned_header_rows_count} header row(s)",
+                metadata,
+            )
+
+        except Exception as e:
+            logger.error(f"Failed to pin header rows: {str(e)}")
+            return False, f"Failed to pin header rows: {str(e)}", {}

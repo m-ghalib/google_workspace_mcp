@@ -17,6 +17,14 @@ from gdocs.docs_helpers import (
     create_delete_table_column_request,
     create_update_table_cell_style_request,
     create_delete_paragraph_bullets_request,
+    # New request builders
+    create_delete_header_request,
+    create_delete_footer_request,
+    create_merge_table_cells_request,
+    create_unmerge_table_cells_request,
+    create_update_table_row_style_request,
+    create_update_table_column_properties_request,
+    create_pin_table_header_rows_request,
 )
 
 
@@ -408,3 +416,331 @@ class TestRequestStructureIntegrity:
         assert "range" in delete_req
         assert "startIndex" in delete_req["range"]
         assert "endIndex" in delete_req["range"]
+
+
+# ==============================================================================
+# NEW REQUEST BUILDER TESTS - Header/Footer & Advanced Table Operations
+# ==============================================================================
+
+
+class TestDeleteHeaderRequest:
+    """Test create_delete_header_request helper function."""
+
+    def test_delete_header_basic(self):
+        """Test basic header deletion request."""
+        result = create_delete_header_request("kix.abc123")
+
+        assert "deleteHeader" in result
+        assert result["deleteHeader"]["headerId"] == "kix.abc123"
+
+    def test_delete_header_different_ids(self):
+        """Test with different header IDs."""
+        for header_id in ["kix.header1", "kix.firstpage", "kix.evenpage"]:
+            result = create_delete_header_request(header_id)
+            assert result["deleteHeader"]["headerId"] == header_id
+
+
+class TestDeleteFooterRequest:
+    """Test create_delete_footer_request helper function."""
+
+    def test_delete_footer_basic(self):
+        """Test basic footer deletion request."""
+        result = create_delete_footer_request("kix.def456")
+
+        assert "deleteFooter" in result
+        assert result["deleteFooter"]["footerId"] == "kix.def456"
+
+    def test_delete_footer_different_ids(self):
+        """Test with different footer IDs."""
+        for footer_id in ["kix.footer1", "kix.firstpage", "kix.evenpage"]:
+            result = create_delete_footer_request(footer_id)
+            assert result["deleteFooter"]["footerId"] == footer_id
+
+
+class TestMergeTableCellsRequest:
+    """Test create_merge_table_cells_request helper function."""
+
+    def test_merge_basic(self):
+        """Test basic cell merge request."""
+        result = create_merge_table_cells_request(
+            table_start_index=100,
+            start_row=0,
+            start_col=0,
+            row_span=2,
+            col_span=3,
+        )
+
+        assert "mergeTableCells" in result
+        merge_req = result["mergeTableCells"]
+        assert "tableRange" in merge_req
+
+        table_range = merge_req["tableRange"]
+        assert table_range["rowSpan"] == 2
+        assert table_range["columnSpan"] == 3
+
+        cell_loc = table_range["tableCellLocation"]
+        assert cell_loc["tableStartLocation"]["index"] == 100
+        assert cell_loc["rowIndex"] == 0
+        assert cell_loc["columnIndex"] == 0
+
+    def test_merge_different_positions(self):
+        """Test merge at different table positions."""
+        result = create_merge_table_cells_request(
+            table_start_index=500,
+            start_row=2,
+            start_col=1,
+            row_span=3,
+            col_span=2,
+        )
+
+        table_range = result["mergeTableCells"]["tableRange"]
+        assert table_range["tableCellLocation"]["tableStartLocation"]["index"] == 500
+        assert table_range["tableCellLocation"]["rowIndex"] == 2
+        assert table_range["tableCellLocation"]["columnIndex"] == 1
+
+
+class TestUnmergeTableCellsRequest:
+    """Test create_unmerge_table_cells_request helper function."""
+
+    def test_unmerge_basic(self):
+        """Test basic cell unmerge request."""
+        result = create_unmerge_table_cells_request(
+            table_start_index=100,
+            row_index=0,
+            col_index=0,
+            row_span=2,
+            col_span=3,
+        )
+
+        assert "unmergeTableCells" in result
+        unmerge_req = result["unmergeTableCells"]
+        assert "tableRange" in unmerge_req
+
+        table_range = unmerge_req["tableRange"]
+        assert table_range["rowSpan"] == 2
+        assert table_range["columnSpan"] == 3
+
+    def test_unmerge_different_positions(self):
+        """Test unmerge at different positions."""
+        result = create_unmerge_table_cells_request(
+            table_start_index=250,
+            row_index=1,
+            col_index=2,
+            row_span=4,
+            col_span=1,
+        )
+
+        table_range = result["unmergeTableCells"]["tableRange"]
+        assert table_range["tableCellLocation"]["rowIndex"] == 1
+        assert table_range["tableCellLocation"]["columnIndex"] == 2
+
+
+class TestUpdateTableRowStyleRequest:
+    """Test create_update_table_row_style_request helper function."""
+
+    def test_min_row_height_only(self):
+        """Test setting only minimum row height."""
+        result = create_update_table_row_style_request(
+            table_start_index=100,
+            row_indices=[0],
+            min_row_height=36.0,
+        )
+
+        assert "updateTableRowStyle" in result
+        req = result["updateTableRowStyle"]
+        assert req["tableStartLocation"]["index"] == 100
+        assert req["rowIndices"] == [0]
+        assert req["tableRowStyle"]["minRowHeight"]["magnitude"] == 36.0
+        assert req["tableRowStyle"]["minRowHeight"]["unit"] == "PT"
+        assert "minRowHeight" in req["fields"]
+
+    def test_prevent_overflow_only(self):
+        """Test setting only prevent overflow."""
+        result = create_update_table_row_style_request(
+            table_start_index=100,
+            row_indices=[0, 1],
+            prevent_overflow=True,
+        )
+
+        req = result["updateTableRowStyle"]
+        assert req["tableRowStyle"]["preventOverflow"] is True
+        assert "preventOverflow" in req["fields"]
+
+    def test_combined_row_style(self):
+        """Test combining min height and prevent overflow."""
+        result = create_update_table_row_style_request(
+            table_start_index=100,
+            row_indices=[0, 1, 2],
+            min_row_height=48.0,
+            prevent_overflow=False,
+        )
+
+        req = result["updateTableRowStyle"]
+        assert req["rowIndices"] == [0, 1, 2]
+        assert req["tableRowStyle"]["minRowHeight"]["magnitude"] == 48.0
+        assert req["tableRowStyle"]["preventOverflow"] is False
+        assert "minRowHeight" in req["fields"]
+        assert "preventOverflow" in req["fields"]
+
+
+class TestUpdateTableColumnPropertiesRequest:
+    """Test create_update_table_column_properties_request helper function."""
+
+    def test_fixed_width(self):
+        """Test setting fixed column width."""
+        result = create_update_table_column_properties_request(
+            table_start_index=100,
+            column_indices=[0],
+            width=150.0,
+            width_type="FIXED_WIDTH",
+        )
+
+        assert "updateTableColumnProperties" in result
+        req = result["updateTableColumnProperties"]
+        assert req["tableStartLocation"]["index"] == 100
+        assert req["columnIndices"] == [0]
+        assert req["tableColumnProperties"]["widthType"] == "FIXED_WIDTH"
+        assert req["tableColumnProperties"]["width"]["magnitude"] == 150.0
+        assert req["tableColumnProperties"]["width"]["unit"] == "PT"
+
+    def test_evenly_distributed(self):
+        """Test evenly distributed width type."""
+        result = create_update_table_column_properties_request(
+            table_start_index=100,
+            column_indices=[0, 1, 2],
+            width_type="EVENLY_DISTRIBUTED",
+        )
+
+        req = result["updateTableColumnProperties"]
+        assert req["tableColumnProperties"]["widthType"] == "EVENLY_DISTRIBUTED"
+
+    def test_multiple_columns(self):
+        """Test setting width for multiple columns."""
+        result = create_update_table_column_properties_request(
+            table_start_index=200,
+            column_indices=[0, 2, 4],
+            width=100.0,
+            width_type="FIXED_WIDTH",
+        )
+
+        req = result["updateTableColumnProperties"]
+        assert req["columnIndices"] == [0, 2, 4]
+
+
+class TestPinTableHeaderRowsRequest:
+    """Test create_pin_table_header_rows_request helper function."""
+
+    def test_pin_single_row(self):
+        """Test pinning a single header row."""
+        result = create_pin_table_header_rows_request(
+            table_start_index=100,
+            pinned_header_rows_count=1,
+        )
+
+        assert "pinTableHeaderRows" in result
+        req = result["pinTableHeaderRows"]
+        assert req["tableStartLocation"]["index"] == 100
+        assert req["pinnedHeaderRowsCount"] == 1
+
+    def test_pin_multiple_rows(self):
+        """Test pinning multiple header rows."""
+        result = create_pin_table_header_rows_request(
+            table_start_index=100,
+            pinned_header_rows_count=3,
+        )
+
+        assert result["pinTableHeaderRows"]["pinnedHeaderRowsCount"] == 3
+
+    def test_unpin_all_rows(self):
+        """Test unpinning all rows (count=0)."""
+        result = create_pin_table_header_rows_request(
+            table_start_index=100,
+            pinned_header_rows_count=0,
+        )
+
+        assert result["pinTableHeaderRows"]["pinnedHeaderRowsCount"] == 0
+
+
+# ==============================================================================
+# NEW REQUEST STRUCTURE INTEGRITY TESTS
+# ==============================================================================
+
+
+class TestNewRequestStructureIntegrity:
+    """Test that new requests match Google Docs API spec."""
+
+    def test_delete_header_structure(self):
+        """Verify deleteHeader matches Google Docs API spec."""
+        result = create_delete_header_request("kix.test123")
+
+        assert "deleteHeader" in result
+        assert "headerId" in result["deleteHeader"]
+
+    def test_delete_footer_structure(self):
+        """Verify deleteFooter matches Google Docs API spec."""
+        result = create_delete_footer_request("kix.test456")
+
+        assert "deleteFooter" in result
+        assert "footerId" in result["deleteFooter"]
+
+    def test_merge_cells_structure(self):
+        """Verify mergeTableCells matches Google Docs API spec."""
+        result = create_merge_table_cells_request(100, 0, 0, 2, 2)
+
+        assert "mergeTableCells" in result
+        merge_req = result["mergeTableCells"]
+        assert "tableRange" in merge_req
+
+        table_range = merge_req["tableRange"]
+        assert "tableCellLocation" in table_range
+        assert "rowSpan" in table_range
+        assert "columnSpan" in table_range
+
+        cell_loc = table_range["tableCellLocation"]
+        assert "tableStartLocation" in cell_loc
+        assert "index" in cell_loc["tableStartLocation"]
+        assert "rowIndex" in cell_loc
+        assert "columnIndex" in cell_loc
+
+    def test_unmerge_cells_structure(self):
+        """Verify unmergeTableCells matches Google Docs API spec."""
+        result = create_unmerge_table_cells_request(100, 0, 0, 2, 2)
+
+        assert "unmergeTableCells" in result
+        unmerge_req = result["unmergeTableCells"]
+        assert "tableRange" in unmerge_req
+
+    def test_row_style_structure(self):
+        """Verify updateTableRowStyle matches Google Docs API spec."""
+        result = create_update_table_row_style_request(100, [0], min_row_height=36.0)
+
+        assert "updateTableRowStyle" in result
+        req = result["updateTableRowStyle"]
+        assert "tableStartLocation" in req
+        assert "index" in req["tableStartLocation"]
+        assert "rowIndices" in req
+        assert "tableRowStyle" in req
+        assert "fields" in req
+
+    def test_column_properties_structure(self):
+        """Verify updateTableColumnProperties matches Google Docs API spec."""
+        result = create_update_table_column_properties_request(
+            100, [0], width=100.0, width_type="FIXED_WIDTH"
+        )
+
+        assert "updateTableColumnProperties" in result
+        req = result["updateTableColumnProperties"]
+        assert "tableStartLocation" in req
+        assert "columnIndices" in req
+        assert "tableColumnProperties" in req
+        assert "fields" in req
+
+    def test_pin_header_rows_structure(self):
+        """Verify pinTableHeaderRows matches Google Docs API spec."""
+        result = create_pin_table_header_rows_request(100, 1)
+
+        assert "pinTableHeaderRows" in result
+        req = result["pinTableHeaderRows"]
+        assert "tableStartLocation" in req
+        assert "index" in req["tableStartLocation"]
+        assert "pinnedHeaderRowsCount" in req

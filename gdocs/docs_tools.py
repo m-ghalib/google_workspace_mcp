@@ -1932,6 +1932,426 @@ async def delete_paragraph_bullets(
     return f"Removed bullet/list formatting from range {start_index}-{end_index} in document {document_id}. Link: {link}"
 
 
+# ==============================================================================
+# HEADER/FOOTER MANAGEMENT TOOLS
+# ==============================================================================
+
+
+@server.tool()
+@handle_http_errors("delete_doc_header_footer", service_type="docs")
+@require_google_service("docs", "docs_write")
+async def delete_doc_header_footer(
+    service: Any,
+    user_google_email: str,
+    document_id: str,
+    section_type: str,
+    header_footer_type: str = "DEFAULT",
+) -> str:
+    """
+    Deletes a header or footer section from a Google Doc.
+
+    Args:
+        user_google_email: User's Google email address
+        document_id: ID of the document to update
+        section_type: Type of section to delete ("header" or "footer")
+        header_footer_type: Type of header/footer to delete ("DEFAULT", "FIRST_PAGE", or "EVEN_PAGE")
+
+    Returns:
+        str: Confirmation message with deletion details
+
+    Example:
+        # Delete the default header
+        delete_doc_header_footer(document_id="...", section_type="header", header_footer_type="DEFAULT")
+
+        # Delete the first page footer
+        delete_doc_header_footer(document_id="...", section_type="footer", header_footer_type="FIRST_PAGE")
+    """
+    logger.info(
+        f"[delete_doc_header_footer] Doc={document_id}, type={section_type}, hf_type={header_footer_type}"
+    )
+
+    # Input validation
+    validator = ValidationManager()
+
+    is_valid, error_msg = validator.validate_document_id(document_id)
+    if not is_valid:
+        return f"Error: {error_msg}"
+
+    # Validate section_type
+    if section_type not in ["header", "footer"]:
+        return "Error: section_type must be 'header' or 'footer'"
+
+    # Validate header_footer_type
+    valid_types = ["DEFAULT", "FIRST_PAGE", "EVEN_PAGE", "FIRST_PAGE_ONLY"]
+    if header_footer_type not in valid_types:
+        return f"Error: header_footer_type must be one of {valid_types}"
+
+    # Use HeaderFooterManager to handle the deletion
+    header_footer_manager = HeaderFooterManager(service)
+
+    success, message = await header_footer_manager.delete_header_footer(
+        document_id, section_type, header_footer_type
+    )
+
+    if success:
+        link = f"https://docs.google.com/document/d/{document_id}/edit"
+        return f"{message}. Link: {link}"
+    else:
+        return f"Error: {message}"
+
+
+# ==============================================================================
+# ADVANCED TABLE OPERATIONS TOOLS
+# ==============================================================================
+
+
+@server.tool()
+@handle_http_errors("merge_table_cells", service_type="docs")
+@require_google_service("docs", "docs_write")
+async def merge_table_cells(
+    service: Any,
+    user_google_email: str,
+    document_id: str,
+    table_index: int,
+    start_row: int,
+    start_col: int,
+    row_span: int,
+    col_span: int,
+) -> str:
+    """
+    Merges a range of cells in a table.
+
+    Creates a single merged cell spanning multiple rows and/or columns.
+    The content of the top-left cell is preserved; content from other cells is deleted.
+
+    Args:
+        user_google_email: User's Google email address
+        document_id: ID of the document containing the table
+        table_index: Which table to modify (0 = first table, 1 = second, etc.)
+        start_row: Starting row index for merge (0-based)
+        start_col: Starting column index for merge (0-based)
+        row_span: Number of rows to merge (must be >= 1)
+        col_span: Number of columns to merge (must be >= 1)
+
+    Returns:
+        str: Confirmation message with merge details
+
+    Example:
+        # Merge cells (0,0) to (1,2) - 2 rows x 3 columns starting at top-left
+        merge_table_cells(document_id="...", table_index=0,
+                         start_row=0, start_col=0, row_span=2, col_span=3)
+
+        # Merge first column across 3 rows (for a row header)
+        merge_table_cells(document_id="...", table_index=0,
+                         start_row=1, start_col=0, row_span=3, col_span=1)
+    """
+    logger.info(
+        f"[merge_table_cells] Doc={document_id}, table={table_index}, "
+        f"start=({start_row},{start_col}), span={row_span}x{col_span}"
+    )
+
+    # Input validation
+    validator = ValidationManager()
+
+    is_valid, error_msg = validator.validate_document_id(document_id)
+    if not is_valid:
+        return f"Error: {error_msg}"
+
+    if row_span < 1 or col_span < 1:
+        return "Error: row_span and col_span must be >= 1"
+
+    if row_span == 1 and col_span == 1:
+        return "Error: Merging a single cell has no effect. row_span and col_span cannot both be 1."
+
+    # Use TableOperationManager to handle the merge
+    table_manager = TableOperationManager(service)
+
+    success, message, metadata = await table_manager.merge_cells(
+        document_id, table_index, start_row, start_col, row_span, col_span
+    )
+
+    if success:
+        link = f"https://docs.google.com/document/d/{document_id}/edit"
+        return f"{message}. Link: {link}"
+    else:
+        return f"Error: {message}"
+
+
+@server.tool()
+@handle_http_errors("unmerge_table_cells", service_type="docs")
+@require_google_service("docs", "docs_write")
+async def unmerge_table_cells(
+    service: Any,
+    user_google_email: str,
+    document_id: str,
+    table_index: int,
+    row_index: int,
+    col_index: int,
+    row_span: int,
+    col_span: int,
+) -> str:
+    """
+    Unmerges previously merged cells in a table.
+
+    Splits a merged cell back into individual cells. The content remains in the
+    top-left cell; other cells become empty.
+
+    Args:
+        user_google_email: User's Google email address
+        document_id: ID of the document containing the table
+        table_index: Which table to modify (0 = first table, 1 = second, etc.)
+        row_index: Row index of the merged cell (0-based)
+        col_index: Column index of the merged cell (0-based)
+        row_span: Number of rows the merged cell spans
+        col_span: Number of columns the merged cell spans
+
+    Returns:
+        str: Confirmation message with unmerge details
+
+    Example:
+        # Unmerge a cell that was merged across 2 rows and 3 columns
+        unmerge_table_cells(document_id="...", table_index=0,
+                          row_index=0, col_index=0, row_span=2, col_span=3)
+    """
+    logger.info(
+        f"[unmerge_table_cells] Doc={document_id}, table={table_index}, "
+        f"cell=({row_index},{col_index}), span={row_span}x{col_span}"
+    )
+
+    # Input validation
+    validator = ValidationManager()
+
+    is_valid, error_msg = validator.validate_document_id(document_id)
+    if not is_valid:
+        return f"Error: {error_msg}"
+
+    if row_span < 1 or col_span < 1:
+        return "Error: row_span and col_span must be >= 1"
+
+    # Use TableOperationManager to handle the unmerge
+    table_manager = TableOperationManager(service)
+
+    success, message, metadata = await table_manager.unmerge_cells(
+        document_id, table_index, row_index, col_index, row_span, col_span
+    )
+
+    if success:
+        link = f"https://docs.google.com/document/d/{document_id}/edit"
+        return f"{message}. Link: {link}"
+    else:
+        return f"Error: {message}"
+
+
+@server.tool()
+@handle_http_errors("update_table_row_style", service_type="docs")
+@require_google_service("docs", "docs_write")
+async def update_table_row_style(
+    service: Any,
+    user_google_email: str,
+    document_id: str,
+    table_index: int,
+    row_indices: List[int],
+    min_row_height: float = None,
+    prevent_overflow: bool = None,
+) -> str:
+    """
+    Updates the style of one or more table rows.
+
+    Allows setting row-level properties like minimum height and overflow behavior.
+
+    Args:
+        user_google_email: User's Google email address
+        document_id: ID of the document containing the table
+        table_index: Which table to modify (0 = first table, 1 = second, etc.)
+        row_indices: List of row indices to style (0-based). Example: [0, 1, 2]
+        min_row_height: Minimum row height in points (e.g., 36 for ~0.5 inch)
+        prevent_overflow: If True, prevents content from expanding row height beyond minimum
+
+    Returns:
+        str: Confirmation message with styling details
+
+    Example:
+        # Set minimum height for header row
+        update_table_row_style(document_id="...", table_index=0,
+                              row_indices=[0], min_row_height=36)
+
+        # Set all rows to fixed height with no overflow
+        update_table_row_style(document_id="...", table_index=0,
+                              row_indices=[0, 1, 2, 3],
+                              min_row_height=24, prevent_overflow=True)
+    """
+    logger.info(
+        f"[update_table_row_style] Doc={document_id}, table={table_index}, "
+        f"rows={row_indices}, height={min_row_height}, overflow={prevent_overflow}"
+    )
+
+    # Input validation
+    validator = ValidationManager()
+
+    is_valid, error_msg = validator.validate_document_id(document_id)
+    if not is_valid:
+        return f"Error: {error_msg}"
+
+    if not row_indices:
+        return "Error: row_indices list cannot be empty"
+
+    if min_row_height is None and prevent_overflow is None:
+        return "Error: At least one style property (min_row_height or prevent_overflow) must be provided"
+
+    # Use TableOperationManager to handle the styling
+    table_manager = TableOperationManager(service)
+
+    success, message, metadata = await table_manager.update_row_style(
+        document_id, table_index, row_indices, min_row_height, prevent_overflow
+    )
+
+    if success:
+        link = f"https://docs.google.com/document/d/{document_id}/edit"
+        return f"{message}. Link: {link}"
+    else:
+        return f"Error: {message}"
+
+
+@server.tool()
+@handle_http_errors("set_table_column_width", service_type="docs")
+@require_google_service("docs", "docs_write")
+async def set_table_column_width(
+    service: Any,
+    user_google_email: str,
+    document_id: str,
+    table_index: int,
+    column_indices: List[int],
+    width: float = None,
+    width_type: str = "FIXED_WIDTH",
+) -> str:
+    """
+    Sets the width properties for one or more table columns.
+
+    Args:
+        user_google_email: User's Google email address
+        document_id: ID of the document containing the table
+        table_index: Which table to modify (0 = first table, 1 = second, etc.)
+        column_indices: List of column indices to modify (0-based). Example: [0, 1]
+        width: Column width in points (required for FIXED_WIDTH). 72 points = 1 inch.
+        width_type: Width type - "FIXED_WIDTH" (exact width) or "EVENLY_DISTRIBUTED" (auto-distribute)
+
+    Returns:
+        str: Confirmation message with width details
+
+    Example:
+        # Set first column to 100 points wide
+        set_table_column_width(document_id="...", table_index=0,
+                              column_indices=[0], width=100)
+
+        # Distribute all columns evenly
+        set_table_column_width(document_id="...", table_index=0,
+                              column_indices=[0, 1, 2, 3],
+                              width_type="EVENLY_DISTRIBUTED")
+
+        # Set multiple columns to same fixed width
+        set_table_column_width(document_id="...", table_index=0,
+                              column_indices=[1, 2], width=72)
+    """
+    logger.info(
+        f"[set_table_column_width] Doc={document_id}, table={table_index}, "
+        f"cols={column_indices}, width={width}, type={width_type}"
+    )
+
+    # Input validation
+    validator = ValidationManager()
+
+    is_valid, error_msg = validator.validate_document_id(document_id)
+    if not is_valid:
+        return f"Error: {error_msg}"
+
+    if not column_indices:
+        return "Error: column_indices list cannot be empty"
+
+    valid_width_types = ["FIXED_WIDTH", "EVENLY_DISTRIBUTED"]
+    if width_type not in valid_width_types:
+        return f"Error: width_type must be one of {valid_width_types}"
+
+    if width_type == "FIXED_WIDTH" and width is None:
+        return "Error: width is required when width_type is 'FIXED_WIDTH'"
+
+    # Use TableOperationManager to handle the width setting
+    table_manager = TableOperationManager(service)
+
+    success, message, metadata = await table_manager.set_column_width(
+        document_id, table_index, column_indices, width, width_type
+    )
+
+    if success:
+        link = f"https://docs.google.com/document/d/{document_id}/edit"
+        return f"{message}. Link: {link}"
+    else:
+        return f"Error: {message}"
+
+
+@server.tool()
+@handle_http_errors("pin_table_header_rows", service_type="docs")
+@require_google_service("docs", "docs_write")
+async def pin_table_header_rows(
+    service: Any,
+    user_google_email: str,
+    document_id: str,
+    table_index: int,
+    pinned_header_rows_count: int,
+) -> str:
+    """
+    Pins rows as repeating table headers that appear at the top of each page.
+
+    When a table spans multiple pages, pinned header rows will automatically
+    repeat at the top of each page for better readability.
+
+    Args:
+        user_google_email: User's Google email address
+        document_id: ID of the document containing the table
+        table_index: Which table to modify (0 = first table, 1 = second, etc.)
+        pinned_header_rows_count: Number of rows to pin as headers (0 to unpin all)
+
+    Returns:
+        str: Confirmation message with pinning details
+
+    Example:
+        # Pin the first row as a repeating header
+        pin_table_header_rows(document_id="...", table_index=0, pinned_header_rows_count=1)
+
+        # Pin the first two rows as repeating headers
+        pin_table_header_rows(document_id="...", table_index=0, pinned_header_rows_count=2)
+
+        # Remove all pinned headers
+        pin_table_header_rows(document_id="...", table_index=0, pinned_header_rows_count=0)
+    """
+    logger.info(
+        f"[pin_table_header_rows] Doc={document_id}, table={table_index}, "
+        f"pinned_rows={pinned_header_rows_count}"
+    )
+
+    # Input validation
+    validator = ValidationManager()
+
+    is_valid, error_msg = validator.validate_document_id(document_id)
+    if not is_valid:
+        return f"Error: {error_msg}"
+
+    if pinned_header_rows_count < 0:
+        return "Error: pinned_header_rows_count cannot be negative"
+
+    # Use TableOperationManager to handle the pinning
+    table_manager = TableOperationManager(service)
+
+    success, message, metadata = await table_manager.pin_header_rows(
+        document_id, table_index, pinned_header_rows_count
+    )
+
+    if success:
+        link = f"https://docs.google.com/document/d/{document_id}/edit"
+        return f"{message}. Link: {link}"
+    else:
+        return f"Error: {message}"
+
+
 # Create comment management tools for documents
 _comment_tools = create_comment_tools("document", "document_id")
 

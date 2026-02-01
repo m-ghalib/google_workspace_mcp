@@ -65,7 +65,7 @@ export OAUTHLIB_INSECURE_TRANSPORT=1  # Development only
 
 **Also includes:** `get_gmail_attachment_content`, `list_gmail_filters`, `create_gmail_filter`, `delete_gmail_filter`
 
-### Google Drive (7 tools)
+### Google Drive (5 tools)
 
 | Tool | Tier | Description |
 |------|------|-------------|
@@ -74,8 +74,6 @@ export OAUTHLIB_INSECURE_TRANSPORT=1  # Development only
 | `create_drive_file` | Core | Create files from content or URL (supports file://, http://, https://) |
 | `list_drive_items` | Extended | List folder contents with shared drive support |
 | `update_drive_file` | Extended | Update metadata, move between folders, star, trash |
-| `get_drive_file_permissions` | Complete | Check sharing status and permissions |
-| `check_drive_file_public_access` | Complete | Verify public link sharing for Docs image insertion |
 
 **Also includes:** `get_drive_file_download_url` for generating download URLs
 

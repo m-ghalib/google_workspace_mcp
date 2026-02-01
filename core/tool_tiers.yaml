@@ -28,19 +28,11 @@ drive:
     - get_drive_file_download_url
     - create_drive_file
     - import_to_google_doc
-    - share_drive_file
-    - get_drive_shareable_link
   extended:
     - list_drive_items
     - copy_drive_file
     - update_drive_file
-    - update_drive_permission
-    - remove_drive_permission
-    - transfer_drive_ownership
-    - batch_share_drive_file
-  complete:
-    - get_drive_file_permissions
-    - check_drive_file_public_access
+  complete: []
 
 calendar:
   core:

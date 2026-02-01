@@ -337,3 +337,68 @@ class HeaderFooterManager:
                     f"A {section_type} of type {api_type} already exists in the document",
                 )
             return False, f"Failed to create {section_type}: {error_msg}"
+
+    async def delete_header_footer(
+        self,
+        document_id: str,
+        section_type: str,
+        header_footer_type: str = "DEFAULT",
+    ) -> tuple[bool, str]:
+        """
+        Delete a header or footer section from the document.
+
+        Args:
+            document_id: Document ID
+            section_type: "header" or "footer"
+            header_footer_type: Type of header/footer to delete ("DEFAULT", "FIRST_PAGE", or "EVEN_PAGE")
+
+        Returns:
+            Tuple of (success, message)
+        """
+        if section_type not in ["header", "footer"]:
+            return False, "section_type must be 'header' or 'footer'"
+
+        valid_types = ["DEFAULT", "FIRST_PAGE", "EVEN_PAGE", "FIRST_PAGE_ONLY"]
+        if header_footer_type not in valid_types:
+            return (
+                False,
+                f"header_footer_type must be one of {valid_types}, got '{header_footer_type}'",
+            )
+
+        try:
+            # Get document to find the section ID
+            doc = await self._get_document(document_id)
+
+            # Find the target section
+            target_section, section_id = await self._find_target_section(
+                doc, section_type, header_footer_type
+            )
+
+            if not target_section or not section_id:
+                return (
+                    False,
+                    f"No {section_type} of type '{header_footer_type}' found in document",
+                )
+
+            # Build the delete request
+            if section_type == "header":
+                batch_request = {"deleteHeader": {"headerId": section_id}}
+            else:
+                batch_request = {"deleteFooter": {"footerId": section_id}}
+
+            # Execute the request
+            await asyncio.to_thread(
+                self.service.documents()
+                .batchUpdate(documentId=document_id, body={"requests": [batch_request]})
+                .execute
+            )
+
+            return (
+                True,
+                f"Successfully deleted {section_type} (ID: {section_id}) from document",
+            )
+
+        except Exception as e:
+            error_msg = str(e)
+            logger.error(f"Failed to delete {section_type}: {error_msg}")
+            return False, f"Failed to delete {section_type}: {error_msg}"
