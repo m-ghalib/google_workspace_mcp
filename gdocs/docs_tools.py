@@ -15,7 +15,7 @@ from googleapiclient.http import MediaIoBaseDownload, MediaIoBaseUpload
 from auth.service_decorator import require_google_service, require_multiple_services
 from core.utils import extract_office_xml_text, handle_http_errors
 from core.server import server
-from core.comments import create_comment_tools
+# Comment tools are now unified in core/comments.py (read_comments, create_comment, etc.)
 
 # Import helper functions for document operations
 from gdocs.docs_helpers import (
@@ -634,6 +634,66 @@ async def find_and_replace_doc(
 
     link = f"https://docs.google.com/document/d/{document_id}/edit"
     return f"Replaced {replacements} occurrence(s) of '{find_text}' with '{replace_text}' in document {document_id}. Link: {link}"
+
+
+@server.tool()
+@handle_http_errors("delete_doc_content", service_type="docs")
+@require_google_service("docs", "docs_write")
+async def delete_doc_content(
+    service: Any,
+    user_google_email: str,
+    document_id: str,
+    start_index: int,
+    end_index: int,
+) -> str:
+    """
+    Deletes content from a Google Doc within a specified index range.
+
+    This is a dedicated tool for removing text and other content from a document.
+    For safety, always use inspect_doc_structure first to understand valid indices.
+
+    Args:
+        user_google_email: User's Google email address
+        document_id: ID of the document to modify
+        start_index: Start position of content to delete (0-based, inclusive)
+        end_index: End position of content to delete (exclusive)
+
+    Returns:
+        str: Confirmation message with deletion details
+
+    Example:
+        # Delete content between indices 50 and 100
+        delete_doc_content(document_id="...", start_index=50, end_index=100)
+
+    Note:
+        - Indices are 0-based
+        - end_index is exclusive (content at end_index is NOT deleted)
+        - Always call inspect_doc_structure first to get valid index ranges
+        - Deleting content shifts all subsequent indices
+    """
+    logger.info(
+        f"[delete_doc_content] Doc={document_id}, start={start_index}, end={end_index}"
+    )
+
+    # Validate indices
+    if start_index < 0:
+        return "Error: start_index must be >= 0"
+    if end_index <= start_index:
+        return "Error: end_index must be greater than start_index"
+
+    requests = [create_delete_range_request(start_index, end_index)]
+
+    result = await asyncio.to_thread(
+        service.documents()
+        .batchUpdate(documentId=document_id, body={"requests": requests})
+        .execute
+    )
+
+    # Calculate characters deleted
+    chars_deleted = end_index - start_index
+
+    link = f"https://docs.google.com/document/d/{document_id}/edit"
+    return f"Deleted {chars_deleted} character(s) from indices {start_index} to {end_index} in document {document_id}. Link: {link}"
 
 
 @server.tool()
@@ -1570,7 +1630,7 @@ async def insert_table_row(
 
     table = tables[table_index]
     if row_index >= table["rows"]:
-        return f"Error: row_index {row_index} out of bounds. Table has {table['rows']} rows (0-{table['rows']-1})."
+        return f"Error: row_index {row_index} out of bounds. Table has {table['rows']} rows (0-{table['rows'] - 1})."
 
     # Execute request
     requests = [
@@ -1632,7 +1692,7 @@ async def delete_table_row(
 
     table = tables[table_index]
     if row_index >= table["rows"]:
-        return f"Error: row_index {row_index} out of bounds. Table has {table['rows']} rows (0-{table['rows']-1})."
+        return f"Error: row_index {row_index} out of bounds. Table has {table['rows']} rows (0-{table['rows'] - 1})."
 
     # Cannot delete the last row
     if table["rows"] <= 1:
@@ -1702,7 +1762,7 @@ async def insert_table_column(
 
     table = tables[table_index]
     if column_index >= table["columns"]:
-        return f"Error: column_index {column_index} out of bounds. Table has {table['columns']} columns (0-{table['columns']-1})."
+        return f"Error: column_index {column_index} out of bounds. Table has {table['columns']} columns (0-{table['columns'] - 1})."
 
     # Check Google Docs column limit (20 max)
     if table["columns"] >= 20:
@@ -1770,11 +1830,13 @@ async def delete_table_column(
 
     table = tables[table_index]
     if column_index >= table["columns"]:
-        return f"Error: column_index {column_index} out of bounds. Table has {table['columns']} columns (0-{table['columns']-1})."
+        return f"Error: column_index {column_index} out of bounds. Table has {table['columns']} columns (0-{table['columns'] - 1})."
 
     # Cannot delete the last column
     if table["columns"] <= 1:
-        return "Error: Cannot delete the last column. Table must have at least 1 column."
+        return (
+            "Error: Cannot delete the last column. Table must have at least 1 column."
+        )
 
     # Execute request
     requests = [create_delete_table_column_request(table["start_index"], column_index)]
@@ -1858,9 +1920,9 @@ async def update_table_cell_style(
 
     table = tables[table_index]
     if row_index >= table["rows"]:
-        return f"Error: row_index {row_index} out of bounds. Table has {table['rows']} rows (0-{table['rows']-1})."
+        return f"Error: row_index {row_index} out of bounds. Table has {table['rows']} rows (0-{table['rows'] - 1})."
     if column_index >= table["columns"]:
-        return f"Error: column_index {column_index} out of bounds. Table has {table['columns']} columns (0-{table['columns']-1})."
+        return f"Error: column_index {column_index} out of bounds. Table has {table['columns']} columns (0-{table['columns'] - 1})."
 
     # Build the style request
     try:
@@ -1957,7 +2019,9 @@ async def create_paragraph_bullets(
     valid_list_types = ["UNORDERED", "ORDERED"]
     list_type_upper = list_type.upper()
     if list_type_upper not in valid_list_types:
-        return f"Error: Invalid list_type '{list_type}'. Must be 'UNORDERED' or 'ORDERED'."
+        return (
+            f"Error: Invalid list_type '{list_type}'. Must be 'UNORDERED' or 'ORDERED'."
+        )
 
     # Execute request
     requests = [create_bullet_list_request(start_index, end_index, list_type_upper)]
@@ -1967,7 +2031,9 @@ async def create_paragraph_bullets(
         .execute
     )
 
-    list_description = "bullet list" if list_type_upper == "UNORDERED" else "numbered list"
+    list_description = (
+        "bullet list" if list_type_upper == "UNORDERED" else "numbered list"
+    )
     link = f"https://docs.google.com/document/d/{document_id}/edit"
     return f"Created {list_description} for range {start_index}-{end_index} in document {document_id}. Link: {link}"
 
@@ -2443,11 +2509,5 @@ async def pin_table_header_rows(
         return f"Error: {message}"
 
 
-# Create comment management tools for documents
-_comment_tools = create_comment_tools("document", "document_id")
-
-# Extract and register the functions
-read_doc_comments = _comment_tools["read_comments"]
-create_doc_comment = _comment_tools["create_comment"]
-reply_to_comment = _comment_tools["reply_to_comment"]
-resolve_comment = _comment_tools["resolve_comment"]
+# Comment management tools are now unified in core/comments.py
+# Use: read_comments, create_comment, reply_to_comment, resolve_comment with file_id parameter

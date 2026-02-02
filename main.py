@@ -273,6 +273,9 @@ def main():
 
     wrap_server_tool_method(server)
 
+    # Import unified comment tools (work across all services via Drive API)
+    import core.comments  # noqa: F401
+
     from auth.scopes import set_enabled_tools, set_read_only
 
     set_enabled_tools(list(tools_to_import))

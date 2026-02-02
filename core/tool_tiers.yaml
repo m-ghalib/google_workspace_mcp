@@ -1,14 +1,13 @@
 gmail:
   core:
     - search_gmail_messages
-    - get_gmail_message_content
-    - get_gmail_messages_content_batch
+    - get_gmail_message_content  # Handles single + batch
     - send_gmail_message
 
   extended:
     - get_gmail_attachment_content
-    - get_gmail_thread_content
-    - modify_gmail_message_labels
+    - get_gmail_thread_content    # Handles single + batch
+    - modify_gmail_message_labels # Handles single + batch
     - list_gmail_labels
     - manage_gmail_label
     - draft_gmail_message
@@ -17,8 +16,6 @@ gmail:
     - delete_gmail_filter
 
   complete:
-    - get_gmail_threads_content_batch
-    - batch_modify_gmail_message_labels
     - start_google_auth
 
 drive:
@@ -32,7 +29,12 @@ drive:
     - list_drive_items
     - copy_drive_file
     - update_drive_file
-  complete: []
+  complete:
+    # Unified comment tools (work across Docs, Sheets, Slides via Drive API)
+    - read_comments
+    - create_comment
+    - reply_to_comment
+    - resolve_comment
 
 calendar:
   core:
@@ -64,10 +66,7 @@ docs:
     - inspect_doc_structure
     - create_table_with_data
     - debug_table_structure
-    - read_document_comments
-    - create_document_comment
-    - reply_to_document_comment
-    - resolve_document_comment
+    # Comment tools moved to drive service (unified across Docs/Sheets/Slides)
 
 sheets:
   core:
@@ -79,10 +78,11 @@ sheets:
     - get_spreadsheet_info
   complete:
     - create_sheet
-    - read_spreadsheet_comments
-    - create_spreadsheet_comment
-    - reply_to_spreadsheet_comment
-    - resolve_spreadsheet_comment
+    - format_sheet_range
+    - add_conditional_formatting
+    - update_conditional_formatting
+    - delete_conditional_formatting
+    # Comment tools moved to drive service (unified across Docs/Sheets/Slides)
 
 slides:
   core:
@@ -93,7 +93,5 @@ slides:
     - get_page
     - get_page_thumbnail
   complete:
-    - read_presentation_comments
-    - create_presentation_comment
-    - reply_to_presentation_comment
-    - resolve_presentation_comment
+    # Comment tools moved to drive service (unified across Docs/Sheets/Slides)
+    []

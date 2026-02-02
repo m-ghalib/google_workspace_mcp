@@ -747,16 +747,13 @@ cp .env.oauth21 .env
 | Tool | Tier | Description |
 |------|------|-------------|
 | `search_gmail_messages` | **Core** | Search with Gmail operators |
-| `get_gmail_message_content` | **Core** | Retrieve message content |
-| `get_gmail_messages_content_batch` | **Core** | Batch retrieve message content |
+| `get_gmail_message_content` | **Core** | Retrieve message content (single ID or list) |
 | `send_gmail_message` | **Core** | Send emails |
-| `get_gmail_thread_content` | Extended | Get full thread content |
-| `modify_gmail_message_labels` | Extended | Modify message labels |
+| `get_gmail_thread_content` | Extended | Get full thread content (single ID or list) |
+| `modify_gmail_message_labels` | Extended | Modify message labels (single ID or list) |
 | `list_gmail_labels` | Extended | List available labels |
 | `manage_gmail_label` | Extended | Create/update/delete labels |
 | `draft_gmail_message` | Extended | Create drafts |
-| `get_gmail_threads_content_batch` | Complete | Batch retrieve thread content |
-| `batch_modify_gmail_message_labels` | Complete | Batch modify labels |
 | `start_google_auth` | Complete | Legacy OAuth 2.0 auth (disabled when OAuth 2.1 is enabled) |
 
 <details>

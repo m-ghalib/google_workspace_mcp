@@ -13,7 +13,8 @@ from typing import List, Optional, Union
 from auth.service_decorator import require_google_service
 from core.server import server
 from core.utils import handle_http_errors, UserInputError
-from core.comments import create_comment_tools
+
+# Comment tools are now unified in core/comments.py (read_comments, create_comment, etc.)
 from gsheets.sheets_helpers import (
     CONDITION_TYPES,
     _a1_range_for_values,
@@ -999,11 +1000,5 @@ async def create_sheet(
     return text_output
 
 
-# Create comment management tools for sheets
-_comment_tools = create_comment_tools("spreadsheet", "spreadsheet_id")
-
-# Extract and register the functions
-read_sheet_comments = _comment_tools["read_comments"]
-create_sheet_comment = _comment_tools["create_comment"]
-reply_to_sheet_comment = _comment_tools["reply_to_comment"]
-resolve_sheet_comment = _comment_tools["resolve_comment"]
+# Comment management tools are now unified in core/comments.py
+# Use: read_comments, create_comment, reply_to_comment, resolve_comment with file_id parameter

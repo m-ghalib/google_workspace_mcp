@@ -1,13 +1,19 @@
 """
 Core Comments Module
 
-This module provides reusable comment management functions for Google Workspace applications.
+This module provides unified comment management tools for Google Workspace files.
 All Google Workspace apps (Docs, Sheets, Slides) use the Drive API for comment operations.
+
+These 4 tools replace the previous 12 app-specific tools:
+- read_comments (replaces read_document_comments, read_spreadsheet_comments, read_presentation_comments)
+- create_comment (replaces create_document_comment, create_spreadsheet_comment, create_presentation_comment)
+- reply_to_comment (replaces reply_to_document_comment, reply_to_spreadsheet_comment, reply_to_presentation_comment)
+- resolve_comment (replaces resolve_document_comment, resolve_spreadsheet_comment, resolve_presentation_comment)
 """
 
 import logging
 import asyncio
-
+from typing import Optional, Literal
 
 from auth.service_decorator import require_google_service
 from core.server import server
@@ -15,181 +21,36 @@ from core.utils import handle_http_errors
 
 logger = logging.getLogger(__name__)
 
+# Valid resource types for documentation purposes
+ResourceType = Literal["document", "spreadsheet", "presentation"]
 
-def create_comment_tools(app_name: str, file_id_param: str):
+
+@server.tool()
+@require_google_service("drive", "drive_read")
+@handle_http_errors("read_comments", service_type="drive")
+async def read_comments(
+    service,
+    user_google_email: str,
+    file_id: str,
+    resource_type: Optional[ResourceType] = None,
+) -> str:
     """
-    Factory function to create comment management tools for a specific Google Workspace app.
+    Read all comments from a Google Workspace file (Doc, Sheet, or Slides).
+
+    Works with any Google Workspace file type that supports comments.
+    The resource_type parameter is optional and used only for response formatting.
 
     Args:
-        app_name: Name of the app (e.g., "document", "spreadsheet", "presentation")
-        file_id_param: Parameter name for the file ID (e.g., "document_id", "spreadsheet_id", "presentation_id")
+        user_google_email (str): The user's Google email address. Required.
+        file_id (str): The ID of the file (document, spreadsheet, or presentation). Required.
+        resource_type (Optional[str]): Type of resource ("document", "spreadsheet", "presentation").
+            Optional - used for response formatting only.
 
     Returns:
-        Dict containing the four comment management functions with unique names
+        str: Formatted list of comments with authors, timestamps, and replies.
     """
-
-    # Create unique function names based on the app type
-    read_func_name = f"read_{app_name}_comments"
-    create_func_name = f"create_{app_name}_comment"
-    reply_func_name = f"reply_to_{app_name}_comment"
-    resolve_func_name = f"resolve_{app_name}_comment"
-
-    # Create functions without decorators first, then apply decorators with proper names
-    if file_id_param == "document_id":
-
-        @require_google_service("drive", "drive_read")
-        @handle_http_errors(read_func_name, service_type="drive")
-        async def read_comments(
-            service, user_google_email: str, document_id: str
-        ) -> str:
-            """Read all comments from a Google Document."""
-            return await _read_comments_impl(service, app_name, document_id)
-
-        @require_google_service("drive", "drive_file")
-        @handle_http_errors(create_func_name, service_type="drive")
-        async def create_comment(
-            service, user_google_email: str, document_id: str, comment_content: str
-        ) -> str:
-            """Create a new comment on a Google Document."""
-            return await _create_comment_impl(
-                service, app_name, document_id, comment_content
-            )
-
-        @require_google_service("drive", "drive_file")
-        @handle_http_errors(reply_func_name, service_type="drive")
-        async def reply_to_comment(
-            service,
-            user_google_email: str,
-            document_id: str,
-            comment_id: str,
-            reply_content: str,
-        ) -> str:
-            """Reply to a specific comment in a Google Document."""
-            return await _reply_to_comment_impl(
-                service, app_name, document_id, comment_id, reply_content
-            )
-
-        @require_google_service("drive", "drive_file")
-        @handle_http_errors(resolve_func_name, service_type="drive")
-        async def resolve_comment(
-            service, user_google_email: str, document_id: str, comment_id: str
-        ) -> str:
-            """Resolve a comment in a Google Document."""
-            return await _resolve_comment_impl(
-                service, app_name, document_id, comment_id
-            )
-
-    elif file_id_param == "spreadsheet_id":
-
-        @require_google_service("drive", "drive_read")
-        @handle_http_errors(read_func_name, service_type="drive")
-        async def read_comments(
-            service, user_google_email: str, spreadsheet_id: str
-        ) -> str:
-            """Read all comments from a Google Spreadsheet."""
-            return await _read_comments_impl(service, app_name, spreadsheet_id)
-
-        @require_google_service("drive", "drive_file")
-        @handle_http_errors(create_func_name, service_type="drive")
-        async def create_comment(
-            service, user_google_email: str, spreadsheet_id: str, comment_content: str
-        ) -> str:
-            """Create a new comment on a Google Spreadsheet."""
-            return await _create_comment_impl(
-                service, app_name, spreadsheet_id, comment_content
-            )
-
-        @require_google_service("drive", "drive_file")
-        @handle_http_errors(reply_func_name, service_type="drive")
-        async def reply_to_comment(
-            service,
-            user_google_email: str,
-            spreadsheet_id: str,
-            comment_id: str,
-            reply_content: str,
-        ) -> str:
-            """Reply to a specific comment in a Google Spreadsheet."""
-            return await _reply_to_comment_impl(
-                service, app_name, spreadsheet_id, comment_id, reply_content
-            )
-
-        @require_google_service("drive", "drive_file")
-        @handle_http_errors(resolve_func_name, service_type="drive")
-        async def resolve_comment(
-            service, user_google_email: str, spreadsheet_id: str, comment_id: str
-        ) -> str:
-            """Resolve a comment in a Google Spreadsheet."""
-            return await _resolve_comment_impl(
-                service, app_name, spreadsheet_id, comment_id
-            )
-
-    elif file_id_param == "presentation_id":
-
-        @require_google_service("drive", "drive_read")
-        @handle_http_errors(read_func_name, service_type="drive")
-        async def read_comments(
-            service, user_google_email: str, presentation_id: str
-        ) -> str:
-            """Read all comments from a Google Presentation."""
-            return await _read_comments_impl(service, app_name, presentation_id)
-
-        @require_google_service("drive", "drive_file")
-        @handle_http_errors(create_func_name, service_type="drive")
-        async def create_comment(
-            service, user_google_email: str, presentation_id: str, comment_content: str
-        ) -> str:
-            """Create a new comment on a Google Presentation."""
-            return await _create_comment_impl(
-                service, app_name, presentation_id, comment_content
-            )
-
-        @require_google_service("drive", "drive_file")
-        @handle_http_errors(reply_func_name, service_type="drive")
-        async def reply_to_comment(
-            service,
-            user_google_email: str,
-            presentation_id: str,
-            comment_id: str,
-            reply_content: str,
-        ) -> str:
-            """Reply to a specific comment in a Google Presentation."""
-            return await _reply_to_comment_impl(
-                service, app_name, presentation_id, comment_id, reply_content
-            )
-
-        @require_google_service("drive", "drive_file")
-        @handle_http_errors(resolve_func_name, service_type="drive")
-        async def resolve_comment(
-            service, user_google_email: str, presentation_id: str, comment_id: str
-        ) -> str:
-            """Resolve a comment in a Google Presentation."""
-            return await _resolve_comment_impl(
-                service, app_name, presentation_id, comment_id
-            )
-
-    # Set the proper function names and register with server
-    read_comments.__name__ = read_func_name
-    create_comment.__name__ = create_func_name
-    reply_to_comment.__name__ = reply_func_name
-    resolve_comment.__name__ = resolve_func_name
-
-    # Register tools with the server using the proper names
-    server.tool()(read_comments)
-    server.tool()(create_comment)
-    server.tool()(reply_to_comment)
-    server.tool()(resolve_comment)
-
-    return {
-        "read_comments": read_comments,
-        "create_comment": create_comment,
-        "reply_to_comment": reply_to_comment,
-        "resolve_comment": resolve_comment,
-    }
-
-
-async def _read_comments_impl(service, app_name: str, file_id: str) -> str:
-    """Implementation for reading comments from any Google Workspace file."""
-    logger.info(f"[read_{app_name}_comments] Reading comments for {app_name} {file_id}")
+    resource_label = resource_type or "file"
+    logger.info(f"[read_comments] Reading comments for {resource_label} {file_id}")
 
     response = await asyncio.to_thread(
         service.comments()
@@ -203,9 +64,9 @@ async def _read_comments_impl(service, app_name: str, file_id: str) -> str:
     comments = response.get("comments", [])
 
     if not comments:
-        return f"No comments found in {app_name} {file_id}"
+        return f"No comments found in {resource_label} {file_id}"
 
-    output = [f"Found {len(comments)} comments in {app_name} {file_id}:\\n"]
+    output = [f"Found {len(comments)} comments in {resource_label} {file_id}:\n"]
 
     for comment in comments:
         author = comment.get("author", {}).get("displayName", "Unknown")
@@ -236,14 +97,36 @@ async def _read_comments_impl(service, app_name: str, file_id: str) -> str:
 
         output.append("")  # Empty line between comments
 
-    return "\\n".join(output)
+    return "\n".join(output)
 
 
-async def _create_comment_impl(
-    service, app_name: str, file_id: str, comment_content: str
+@server.tool()
+@require_google_service("drive", "drive_file")
+@handle_http_errors("create_comment", service_type="drive")
+async def create_comment(
+    service,
+    user_google_email: str,
+    file_id: str,
+    comment_content: str,
+    resource_type: Optional[ResourceType] = None,
 ) -> str:
-    """Implementation for creating a comment on any Google Workspace file."""
-    logger.info(f"[create_{app_name}_comment] Creating comment in {app_name} {file_id}")
+    """
+    Create a new comment on a Google Workspace file (Doc, Sheet, or Slides).
+
+    Works with any Google Workspace file type that supports comments.
+
+    Args:
+        user_google_email (str): The user's Google email address. Required.
+        file_id (str): The ID of the file (document, spreadsheet, or presentation). Required.
+        comment_content (str): The text content of the comment. Required.
+        resource_type (Optional[str]): Type of resource ("document", "spreadsheet", "presentation").
+            Optional - used for logging only.
+
+    Returns:
+        str: Confirmation with the new comment ID and details.
+    """
+    resource_label = resource_type or "file"
+    logger.info(f"[create_comment] Creating comment in {resource_label} {file_id}")
 
     body = {"content": comment_content}
 
@@ -261,15 +144,39 @@ async def _create_comment_impl(
     author = comment.get("author", {}).get("displayName", "Unknown")
     created = comment.get("createdTime", "")
 
-    return f"Comment created successfully!\\nComment ID: {comment_id}\\nAuthor: {author}\\nCreated: {created}\\nContent: {comment_content}"
+    return f"Comment created successfully!\nComment ID: {comment_id}\nAuthor: {author}\nCreated: {created}\nContent: {comment_content}"
 
 
-async def _reply_to_comment_impl(
-    service, app_name: str, file_id: str, comment_id: str, reply_content: str
+@server.tool()
+@require_google_service("drive", "drive_file")
+@handle_http_errors("reply_to_comment", service_type="drive")
+async def reply_to_comment(
+    service,
+    user_google_email: str,
+    file_id: str,
+    comment_id: str,
+    reply_content: str,
+    resource_type: Optional[ResourceType] = None,
 ) -> str:
-    """Implementation for replying to a comment on any Google Workspace file."""
+    """
+    Reply to a specific comment in a Google Workspace file (Doc, Sheet, or Slides).
+
+    Works with any Google Workspace file type that supports comments.
+
+    Args:
+        user_google_email (str): The user's Google email address. Required.
+        file_id (str): The ID of the file (document, spreadsheet, or presentation). Required.
+        comment_id (str): The ID of the comment to reply to. Required.
+        reply_content (str): The text content of the reply. Required.
+        resource_type (Optional[str]): Type of resource ("document", "spreadsheet", "presentation").
+            Optional - used for logging only.
+
+    Returns:
+        str: Confirmation with the new reply ID and details.
+    """
+    resource_label = resource_type or "file"
     logger.info(
-        f"[reply_to_{app_name}_comment] Replying to comment {comment_id} in {app_name} {file_id}"
+        f"[reply_to_comment] Replying to comment {comment_id} in {resource_label} {file_id}"
     )
 
     body = {"content": reply_content}
@@ -289,15 +196,37 @@ async def _reply_to_comment_impl(
     author = reply.get("author", {}).get("displayName", "Unknown")
     created = reply.get("createdTime", "")
 
-    return f"Reply posted successfully!\\nReply ID: {reply_id}\\nAuthor: {author}\\nCreated: {created}\\nContent: {reply_content}"
+    return f"Reply posted successfully!\nReply ID: {reply_id}\nAuthor: {author}\nCreated: {created}\nContent: {reply_content}"
 
 
-async def _resolve_comment_impl(
-    service, app_name: str, file_id: str, comment_id: str
+@server.tool()
+@require_google_service("drive", "drive_file")
+@handle_http_errors("resolve_comment", service_type="drive")
+async def resolve_comment(
+    service,
+    user_google_email: str,
+    file_id: str,
+    comment_id: str,
+    resource_type: Optional[ResourceType] = None,
 ) -> str:
-    """Implementation for resolving a comment on any Google Workspace file."""
+    """
+    Resolve a comment in a Google Workspace file (Doc, Sheet, or Slides).
+
+    Marks the comment as resolved by posting a resolve action reply.
+
+    Args:
+        user_google_email (str): The user's Google email address. Required.
+        file_id (str): The ID of the file (document, spreadsheet, or presentation). Required.
+        comment_id (str): The ID of the comment to resolve. Required.
+        resource_type (Optional[str]): Type of resource ("document", "spreadsheet", "presentation").
+            Optional - used for logging only.
+
+    Returns:
+        str: Confirmation that the comment was resolved.
+    """
+    resource_label = resource_type or "file"
     logger.info(
-        f"[resolve_{app_name}_comment] Resolving comment {comment_id} in {app_name} {file_id}"
+        f"[resolve_comment] Resolving comment {comment_id} in {resource_label} {file_id}"
     )
 
     body = {"content": "This comment has been resolved.", "action": "resolve"}
@@ -317,4 +246,4 @@ async def _resolve_comment_impl(
     author = reply.get("author", {}).get("displayName", "Unknown")
     created = reply.get("createdTime", "")
 
-    return f"Comment {comment_id} has been resolved successfully.\\nResolve reply ID: {reply_id}\\nAuthor: {author}\\nCreated: {created}"
+    return f"Comment {comment_id} has been resolved successfully.\nResolve reply ID: {reply_id}\nAuthor: {author}\nCreated: {created}"

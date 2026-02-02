@@ -47,23 +47,20 @@ export OAUTHLIB_INSECURE_TRANSPORT=1  # Development only
 
 ## 🛠 Tools Reference
 
-### Gmail (11 tools)
+### Gmail (13 tools)
 
 | Tool | Tier | Description |
 |------|------|-------------|
 | `search_gmail_messages` | Core | Search with Gmail operators, returns message/thread IDs with web links |
-| `get_gmail_message_content` | Core | Get full message: subject, sender, body, attachments |
-| `get_gmail_messages_content_batch` | Core | Batch retrieve up to 25 messages |
+| `get_gmail_message_content` | Core | Get message(s): subject, sender, body, attachments. Accepts single ID or list |
 | `send_gmail_message` | Core | Send emails with HTML support, CC/BCC, threading |
-| `get_gmail_thread_content` | Extended | Get complete conversation thread |
+| `get_gmail_thread_content` | Extended | Get conversation thread(s). Accepts single ID or list |
 | `draft_gmail_message` | Extended | Create drafts with threading support |
 | `list_gmail_labels` | Extended | List all system and user labels |
 | `manage_gmail_label` | Extended | Create, update, delete labels |
-| `modify_gmail_message_labels` | Extended | Add/remove labels (archive, trash, etc.) |
-| `get_gmail_threads_content_batch` | Complete | Batch retrieve threads |
-| `batch_modify_gmail_message_labels` | Complete | Bulk label operations |
+| `modify_gmail_message_labels` | Extended | Add/remove labels (archive, trash, etc.). Accepts single ID or list |
 
-**Also includes:** `get_gmail_attachment_content`, `list_gmail_filters`, `create_gmail_filter`, `delete_gmail_filter`
+**Also includes:** `get_gmail_attachment_content`, `list_gmail_filters`, `create_gmail_filter`, `delete_gmail_filter`, `start_google_auth`
 
 ### Google Drive (5 tools)
 
