@@ -356,6 +356,17 @@ async def create_doc(
     return msg
 
 
+async def _get_document_length(service: Any, document_id: str) -> int:
+    """Get document length for bounds validation."""
+    doc = await asyncio.to_thread(
+        service.documents().get(documentId=document_id).execute
+    )
+    body_content = doc.get("body", {}).get("content", [])
+    if body_content:
+        return body_content[-1].get("endIndex", 1)
+    return 1
+
+
 @server.tool()
 @handle_http_errors("modify_doc_text", service_type="docs")
 @require_google_service("docs", "docs_write")
@@ -406,6 +417,11 @@ async def modify_doc_text(
     if not is_valid:
         return f"Error: {error_msg}"
 
+    # For delete/replace operations, fetch document length for bounds checking
+    document_length = None
+    if end_index is not None and end_index > start_index:
+        document_length = await _get_document_length(service, document_id)
+
     # Validate that we have something to do
     if text is None and not any(
         [
@@ -448,7 +464,9 @@ async def modify_doc_text(
         if end_index is None:
             return "Error: 'end_index' is required when applying formatting."
 
-        is_valid, error_msg = validator.validate_index_range(start_index, end_index)
+        is_valid, error_msg = validator.validate_index_range(
+            start_index, end_index, document_length
+        )
         if not is_valid:
             return f"Error: {error_msg}"
 
@@ -458,6 +476,12 @@ async def modify_doc_text(
     # Handle text insertion/replacement
     if text is not None:
         if end_index is not None and end_index > start_index:
+            # Validate bounds before attempting deletion
+            is_valid, error_msg = validator.validate_index_range(
+                start_index, end_index, document_length
+            )
+            if not is_valid:
+                return f"Error: {error_msg}"
             # Text replacement
             if start_index == 0:
                 # Special case: Cannot delete at index 0 (first section break)
