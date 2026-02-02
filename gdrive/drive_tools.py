@@ -38,6 +38,7 @@ logger = logging.getLogger(__name__)
 
 DOWNLOAD_CHUNK_SIZE_BYTES = 256 * 1024  # 256 KB
 UPLOAD_CHUNK_SIZE_BYTES = 5 * 1024 * 1024  # 5 MB (Google recommended minimum)
+MAX_BASE64_FILE_SIZE_BYTES = 500 * 1024  # 500 KB
 
 
 @server.tool()
@@ -215,9 +216,10 @@ async def get_drive_file_download_url(
     user_google_email: str,
     file_id: str,
     export_format: Optional[str] = None,
+    output_mode: str = "base64",
 ) -> str:
     """
-    Gets a download URL for a Google Drive file. The file is prepared and made available via HTTP URL.
+    Downloads a Google Drive file and returns it as base64 content or HTTP URL.
 
     For Google native files (Docs, Sheets, Slides), exports to a useful format:
     • Google Docs → PDF (default) or DOCX if export_format='docx'
@@ -228,17 +230,21 @@ async def get_drive_file_download_url(
 
     Args:
         user_google_email: The user's Google email address. Required.
-        file_id: The Google Drive file ID to get a download URL for.
+        file_id: The Google Drive file ID to download.
         export_format: Optional export format for Google native files.
                       Options: 'pdf', 'docx', 'xlsx', 'csv', 'pptx'.
                       If not specified, uses sensible defaults (PDF for Docs/Slides, XLSX for Sheets).
                       For Sheets: supports 'csv', 'pdf', or 'xlsx' (default).
+        output_mode: How to return the file. Options:
+                    - "base64" (default): Return file content as base64-encoded string.
+                    - "url": Save file and return HTTP URL (requires accessible server).
+                    - "auto": Return base64 if file <= 500KB, otherwise return URL.
 
     Returns:
-        str: Download URL and file metadata. The file is available at the URL for 1 hour.
+        str: File metadata and either base64-encoded content or download URL.
     """
     logger.info(
-        f"[get_drive_file_download_url] Invoked. File ID: '{file_id}', Export format: {export_format}"
+        f"[get_drive_file_download_url] Invoked. File ID: '{file_id}', Export format: {export_format}, Output mode: {output_mode}"
     )
 
     # Resolve shortcuts and get file metadata
@@ -323,38 +329,41 @@ async def get_drive_file_download_url(
     size_bytes = len(file_content_bytes)
     size_kb = size_bytes / 1024 if size_bytes else 0
 
-    # Check if we're in stateless mode (can't save files)
-    if is_stateless_mode():
+    effective_mode = output_mode
+    if output_mode == "auto":
+        effective_mode = "base64" if size_bytes <= MAX_BASE64_FILE_SIZE_BYTES else "url"
+
+    if is_stateless_mode() and effective_mode == "url":
+        effective_mode = "base64"
+
+    if effective_mode == "base64":
+        base64_content = base64.b64encode(file_content_bytes).decode("utf-8")
         result_lines = [
             "File downloaded successfully!",
             f"File: {file_name}",
             f"File ID: {file_id}",
             f"Size: {size_kb:.1f} KB ({size_bytes} bytes)",
             f"MIME Type: {output_mime_type}",
-            "\n⚠️ Stateless mode: File storage disabled.",
-            "\nBase64-encoded content (first 100 characters shown):",
-            f"{base64.b64encode(file_content_bytes[:100]).decode('utf-8')}...",
+            f"Output filename: {output_filename}",
+            "",
+            "Base64-encoded content:",
+            base64_content,
         ]
+        if export_mime_type:
+            result_lines.insert(6, f"Note: Google native file exported to {output_mime_type} format.")
         logger.info(
-            f"[get_drive_file_download_url] Successfully downloaded {size_kb:.1f} KB file (stateless mode)"
+            f"[get_drive_file_download_url] Successfully downloaded {size_kb:.1f} KB file (base64 mode)"
         )
         return "\n".join(result_lines)
 
-    # Save file and generate URL
     try:
         storage = get_attachment_storage()
-
-        # Encode bytes to base64 (as expected by AttachmentStorage)
         base64_data = base64.urlsafe_b64encode(file_content_bytes).decode("utf-8")
-
-        # Save attachment
         saved_file_id = storage.save_attachment(
             base64_data=base64_data,
             filename=output_filename,
             mime_type=output_mime_type,
         )
-
-        # Generate URL
         download_url = get_attachment_url(saved_file_id)
 
         result_lines = [
@@ -363,16 +372,14 @@ async def get_drive_file_download_url(
             f"File ID: {file_id}",
             f"Size: {size_kb:.1f} KB ({size_bytes} bytes)",
             f"MIME Type: {output_mime_type}",
-            f"\n📎 Download URL: {download_url}",
+            f"\nDownload URL: {download_url}",
             "\nThe file has been saved and is available at the URL above.",
             "The file will expire after 1 hour.",
         ]
-
         if export_mime_type:
             result_lines.append(
                 f"\nNote: Google native file exported to {output_mime_type} format."
             )
-
         logger.info(
             f"[get_drive_file_download_url] Successfully saved {size_kb:.1f} KB file as {saved_file_id}"
         )

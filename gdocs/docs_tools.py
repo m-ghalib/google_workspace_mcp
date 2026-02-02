@@ -1882,6 +1882,73 @@ async def update_table_cell_style(
 
 
 @server.tool()
+@handle_http_errors("create_paragraph_bullets", service_type="docs")
+@require_google_service("docs", "docs_write")
+async def create_paragraph_bullets(
+    service: Any,
+    user_google_email: str,
+    document_id: str,
+    start_index: int,
+    end_index: int,
+    list_type: str = "UNORDERED",
+) -> str:
+    """
+    Converts existing paragraphs to bullet points or numbered lists.
+
+    Applies list formatting to paragraphs within the specified range, converting
+    them to either unordered bullet lists or ordered numbered lists. This tool
+    preserves existing text content while adding list formatting.
+
+    Args:
+        user_google_email: User's Google email address
+        document_id: ID of the document to modify
+        start_index: Start position of the range (1-based)
+        end_index: End position of the range (exclusive)
+        list_type: Type of list ("UNORDERED" or "ORDERED"). Defaults to "UNORDERED".
+                   UNORDERED creates bullet lists with disc/circle/square markers.
+                   ORDERED creates numbered lists with decimal/alpha/roman numerals.
+
+    Returns:
+        str: Confirmation message with operation details
+
+    Examples:
+        # Create bullet list from paragraphs between indices 10 and 50
+        create_paragraph_bullets(document_id="...", start_index=10, end_index=50)
+
+        # Create numbered list from specific range
+        create_paragraph_bullets(document_id="...", start_index=100, end_index=200,
+                                list_type="ORDERED")
+    """
+    logger.info(
+        f"[create_paragraph_bullets] Doc={document_id}, range={start_index}-{end_index}, type={list_type}"
+    )
+
+    # Validate inputs
+    if start_index < 1:
+        return "Error: start_index must be >= 1"
+    if end_index <= start_index:
+        return "Error: end_index must be greater than start_index"
+
+    # Validate and normalize list_type
+    valid_list_types = ["UNORDERED", "ORDERED"]
+    list_type_upper = list_type.upper()
+    if list_type_upper not in valid_list_types:
+        return f"Error: Invalid list_type '{list_type}'. Must be 'UNORDERED' or 'ORDERED'."
+
+    # Execute request
+    requests = [create_bullet_list_request(start_index, end_index, list_type_upper)]
+    await asyncio.to_thread(
+        service.documents()
+        .batchUpdate(documentId=document_id, body={"requests": requests})
+        .execute
+    )
+
+    list_description = "bullet list" if list_type_upper == "UNORDERED" else "numbered list"
+    link = f"https://docs.google.com/document/d/{document_id}/edit"
+    return f"Created {list_description} for range {start_index}-{end_index} in document {document_id}. Link: {link}"
+
+
+@server.tool()
 @handle_http_errors("delete_paragraph_bullets", service_type="docs")
 @require_google_service("docs", "docs_write")
 async def delete_paragraph_bullets(

@@ -519,10 +519,14 @@ def create_update_table_cell_style_request(
 
     return {
         "updateTableCellStyle": {
-            "tableCellLocation": {
-                "tableStartLocation": {"index": table_start_index},
-                "rowIndex": row_index,
-                "columnIndex": column_index,
+            "tableRange": {
+                "tableCellLocation": {
+                    "tableStartLocation": {"index": table_start_index},
+                    "rowIndex": row_index,
+                    "columnIndex": column_index,
+                },
+                "rowSpan": 1,
+                "columnSpan": 1,
             },
             "tableCellStyle": table_cell_style,
             "fields": ",".join(fields),
