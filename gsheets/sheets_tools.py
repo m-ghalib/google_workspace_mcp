@@ -14,7 +14,6 @@ from auth.service_decorator import require_google_service
 from core.server import server
 from core.utils import handle_http_errors, UserInputError
 
-# Comment tools are now unified in core/comments.py (read_comments, create_comment, etc.)
 from gsheets.sheets_helpers import (
     CONDITION_TYPES,
     _a1_range_for_values,
@@ -34,59 +33,6 @@ from gsheets.sheets_helpers import (
 
 # Configure module logger
 logger = logging.getLogger(__name__)
-
-
-@server.tool()
-@handle_http_errors("list_spreadsheets", is_read_only=True, service_type="sheets")
-@require_google_service("drive", "drive_read")
-async def list_spreadsheets(
-    service,
-    user_google_email: str,
-    max_results: int = 25,
-) -> str:
-    """
-    Lists spreadsheets from Google Drive that the user has access to.
-
-    Args:
-        user_google_email (str): The user's Google email address. Required.
-        max_results (int): Maximum number of spreadsheets to return. Defaults to 25.
-
-    Returns:
-        str: A formatted list of spreadsheet files (name, ID, modified time).
-    """
-    logger.info(f"[list_spreadsheets] Invoked. Email: '{user_google_email}'")
-
-    files_response = await asyncio.to_thread(
-        service.files()
-        .list(
-            q="mimeType='application/vnd.google-apps.spreadsheet'",
-            pageSize=max_results,
-            fields="files(id,name,modifiedTime,webViewLink)",
-            orderBy="modifiedTime desc",
-            supportsAllDrives=True,
-            includeItemsFromAllDrives=True,
-        )
-        .execute
-    )
-
-    files = files_response.get("files", [])
-    if not files:
-        return f"No spreadsheets found for {user_google_email}."
-
-    spreadsheets_list = [
-        f'- "{file["name"]}" (ID: {file["id"]}) | Modified: {file.get("modifiedTime", "Unknown")} | Link: {file.get("webViewLink", "No link")}'
-        for file in files
-    ]
-
-    text_output = (
-        f"Successfully listed {len(files)} spreadsheets for {user_google_email}:\n"
-        + "\n".join(spreadsheets_list)
-    )
-
-    logger.info(
-        f"Successfully listed {len(files)} spreadsheets for {user_google_email}."
-    )
-    return text_output
 
 
 @server.tool()

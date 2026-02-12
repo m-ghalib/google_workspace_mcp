@@ -6,7 +6,7 @@
 [![Python 3.10+](https://img.shields.io/badge/Python-3.10%2B-blue.svg)](https://www.python.org/downloads/)
 [![PyPI](https://img.shields.io/pypi/v/workspace-mcp.svg)](https://pypi.org/project/workspace-mcp/)
 
-**Complete Google Workspace control through natural language.** Gmail, Calendar, Drive, Docs, Sheets, and Slides—all via MCP.
+**Complete Google Workspace control through natural language.** Gmail, Calendar, Docs, Sheets, and Slides—all via MCP.
 
 [Quick Start](#-quick-start) • [Tools Reference](#-tools-reference) • [Configuration](#-configuration) • [OAuth Setup](#-oauth-setup)
 
@@ -29,7 +29,7 @@
 uvx workspace-mcp
 
 # With specific tools only
-uvx workspace-mcp --tools gmail drive calendar
+uvx workspace-mcp --tools gmail calendar docs
 
 # With tool tier
 uvx workspace-mcp --tool-tier core
@@ -62,18 +62,6 @@ export OAUTHLIB_INSECURE_TRANSPORT=1  # Development only
 
 **Also includes:** `get_gmail_attachment_content`, `list_gmail_filters`, `create_gmail_filter`, `delete_gmail_filter`, `start_google_auth`
 
-### Google Drive (5 tools)
-
-| Tool | Tier | Description |
-|------|------|-------------|
-| `search_drive_files` | Core | Search files with Drive query syntax or free text |
-| `get_drive_file_content` | Core | Read content from Docs, Sheets, Office files (.docx, .xlsx, .pptx) |
-| `create_drive_file` | Core | Create files from content or URL (supports file://, http://, https://) |
-| `list_drive_items` | Extended | List folder contents with shared drive support |
-| `update_drive_file` | Extended | Update metadata, move between folders, star, trash |
-
-**Also includes:** `get_drive_file_download_url` for generating download URLs
-
 ### Google Calendar (5 tools)
 
 | Tool | Tier | Description |
@@ -86,26 +74,21 @@ export OAUTHLIB_INSECURE_TRANSPORT=1  # Development only
 
 **Event features:** Timezone support, transparency (busy/free), visibility settings, up to 5 custom reminders
 
-### Google Docs (16 tools)
+### Google Docs (10 tools)
 
 | Tool | Tier | Description |
 |------|------|-------------|
-| `get_doc_content` | Core | Extract text from Docs or .docx files (supports tabs) |
+| `get_doc_content` | Core | Extract text from native Google Docs (supports tabs) |
 | `create_doc` | Core | Create new documents with optional initial content |
 | `modify_doc_text` | Core | Insert, replace, format text (bold, italic, colors, fonts) |
-| `search_docs` | Extended | Find documents by name |
 | `find_and_replace_doc` | Extended | Global find/replace with case matching |
-| `list_docs_in_folder` | Extended | List Docs in a specific folder |
 | `insert_doc_elements` | Extended | Add tables, lists, page breaks |
-| `export_doc_to_pdf` | Extended | Export to PDF and save to Drive |
-| `insert_doc_image` | Complete | Insert images from Drive or URLs |
+| `insert_doc_image` | Complete | Insert images from URLs |
 | `update_doc_headers_footers` | Complete | Modify headers/footers |
 | `batch_update_doc` | Complete | Execute multiple operations atomically |
 | `inspect_doc_structure` | Complete | Analyze document structure for safe insertion points |
 | `create_table_with_data` | Complete | Create and populate tables in one operation |
 | `debug_table_structure` | Complete | Debug table cell positions and content |
-
-**Comments:** `read_document_comments`, `create_document_comment`, `reply_to_document_comment`, `resolve_document_comment`
 
 ### Google Sheets (13 tools)
 
@@ -114,7 +97,6 @@ export OAUTHLIB_INSECURE_TRANSPORT=1  # Development only
 | `read_sheet_values` | Core | Read cell ranges with formatted output |
 | `modify_sheet_values` | Core | Write, update, or clear cell values |
 | `create_spreadsheet` | Core | Create new spreadsheets with multiple sheets |
-| `list_spreadsheets` | Extended | List accessible spreadsheets |
 | `get_spreadsheet_info` | Extended | Get metadata, sheets, conditional formats |
 | `create_sheet` | Complete | Add sheets to existing spreadsheets |
 | `format_sheet_range` | Complete | Apply colors and number formats |
@@ -122,9 +104,7 @@ export OAUTHLIB_INSECURE_TRANSPORT=1  # Development only
 | `update_conditional_formatting` | Complete | Modify existing rules |
 | `delete_conditional_formatting` | Complete | Remove formatting rules |
 
-**Comments:** `read_spreadsheet_comments`, `create_spreadsheet_comment`, `reply_to_spreadsheet_comment`, `resolve_spreadsheet_comment`
-
-### Google Slides (9 tools)
+### Google Slides (5 tools)
 
 | Tool | Tier | Description |
 |------|------|-------------|
@@ -133,8 +113,6 @@ export OAUTHLIB_INSECURE_TRANSPORT=1  # Development only
 | `batch_update_presentation` | Extended | Apply multiple updates (create slides, shapes, etc.) |
 | `get_page` | Extended | Get specific slide details and elements |
 | `get_page_thumbnail` | Extended | Generate PNG thumbnails |
-
-**Comments:** `read_presentation_comments`, `create_presentation_comment`, `reply_to_presentation_comment`, `resolve_presentation_comment`
 
 ---
 
@@ -156,7 +134,7 @@ uvx workspace-mcp --tool-tier complete  # Everything
 
 Mix tiers with specific services:
 ```bash
-uvx workspace-mcp --tools gmail drive --tool-tier extended
+uvx workspace-mcp --tools gmail docs --tool-tier extended
 ```
 
 ---
@@ -201,7 +179,6 @@ uvx workspace-mcp --tools gmail drive --tool-tier extended
 Click to enable each API:
 
 - [Calendar](https://console.cloud.google.com/flows/enableapi?apiid=calendar-json.googleapis.com)
-- [Drive](https://console.cloud.google.com/flows/enableapi?apiid=drive.googleapis.com)
 - [Gmail](https://console.cloud.google.com/flows/enableapi?apiid=gmail.googleapis.com)
 - [Docs](https://console.cloud.google.com/flows/enableapi?apiid=docs.googleapis.com)
 - [Sheets](https://console.cloud.google.com/flows/enableapi?apiid=sheets.googleapis.com)
@@ -317,7 +294,6 @@ google_workspace_mcp/
 ├── core/                 # MCP server, tool registry, utilities
 ├── gcalendar/           # Calendar tools
 ├── gdocs/               # Docs tools + managers (tables, headers, batch)
-├── gdrive/              # Drive tools + helpers
 ├── gmail/               # Gmail tools
 ├── gsheets/             # Sheets tools + helpers
 ├── gslides/             # Slides tools
@@ -333,17 +309,6 @@ google_workspace_mcp/
 @require_google_service("gmail", "gmail_read")
 async def search_gmail_messages(service, user_google_email: str, query: str):
     # service is injected automatically
-    ...
-```
-
-**Multi-Service Tools:** Some tools need multiple APIs:
-
-```python
-@require_multiple_services([
-    {"service_type": "drive", "scopes": "drive_read", "param_name": "drive_service"},
-    {"service_type": "docs", "scopes": "docs_read", "param_name": "docs_service"},
-])
-async def get_doc_content(drive_service, docs_service, ...):
     ...
 ```
 

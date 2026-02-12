@@ -1,608 +1,20 @@
 """
-Google Docs Helper Functions
+Google Docs REST API Request Builders
 
-This module provides utility functions for common Google Docs operations
-to simplify the implementation of document editing tools.
+Builds batchUpdate request dicts for the Google Docs REST API.
+Each function returns a single request dict ready for inclusion in
+a batchUpdate requests list.
 """
 
 import logging
-from typing import Dict, Any, Optional
+from typing import Any
 
 logger = logging.getLogger(__name__)
 
 
-def _normalize_color(
-    color: Optional[str], param_name: str
-) -> Optional[Dict[str, float]]:
-    """
-    Normalize a user-supplied color into Docs API rgbColor format.
-
-    Supports only hex strings in the form "#RRGGBB".
-    """
-    if color is None:
-        return None
-
-    if not isinstance(color, str):
-        raise ValueError(f"{param_name} must be a hex string like '#RRGGBB'")
-
-    if len(color) != 7 or not color.startswith("#"):
-        raise ValueError(f"{param_name} must be a hex string like '#RRGGBB'")
-
-    hex_color = color[1:]
-    if any(c not in "0123456789abcdefABCDEF" for c in hex_color):
-        raise ValueError(f"{param_name} must be a hex string like '#RRGGBB'")
-
-    r = int(hex_color[0:2], 16) / 255
-    g = int(hex_color[2:4], 16) / 255
-    b = int(hex_color[4:6], 16) / 255
-    return {"red": r, "green": g, "blue": b}
-
-
-def build_text_style(
-    bold: bool = None,
-    italic: bool = None,
-    underline: bool = None,
-    font_size: int = None,
-    font_family: str = None,
-    text_color: str = None,
-    background_color: str = None,
-) -> tuple[Dict[str, Any], list[str]]:
-    """
-    Build text style object for Google Docs API requests.
-
-    Args:
-        bold: Whether text should be bold
-        italic: Whether text should be italic
-        underline: Whether text should be underlined
-        font_size: Font size in points
-        font_family: Font family name
-        text_color: Text color as hex string "#RRGGBB"
-        background_color: Background (highlight) color as hex string "#RRGGBB"
-
-    Returns:
-        Tuple of (text_style_dict, list_of_field_names)
-    """
-    text_style = {}
-    fields = []
-
-    if bold is not None:
-        text_style["bold"] = bold
-        fields.append("bold")
-
-    if italic is not None:
-        text_style["italic"] = italic
-        fields.append("italic")
-
-    if underline is not None:
-        text_style["underline"] = underline
-        fields.append("underline")
-
-    if font_size is not None:
-        text_style["fontSize"] = {"magnitude": font_size, "unit": "PT"}
-        fields.append("fontSize")
-
-    if font_family is not None:
-        text_style["weightedFontFamily"] = {"fontFamily": font_family}
-        fields.append("weightedFontFamily")
-
-    if text_color is not None:
-        rgb = _normalize_color(text_color, "text_color")
-        text_style["foregroundColor"] = {"color": {"rgbColor": rgb}}
-        fields.append("foregroundColor")
-
-    if background_color is not None:
-        rgb = _normalize_color(background_color, "background_color")
-        text_style["backgroundColor"] = {"color": {"rgbColor": rgb}}
-        fields.append("backgroundColor")
-
-    return text_style, fields
-
-
-def create_insert_text_request(index: int, text: str) -> Dict[str, Any]:
-    """
-    Create an insertText request for Google Docs API.
-
-    Args:
-        index: Position to insert text
-        text: Text to insert
-
-    Returns:
-        Dictionary representing the insertText request
-    """
-    return {"insertText": {"location": {"index": index}, "text": text}}
-
-
-def create_insert_text_segment_request(
-    index: int, text: str, segment_id: str
-) -> Dict[str, Any]:
-    """
-    Create an insertText request for Google Docs API with segmentId (for headers/footers).
-
-    Args:
-        index: Position to insert text
-        text: Text to insert
-        segment_id: Segment ID (for targeting headers/footers)
-
-    Returns:
-        Dictionary representing the insertText request with segmentId
-    """
-    return {
-        "insertText": {
-            "location": {"segmentId": segment_id, "index": index},
-            "text": text,
-        }
-    }
-
-
-def create_delete_range_request(start_index: int, end_index: int) -> Dict[str, Any]:
-    """
-    Create a deleteContentRange request for Google Docs API.
-
-    Args:
-        start_index: Start position of content to delete
-        end_index: End position of content to delete
-
-    Returns:
-        Dictionary representing the deleteContentRange request
-    """
-    return {
-        "deleteContentRange": {
-            "range": {"startIndex": start_index, "endIndex": end_index}
-        }
-    }
-
-
-def create_format_text_request(
-    start_index: int,
-    end_index: int,
-    bold: bool = None,
-    italic: bool = None,
-    underline: bool = None,
-    font_size: int = None,
-    font_family: str = None,
-    text_color: str = None,
-    background_color: str = None,
-) -> Optional[Dict[str, Any]]:
-    """
-    Create an updateTextStyle request for Google Docs API.
-
-    Args:
-        start_index: Start position of text to format
-        end_index: End position of text to format
-        bold: Whether text should be bold
-        italic: Whether text should be italic
-        underline: Whether text should be underlined
-        font_size: Font size in points
-        font_family: Font family name
-        text_color: Text color as hex string "#RRGGBB"
-        background_color: Background (highlight) color as hex string "#RRGGBB"
-
-    Returns:
-        Dictionary representing the updateTextStyle request, or None if no styles provided
-    """
-    text_style, fields = build_text_style(
-        bold, italic, underline, font_size, font_family, text_color, background_color
-    )
-
-    if not text_style:
-        return None
-
-    return {
-        "updateTextStyle": {
-            "range": {"startIndex": start_index, "endIndex": end_index},
-            "textStyle": text_style,
-            "fields": ",".join(fields),
-        }
-    }
-
-
-def create_find_replace_request(
-    find_text: str, replace_text: str, match_case: bool = False
-) -> Dict[str, Any]:
-    """
-    Create a replaceAllText request for Google Docs API.
-
-    Args:
-        find_text: Text to find
-        replace_text: Text to replace with
-        match_case: Whether to match case exactly
-
-    Returns:
-        Dictionary representing the replaceAllText request
-    """
-    return {
-        "replaceAllText": {
-            "containsText": {"text": find_text, "matchCase": match_case},
-            "replaceText": replace_text,
-        }
-    }
-
-
-def create_insert_table_request(index: int, rows: int, columns: int) -> Dict[str, Any]:
-    """
-    Create an insertTable request for Google Docs API.
-
-    Args:
-        index: Position to insert table
-        rows: Number of rows
-        columns: Number of columns
-
-    Returns:
-        Dictionary representing the insertTable request
-    """
-    return {
-        "insertTable": {"location": {"index": index}, "rows": rows, "columns": columns}
-    }
-
-
-def create_insert_page_break_request(index: int) -> Dict[str, Any]:
-    """
-    Create an insertPageBreak request for Google Docs API.
-
-    Args:
-        index: Position to insert page break
-
-    Returns:
-        Dictionary representing the insertPageBreak request
-    """
-    return {"insertPageBreak": {"location": {"index": index}}}
-
-
-def create_insert_image_request(
-    index: int, image_uri: str, width: int = None, height: int = None
-) -> Dict[str, Any]:
-    """
-    Create an insertInlineImage request for Google Docs API.
-
-    Args:
-        index: Position to insert image
-        image_uri: URI of the image (Drive URL or public URL)
-        width: Image width in points
-        height: Image height in points
-
-    Returns:
-        Dictionary representing the insertInlineImage request
-    """
-    request = {"insertInlineImage": {"location": {"index": index}, "uri": image_uri}}
-
-    # Add size properties if specified
-    object_size = {}
-    if width is not None:
-        object_size["width"] = {"magnitude": width, "unit": "PT"}
-    if height is not None:
-        object_size["height"] = {"magnitude": height, "unit": "PT"}
-
-    if object_size:
-        request["insertInlineImage"]["objectSize"] = object_size
-
-    return request
-
-
-def create_bullet_list_request(
-    start_index: int, end_index: int, list_type: str = "UNORDERED"
-) -> Dict[str, Any]:
-    """
-    Create a createParagraphBullets request for Google Docs API.
-
-    Args:
-        start_index: Start of text range to convert to list
-        end_index: End of text range to convert to list
-        list_type: Type of list ("UNORDERED" or "ORDERED")
-
-    Returns:
-        Dictionary representing the createParagraphBullets request
-    """
-    bullet_preset = (
-        "BULLET_DISC_CIRCLE_SQUARE"
-        if list_type == "UNORDERED"
-        else "NUMBERED_DECIMAL_ALPHA_ROMAN"
-    )
-
-    return {
-        "createParagraphBullets": {
-            "range": {"startIndex": start_index, "endIndex": end_index},
-            "bulletPreset": bullet_preset,
-        }
-    }
-
-
-def create_delete_paragraph_bullets_request(
-    start_index: int, end_index: int
-) -> Dict[str, Any]:
-    """
-    Create a deleteParagraphBullets request for Google Docs API.
-
-    Args:
-        start_index: Start of text range to remove bullets from
-        end_index: End of text range to remove bullets from
-
-    Returns:
-        Dictionary representing the deleteParagraphBullets request
-    """
-    return {
-        "deleteParagraphBullets": {
-            "range": {"startIndex": start_index, "endIndex": end_index}
-        }
-    }
-
-
-# ==============================================================================
-# TABLE ROW/COLUMN MANIPULATION HELPERS
-# ==============================================================================
-
-
-def create_insert_table_row_request(
-    table_start_index: int, row_index: int, insert_below: bool = True
-) -> Dict[str, Any]:
-    """
-    Create an insertTableRow request for Google Docs API.
-
-    Args:
-        table_start_index: The document index where the table starts (from find_tables)
-        row_index: The row index to insert relative to (0-based)
-        insert_below: If True, insert below the specified row; if False, insert above
-
-    Returns:
-        Dictionary representing the insertTableRow request
-    """
-    return {
-        "insertTableRow": {
-            "tableCellLocation": {
-                "tableStartLocation": {"index": table_start_index},
-                "rowIndex": row_index,
-                "columnIndex": 0,
-            },
-            "insertBelow": insert_below,
-        }
-    }
-
-
-def create_delete_table_row_request(
-    table_start_index: int, row_index: int
-) -> Dict[str, Any]:
-    """
-    Create a deleteTableRow request for Google Docs API.
-
-    Args:
-        table_start_index: The document index where the table starts (from find_tables)
-        row_index: The row index to delete (0-based)
-
-    Returns:
-        Dictionary representing the deleteTableRow request
-    """
-    return {
-        "deleteTableRow": {
-            "tableCellLocation": {
-                "tableStartLocation": {"index": table_start_index},
-                "rowIndex": row_index,
-                "columnIndex": 0,
-            }
-        }
-    }
-
-
-def create_insert_table_column_request(
-    table_start_index: int, column_index: int, insert_right: bool = True
-) -> Dict[str, Any]:
-    """
-    Create an insertTableColumn request for Google Docs API.
-
-    Args:
-        table_start_index: The document index where the table starts (from find_tables)
-        column_index: The column index to insert relative to (0-based)
-        insert_right: If True, insert to the right; if False, insert to the left
-
-    Returns:
-        Dictionary representing the insertTableColumn request
-    """
-    return {
-        "insertTableColumn": {
-            "tableCellLocation": {
-                "tableStartLocation": {"index": table_start_index},
-                "rowIndex": 0,
-                "columnIndex": column_index,
-            },
-            "insertRight": insert_right,
-        }
-    }
-
-
-def create_delete_table_column_request(
-    table_start_index: int, column_index: int
-) -> Dict[str, Any]:
-    """
-    Create a deleteTableColumn request for Google Docs API.
-
-    Args:
-        table_start_index: The document index where the table starts (from find_tables)
-        column_index: The column index to delete (0-based)
-
-    Returns:
-        Dictionary representing the deleteTableColumn request
-    """
-    return {
-        "deleteTableColumn": {
-            "tableCellLocation": {
-                "tableStartLocation": {"index": table_start_index},
-                "rowIndex": 0,
-                "columnIndex": column_index,
-            }
-        }
-    }
-
-
-def create_update_table_cell_style_request(
-    table_start_index: int,
-    row_index: int,
-    column_index: int,
-    background_color: Optional[str] = None,
-    padding_top: Optional[float] = None,
-    padding_bottom: Optional[float] = None,
-    padding_left: Optional[float] = None,
-    padding_right: Optional[float] = None,
-    border_width: Optional[float] = None,
-    border_color: Optional[str] = None,
-    content_alignment: Optional[str] = None,
-) -> Optional[Dict[str, Any]]:
-    """
-    Create an updateTableCellStyle request for Google Docs API.
-
-    Args:
-        table_start_index: The document index where the table starts
-        row_index: The row index of the cell (0-based)
-        column_index: The column index of the cell (0-based)
-        background_color: Cell background color as hex string "#RRGGBB"
-        padding_top: Top padding in points
-        padding_bottom: Bottom padding in points
-        padding_left: Left padding in points
-        padding_right: Right padding in points
-        border_width: Width of all borders in points
-        border_color: Border color as hex string "#RRGGBB"
-        content_alignment: Vertical alignment - "TOP", "MIDDLE", or "BOTTOM"
-
-    Returns:
-        Dictionary representing the updateTableCellStyle request, or None if no styles provided
-    """
-    table_cell_style = {}
-    fields = []
-
-    # Background color
-    if background_color is not None:
-        rgb = _normalize_color(background_color, "background_color")
-        table_cell_style["backgroundColor"] = {"color": {"rgbColor": rgb}}
-        fields.append("backgroundColor")
-
-    # Padding
-    if padding_top is not None:
-        table_cell_style["paddingTop"] = {"magnitude": padding_top, "unit": "PT"}
-        fields.append("paddingTop")
-
-    if padding_bottom is not None:
-        table_cell_style["paddingBottom"] = {"magnitude": padding_bottom, "unit": "PT"}
-        fields.append("paddingBottom")
-
-    if padding_left is not None:
-        table_cell_style["paddingLeft"] = {"magnitude": padding_left, "unit": "PT"}
-        fields.append("paddingLeft")
-
-    if padding_right is not None:
-        table_cell_style["paddingRight"] = {"magnitude": padding_right, "unit": "PT"}
-        fields.append("paddingRight")
-
-    # Content alignment
-    if content_alignment is not None:
-        valid_alignments = ["TOP", "MIDDLE", "BOTTOM"]
-        if content_alignment.upper() not in valid_alignments:
-            raise ValueError(
-                f"content_alignment must be one of {valid_alignments}, got '{content_alignment}'"
-            )
-        table_cell_style["contentAlignment"] = content_alignment.upper()
-        fields.append("contentAlignment")
-
-    # Border styling (applies to all borders)
-    if border_width is not None or border_color is not None:
-        border_style = {}
-        if border_width is not None:
-            border_style["width"] = {"magnitude": border_width, "unit": "PT"}
-        if border_color is not None:
-            rgb = _normalize_color(border_color, "border_color")
-            border_style["color"] = {"color": {"rgbColor": rgb}}
-        border_style["dashStyle"] = "SOLID"
-
-        # Apply to all four borders
-        for border_name in ["borderTop", "borderBottom", "borderLeft", "borderRight"]:
-            table_cell_style[border_name] = border_style
-            fields.append(border_name)
-
-    if not table_cell_style:
-        return None
-
-    return {
-        "updateTableCellStyle": {
-            "tableRange": {
-                "tableCellLocation": {
-                    "tableStartLocation": {"index": table_start_index},
-                    "rowIndex": row_index,
-                    "columnIndex": column_index,
-                },
-                "rowSpan": 1,
-                "columnSpan": 1,
-            },
-            "tableCellStyle": table_cell_style,
-            "fields": ",".join(fields),
-        }
-    }
-
-
-# ==============================================================================
-# HEADER/FOOTER DELETION HELPERS
-# ==============================================================================
-
-
-def create_delete_header_request(header_id: str) -> Dict[str, Any]:
-    """
-    Create a deleteHeader request for Google Docs API.
-
-    Args:
-        header_id: The ID of the header to delete (e.g., "kix.abc123")
-
-    Returns:
-        Dictionary representing the deleteHeader request
-    """
-    return {"deleteHeader": {"headerId": header_id}}
-
-
-def create_delete_footer_request(footer_id: str) -> Dict[str, Any]:
-    """
-    Create a deleteFooter request for Google Docs API.
-
-    Args:
-        footer_id: The ID of the footer to delete (e.g., "kix.abc123")
-
-    Returns:
-        Dictionary representing the deleteFooter request
-    """
-    return {"deleteFooter": {"footerId": footer_id}}
-
-
-# ==============================================================================
-# ADVANCED TABLE OPERATIONS HELPERS
-# ==============================================================================
-
-
-def create_merge_table_cells_request(
-    table_start_index: int,
-    start_row: int,
-    start_col: int,
-    row_span: int,
-    col_span: int,
-) -> Dict[str, Any]:
-    """
-    Create a mergeTableCells request for Google Docs API.
-
-    Args:
-        table_start_index: The document index where the table starts
-        start_row: Starting row index for the merge (0-based)
-        start_col: Starting column index for the merge (0-based)
-        row_span: Number of rows to merge (must be >= 1)
-        col_span: Number of columns to merge (must be >= 1)
-
-    Returns:
-        Dictionary representing the mergeTableCells request
-    """
-    return {
-        "mergeTableCells": {
-            "tableRange": {
-                "tableCellLocation": {
-                    "tableStartLocation": {"index": table_start_index},
-                    "rowIndex": start_row,
-                    "columnIndex": start_col,
-                },
-                "rowSpan": row_span,
-                "columnSpan": col_span,
-            }
-        }
-    }
+# =============================================================================
+# RED TOOL BUILDERS (unchanged — used by TableOperationManager)
+# =============================================================================
 
 
 def create_unmerge_table_cells_request(
@@ -611,20 +23,8 @@ def create_unmerge_table_cells_request(
     col_index: int,
     row_span: int,
     col_span: int,
-) -> Dict[str, Any]:
-    """
-    Create an unmergeTableCells request for Google Docs API.
-
-    Args:
-        table_start_index: The document index where the table starts
-        row_index: Row index of the merged cell (0-based)
-        col_index: Column index of the merged cell (0-based)
-        row_span: Number of rows the merged cell spans
-        col_span: Number of columns the merged cell spans
-
-    Returns:
-        Dictionary representing the unmergeTableCells request
-    """
+) -> dict[str, Any]:
+    """Create an unmergeTableCells request for Google Docs API."""
     return {
         "unmergeTableCells": {
             "tableRange": {
@@ -643,23 +43,12 @@ def create_unmerge_table_cells_request(
 def create_update_table_row_style_request(
     table_start_index: int,
     row_indices: list[int],
-    min_row_height: Optional[float] = None,
-    prevent_overflow: Optional[bool] = None,
-) -> Optional[Dict[str, Any]]:
-    """
-    Create an updateTableRowStyle request for Google Docs API.
-
-    Args:
-        table_start_index: The document index where the table starts
-        row_indices: List of row indices to update (0-based)
-        min_row_height: Minimum row height in points
-        prevent_overflow: Whether to prevent row content from overflowing
-
-    Returns:
-        Dictionary representing the updateTableRowStyle request, or None if no styles provided
-    """
-    table_row_style = {}
-    fields = []
+    min_row_height: float | None = None,
+    prevent_overflow: bool | None = None,
+) -> dict[str, Any] | None:
+    """Create an updateTableRowStyle request for Google Docs API."""
+    table_row_style: dict[str, Any] = {}
+    fields: list[str] = []
 
     if min_row_height is not None:
         table_row_style["minRowHeight"] = {"magnitude": min_row_height, "unit": "PT"}
@@ -682,62 +71,11 @@ def create_update_table_row_style_request(
     }
 
 
-def create_update_table_column_properties_request(
-    table_start_index: int,
-    column_indices: list[int],
-    width: Optional[float] = None,
-    width_type: str = "FIXED_WIDTH",
-) -> Optional[Dict[str, Any]]:
-    """
-    Create an updateTableColumnProperties request for Google Docs API.
-
-    Args:
-        table_start_index: The document index where the table starts
-        column_indices: List of column indices to update (0-based)
-        width: Column width in points (required if width_type is FIXED_WIDTH)
-        width_type: Width type - "EVENLY_DISTRIBUTED" or "FIXED_WIDTH"
-
-    Returns:
-        Dictionary representing the updateTableColumnProperties request, or None if invalid
-    """
-    valid_width_types = ["EVENLY_DISTRIBUTED", "FIXED_WIDTH"]
-    if width_type not in valid_width_types:
-        raise ValueError(f"width_type must be one of {valid_width_types}, got '{width_type}'")
-
-    table_column_properties = {"widthType": width_type}
-    fields = ["widthType"]
-
-    if width is not None:
-        table_column_properties["width"] = {"magnitude": width, "unit": "PT"}
-        fields.append("width")
-
-    return {
-        "updateTableColumnProperties": {
-            "tableStartLocation": {"index": table_start_index},
-            "columnIndices": column_indices,
-            "tableColumnProperties": table_column_properties,
-            "fields": ",".join(fields),
-        }
-    }
-
-
 def create_pin_table_header_rows_request(
     table_start_index: int,
     pinned_header_rows_count: int,
-) -> Dict[str, Any]:
-    """
-    Create a pinTableHeaderRows request for Google Docs API.
-
-    This pins the specified number of rows as repeating header rows that
-    appear at the top of each page when the table spans multiple pages.
-
-    Args:
-        table_start_index: The document index where the table starts
-        pinned_header_rows_count: Number of rows to pin as headers (0 to unpin all)
-
-    Returns:
-        Dictionary representing the pinTableHeaderRows request
-    """
+) -> dict[str, Any]:
+    """Create a pinTableHeaderRows request for Google Docs API."""
     return {
         "pinTableHeaderRows": {
             "tableStartLocation": {"index": table_start_index},
@@ -746,36 +84,553 @@ def create_pin_table_header_rows_request(
     }
 
 
-def validate_operation(operation: Dict[str, Any]) -> tuple[bool, str]:
-    """
-    Validate a batch operation dictionary.
+# =============================================================================
+# TEXT OPERATIONS
+# =============================================================================
+
+
+def create_insert_text_request(
+    text: str,
+    index: int | None = None,
+    segment_id: str | None = None,
+) -> dict[str, Any]:
+    """Create an insertText request.
 
     Args:
-        operation: Operation dictionary to validate
-
-    Returns:
-        Tuple of (is_valid, error_message)
+        text: Text to insert
+        index: Byte offset to insert at. None = end of segment.
+        segment_id: Header/footer/footnote ID. None = body.
     """
-    op_type = operation.get("type")
-    if not op_type:
-        return False, "Missing 'type' field"
+    req: dict[str, Any] = {"text": text}
+    if index is not None:
+        location: dict[str, Any] = {"index": index}
+        if segment_id:
+            location["segmentId"] = segment_id
+        req["location"] = location
+    else:
+        req["endOfSegmentLocation"] = {"segmentId": segment_id or ""}
+    return {"insertText": req}
 
-    # Validate required fields for each operation type
-    required_fields = {
-        "insert_text": ["index", "text"],
-        "delete_text": ["start_index", "end_index"],
-        "replace_text": ["start_index", "end_index", "text"],
-        "format_text": ["start_index", "end_index"],
-        "insert_table": ["index", "rows", "columns"],
-        "insert_page_break": ["index"],
-        "find_replace": ["find_text", "replace_text"],
+
+def create_delete_content_range_request(
+    start_index: int,
+    end_index: int,
+    segment_id: str | None = None,
+) -> dict[str, Any]:
+    """Create a deleteContentRange request."""
+    range_dict: dict[str, Any] = {
+        "startIndex": start_index,
+        "endIndex": end_index,
+    }
+    if segment_id:
+        range_dict["segmentId"] = segment_id
+    return {"deleteContentRange": {"range": range_dict}}
+
+
+def create_replace_all_text_request(
+    find_text: str,
+    replace_text: str,
+    match_case: bool = False,
+) -> dict[str, Any]:
+    """Create a replaceAllText request."""
+    return {
+        "replaceAllText": {
+            "containsText": {
+                "text": find_text,
+                "matchCase": match_case,
+            },
+            "replaceText": replace_text,
+        }
     }
 
-    if op_type not in required_fields:
-        return False, f"Unsupported operation type: {op_type or 'None'}"
 
-    for field in required_fields[op_type]:
-        if field not in operation:
-            return False, f"Missing required field: {field}"
+def create_update_text_style_request(
+    start_index: int,
+    end_index: int,
+    text_style: dict[str, Any],
+    fields: str,
+    segment_id: str | None = None,
+) -> dict[str, Any]:
+    """Create an updateTextStyle request."""
+    range_dict: dict[str, Any] = {
+        "startIndex": start_index,
+        "endIndex": end_index,
+    }
+    if segment_id:
+        range_dict["segmentId"] = segment_id
+    return {
+        "updateTextStyle": {
+            "textStyle": text_style,
+            "fields": fields,
+            "range": range_dict,
+        }
+    }
 
-    return True, ""
+
+# =============================================================================
+# PARAGRAPH OPERATIONS
+# =============================================================================
+
+
+def create_update_paragraph_style_request(
+    start_index: int,
+    end_index: int,
+    paragraph_style: dict[str, Any],
+    fields: str,
+    segment_id: str | None = None,
+) -> dict[str, Any]:
+    """Create an updateParagraphStyle request."""
+    range_dict: dict[str, Any] = {
+        "startIndex": start_index,
+        "endIndex": end_index,
+    }
+    if segment_id:
+        range_dict["segmentId"] = segment_id
+    return {
+        "updateParagraphStyle": {
+            "paragraphStyle": paragraph_style,
+            "fields": fields,
+            "range": range_dict,
+        }
+    }
+
+
+def create_paragraph_bullets_request(
+    start_index: int,
+    end_index: int,
+    bullet_preset: str,
+) -> dict[str, Any]:
+    """Create a createParagraphBullets request.
+
+    Args:
+        start_index: Start of paragraph range
+        end_index: End of paragraph range
+        bullet_preset: e.g. "BULLET_DISC_CIRCLE_SQUARE" or "NUMBERED_DECIMAL_ALPHA_ROMAN"
+    """
+    return {
+        "createParagraphBullets": {
+            "range": {
+                "startIndex": start_index,
+                "endIndex": end_index,
+            },
+            "bulletPreset": bullet_preset,
+        }
+    }
+
+
+def create_delete_paragraph_bullets_request(
+    start_index: int,
+    end_index: int,
+) -> dict[str, Any]:
+    """Create a deleteParagraphBullets request."""
+    return {
+        "deleteParagraphBullets": {
+            "range": {
+                "startIndex": start_index,
+                "endIndex": end_index,
+            }
+        }
+    }
+
+
+# =============================================================================
+# TABLE OPERATIONS
+# =============================================================================
+
+
+def create_insert_table_request(
+    rows: int,
+    columns: int,
+    index: int | None = None,
+) -> dict[str, Any]:
+    """Create an insertTable request.
+
+    Args:
+        rows: Number of rows
+        columns: Number of columns
+        index: Byte offset for insertion. None = end of body.
+    """
+    req: dict[str, Any] = {"rows": rows, "columns": columns}
+    if index is not None:
+        req["location"] = {"index": index}
+    else:
+        req["endOfSegmentLocation"] = {"segmentId": ""}
+    return {"insertTable": req}
+
+
+def create_insert_table_row_request(
+    table_start_index: int,
+    row_index: int,
+    col_index: int = 0,
+    insert_below: bool = True,
+) -> dict[str, Any]:
+    """Create an insertTableRow request."""
+    return {
+        "insertTableRow": {
+            "tableCellLocation": {
+                "tableStartLocation": {"index": table_start_index},
+                "rowIndex": row_index,
+                "columnIndex": col_index,
+            },
+            "insertBelow": insert_below,
+        }
+    }
+
+
+def create_delete_table_row_request(
+    table_start_index: int,
+    row_index: int,
+    col_index: int = 0,
+) -> dict[str, Any]:
+    """Create a deleteTableRow request."""
+    return {
+        "deleteTableRow": {
+            "tableCellLocation": {
+                "tableStartLocation": {"index": table_start_index},
+                "rowIndex": row_index,
+                "columnIndex": col_index,
+            }
+        }
+    }
+
+
+def create_insert_table_column_request(
+    table_start_index: int,
+    row_index: int = 0,
+    col_index: int = 0,
+    insert_right: bool = True,
+) -> dict[str, Any]:
+    """Create an insertTableColumn request."""
+    return {
+        "insertTableColumn": {
+            "tableCellLocation": {
+                "tableStartLocation": {"index": table_start_index},
+                "rowIndex": row_index,
+                "columnIndex": col_index,
+            },
+            "insertRight": insert_right,
+        }
+    }
+
+
+def create_delete_table_column_request(
+    table_start_index: int,
+    row_index: int = 0,
+    col_index: int = 0,
+) -> dict[str, Any]:
+    """Create a deleteTableColumn request."""
+    return {
+        "deleteTableColumn": {
+            "tableCellLocation": {
+                "tableStartLocation": {"index": table_start_index},
+                "rowIndex": row_index,
+                "columnIndex": col_index,
+            }
+        }
+    }
+
+
+def create_merge_table_cells_request(
+    table_start_index: int,
+    row_index: int,
+    col_index: int,
+    row_span: int,
+    col_span: int,
+) -> dict[str, Any]:
+    """Create a mergeTableCells request.
+
+    BUG FIX: REST API supports proper rectangular merge, unlike Apps Script's
+    cell.merge() which only merged adjacent cells sequentially.
+    """
+    return {
+        "mergeTableCells": {
+            "tableRange": {
+                "tableCellLocation": {
+                    "tableStartLocation": {"index": table_start_index},
+                    "rowIndex": row_index,
+                    "columnIndex": col_index,
+                },
+                "rowSpan": row_span,
+                "columnSpan": col_span,
+            }
+        }
+    }
+
+
+def create_update_table_cell_style_request(
+    table_start_index: int,
+    row_index: int,
+    col_index: int,
+    table_cell_style: dict[str, Any],
+    fields: str,
+    row_span: int = 1,
+    col_span: int = 1,
+) -> dict[str, Any]:
+    """Create an updateTableCellStyle request."""
+    return {
+        "updateTableCellStyle": {
+            "tableRange": {
+                "tableCellLocation": {
+                    "tableStartLocation": {"index": table_start_index},
+                    "rowIndex": row_index,
+                    "columnIndex": col_index,
+                },
+                "rowSpan": row_span,
+                "columnSpan": col_span,
+            },
+            "tableCellStyle": table_cell_style,
+            "fields": fields,
+        }
+    }
+
+
+def create_update_table_column_properties_request(
+    table_start_index: int,
+    column_indices: list[int],
+    width: float | None = None,
+    width_type: str = "FIXED_WIDTH",
+) -> dict[str, Any]:
+    """Create an updateTableColumnProperties request."""
+    props: dict[str, Any] = {"widthType": width_type}
+    fields = ["widthType"]
+
+    if width is not None:
+        props["width"] = {"magnitude": width, "unit": "PT"}
+        fields.append("width")
+
+    return {
+        "updateTableColumnProperties": {
+            "tableStartLocation": {"index": table_start_index},
+            "columnIndices": column_indices,
+            "tableColumnProperties": props,
+            "fields": ",".join(fields),
+        }
+    }
+
+
+# =============================================================================
+# STRUCTURAL OPERATIONS
+# =============================================================================
+
+
+def create_insert_page_break_request(
+    index: int | None = None,
+) -> dict[str, Any]:
+    """Create an insertPageBreak request."""
+    req: dict[str, Any] = {}
+    if index is not None:
+        req["location"] = {"index": index}
+    else:
+        req["endOfSegmentLocation"] = {"segmentId": ""}
+    return {"insertPageBreak": req}
+
+
+def create_insert_inline_image_request(
+    uri: str,
+    index: int | None = None,
+    width: float | None = None,
+    height: float | None = None,
+) -> dict[str, Any]:
+    """Create an insertInlineImage request."""
+    req: dict[str, Any] = {"uri": uri}
+    if index is not None:
+        req["location"] = {"index": index}
+    else:
+        req["endOfSegmentLocation"] = {"segmentId": ""}
+
+    if width is not None or height is not None:
+        size: dict[str, Any] = {}
+        if width is not None:
+            size["width"] = {"magnitude": width, "unit": "PT"}
+        if height is not None:
+            size["height"] = {"magnitude": height, "unit": "PT"}
+        req["objectSize"] = size
+
+    return {"insertInlineImage": req}
+
+
+# =============================================================================
+# HEADER / FOOTER OPERATIONS
+# =============================================================================
+
+
+def create_header_request(
+    header_type: str = "DEFAULT",
+) -> dict[str, Any]:
+    """Create a createHeader request.
+
+    BUG FIX: Now supports FIRST_PAGE and EVEN_PAGE types
+    (Apps Script could only handle DEFAULT).
+    """
+    return {"createHeader": {"type": header_type}}
+
+
+def create_footer_request(
+    footer_type: str = "DEFAULT",
+) -> dict[str, Any]:
+    """Create a createFooter request."""
+    return {"createFooter": {"type": footer_type}}
+
+
+def create_delete_header_request(header_id: str) -> dict[str, Any]:
+    """Create a deleteHeader request."""
+    return {"deleteHeader": {"headerId": header_id}}
+
+
+def create_delete_footer_request(footer_id: str) -> dict[str, Any]:
+    """Create a deleteFooter request."""
+    return {"deleteFooter": {"footerId": footer_id}}
+
+
+# =============================================================================
+# STYLE HELPERS — convert tool params to API format + FieldMask
+# =============================================================================
+
+
+def build_text_style(
+    bold: bool | None = None,
+    italic: bool | None = None,
+    underline: bool | None = None,
+    font_size: float | None = None,
+    font_family: str | None = None,
+    text_color: str | None = None,
+    background_color: str | None = None,
+) -> tuple[dict[str, Any], str]:
+    """Build a TextStyle dict and FieldMask from tool-level parameters.
+
+    Converts hex colors to OptionalColor and font_size to Dimension.
+
+    Returns:
+        Tuple of (text_style dict, comma-separated fields mask)
+    """
+    from gdocs.docs_structure import hex_to_rgb_color
+
+    style: dict[str, Any] = {}
+    fields: list[str] = []
+
+    if bold is not None:
+        style["bold"] = bold
+        fields.append("bold")
+    if italic is not None:
+        style["italic"] = italic
+        fields.append("italic")
+    if underline is not None:
+        style["underline"] = underline
+        fields.append("underline")
+    if font_size is not None:
+        style["fontSize"] = {"magnitude": font_size, "unit": "PT"}
+        fields.append("fontSize")
+    if font_family is not None:
+        style["weightedFontFamily"] = {"fontFamily": font_family}
+        fields.append("weightedFontFamily")
+    if text_color is not None:
+        style["foregroundColor"] = hex_to_rgb_color(text_color)
+        fields.append("foregroundColor")
+    if background_color is not None:
+        style["backgroundColor"] = hex_to_rgb_color(background_color)
+        fields.append("backgroundColor")
+
+    return style, ",".join(fields)
+
+
+def build_paragraph_style(
+    heading_level: int | None = None,
+    alignment: str | None = None,
+    line_spacing: float | None = None,
+    indent_first_line: float | None = None,
+    indent_start: float | None = None,
+    indent_end: float | None = None,
+    space_above: float | None = None,
+    space_below: float | None = None,
+) -> tuple[dict[str, Any], str]:
+    """Build a ParagraphStyle dict and FieldMask from tool-level parameters.
+
+    Converts heading_level int to namedStyleType enum, line_spacing
+    multiplier (1.0 = single) to API percentage (100), and indent/spacing
+    floats to Dimension objects.
+
+    Returns:
+        Tuple of (paragraph_style dict, comma-separated fields mask)
+    """
+    _heading_map = {
+        0: "NORMAL_TEXT",
+        1: "HEADING_1",
+        2: "HEADING_2",
+        3: "HEADING_3",
+        4: "HEADING_4",
+        5: "HEADING_5",
+        6: "HEADING_6",
+    }
+
+    style: dict[str, Any] = {}
+    fields: list[str] = []
+
+    if heading_level is not None:
+        style["namedStyleType"] = _heading_map.get(heading_level, "NORMAL_TEXT")
+        fields.append("namedStyleType")
+    if alignment is not None:
+        style["alignment"] = alignment.upper()
+        fields.append("alignment")
+    if line_spacing is not None:
+        # Tool uses multiplier (1.0=single), API uses percentage (100=single)
+        style["lineSpacing"] = line_spacing * 100
+        fields.append("lineSpacing")
+    if indent_first_line is not None:
+        style["indentFirstLine"] = {"magnitude": indent_first_line, "unit": "PT"}
+        fields.append("indentFirstLine")
+    if indent_start is not None:
+        style["indentStart"] = {"magnitude": indent_start, "unit": "PT"}
+        fields.append("indentStart")
+    if indent_end is not None:
+        style["indentEnd"] = {"magnitude": indent_end, "unit": "PT"}
+        fields.append("indentEnd")
+    if space_above is not None:
+        style["spaceAbove"] = {"magnitude": space_above, "unit": "PT"}
+        fields.append("spaceAbove")
+    if space_below is not None:
+        style["spaceBelow"] = {"magnitude": space_below, "unit": "PT"}
+        fields.append("spaceBelow")
+
+    return style, ",".join(fields)
+
+
+def build_table_cell_style(
+    background_color: str | None = None,
+    padding_top: float | None = None,
+    padding_bottom: float | None = None,
+    padding_left: float | None = None,
+    padding_right: float | None = None,
+    content_alignment: str | None = None,
+) -> tuple[dict[str, Any], str]:
+    """Build a TableCellStyle dict and FieldMask from tool-level parameters.
+
+    Converts hex color to OptionalColor and padding to Dimensions.
+
+    Returns:
+        Tuple of (table_cell_style dict, comma-separated fields mask)
+    """
+    from gdocs.docs_structure import hex_to_rgb_color
+
+    style: dict[str, Any] = {}
+    fields: list[str] = []
+
+    if background_color is not None:
+        style["backgroundColor"] = hex_to_rgb_color(background_color)
+        fields.append("backgroundColor")
+    if padding_top is not None:
+        style["paddingTop"] = {"magnitude": padding_top, "unit": "PT"}
+        fields.append("paddingTop")
+    if padding_bottom is not None:
+        style["paddingBottom"] = {"magnitude": padding_bottom, "unit": "PT"}
+        fields.append("paddingBottom")
+    if padding_left is not None:
+        style["paddingLeft"] = {"magnitude": padding_left, "unit": "PT"}
+        fields.append("paddingLeft")
+    if padding_right is not None:
+        style["paddingRight"] = {"magnitude": padding_right, "unit": "PT"}
+        fields.append("paddingRight")
+    if content_alignment is not None:
+        style["contentAlignment"] = content_alignment.upper()
+        fields.append("contentAlignment")
+
+    return style, ",".join(fields)

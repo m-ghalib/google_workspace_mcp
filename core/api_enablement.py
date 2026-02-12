@@ -13,6 +13,7 @@ API_ENABLEMENT_LINKS: Dict[str, str] = {
     "tasks.googleapis.com": "https://console.cloud.google.com/flows/enableapi?apiid=tasks.googleapis.com",
     "chat.googleapis.com": "https://console.cloud.google.com/flows/enableapi?apiid=chat.googleapis.com",
     "customsearch.googleapis.com": "https://console.cloud.google.com/flows/enableapi?apiid=customsearch.googleapis.com",
+    "script.googleapis.com": "https://console.cloud.google.com/flows/enableapi?apiid=script.googleapis.com",
 }
 
 
@@ -27,12 +28,12 @@ SERVICE_NAME_TO_API: Dict[str, str] = {
     "Google Tasks": "tasks.googleapis.com",
     "Google Chat": "chat.googleapis.com",
     "Google Custom Search": "customsearch.googleapis.com",
+    "Apps Script": "script.googleapis.com",
 }
 
 
 INTERNAL_SERVICE_TO_API: Dict[str, str] = {
     "calendar": "calendar-json.googleapis.com",
-    "drive": "drive.googleapis.com",
     "gmail": "gmail.googleapis.com",
     "docs": "docs.googleapis.com",
     "sheets": "sheets.googleapis.com",
@@ -42,6 +43,7 @@ INTERNAL_SERVICE_TO_API: Dict[str, str] = {
     "chat": "chat.googleapis.com",
     "customsearch": "customsearch.googleapis.com",
     "search": "customsearch.googleapis.com",
+    "script": "script.googleapis.com",
 }
 
 

@@ -1,0 +1,4673 @@
+{
+  "title": "Job Offer Findings",
+  "suggestionsViewMode": "SUGGESTIONS_INLINE",
+  "documentId": "18TO5z2CcVIOXtoRbR-KammEvNRSDDZnn6sWqEty5jtA",
+  "tabs": [
+    {
+      "tabProperties": {
+        "tabId": "t.zhnysc1ong96",
+        "title": "Readout",
+        "index": 0
+      },
+      "documentTab": {
+        "body": {
+          "content": [
+            {
+              "endIndex": 1,
+              "sectionBreak": {
+                "sectionStyle": {
+                  "columnSeparatorStyle": "NONE",
+                  "contentDirection": "LEFT_TO_RIGHT",
+                  "sectionType": "CONTINUOUS"
+                }
+              }
+            },
+            {
+              "startIndex": 1,
+              "endIndex": 18,
+              "paragraph": {
+                "elements": [
+                  {
+                    "startIndex": 1,
+                    "endIndex": 18,
+                    "textRun": {
+                      "content": "Job Board Offers\n",
+                      "textStyle": {}
+                    }
+                  }
+                ],
+                "paragraphStyle": {
+                  "headingId": "h.g36twfkncjpg",
+                  "namedStyleType": "TITLE",
+                  "direction": "LEFT_TO_RIGHT"
+                }
+              }
+            },
+            {
+              "startIndex": 18,
+              "endIndex": 37,
+              "paragraph": {
+                "elements": [
+                  {
+                    "startIndex": 18,
+                    "endIndex": 35,
+                    "textRun": {
+                      "content": "Product Analyst: ",
+                      "textStyle": {}
+                    }
+                  },
+                  {
+                    "startIndex": 35,
+                    "endIndex": 36,
+                    "person": {
+                      "personId": "kix.w3y151lkmuc",
+                      "textStyle": {},
+                      "personProperties": {
+                        "name": "Trisha Schutter",
+                        "email": "patricia.schutter@xometry.com"
+                      }
+                    }
+                  },
+                  {
+                    "startIndex": 36,
+                    "endIndex": 37,
+                    "textRun": {
+                      "content": "\n",
+                      "textStyle": {}
+                    }
+                  }
+                ],
+                "paragraphStyle": {
+                  "namedStyleType": "NORMAL_TEXT",
+                  "direction": "LEFT_TO_RIGHT"
+                }
+              }
+            },
+            {
+              "startIndex": 37,
+              "endIndex": 38,
+              "paragraph": {
+                "elements": [
+                  {
+                    "startIndex": 37,
+                    "endIndex": 38,
+                    "textRun": {
+                      "content": "\n",
+                      "textStyle": {}
+                    }
+                  }
+                ],
+                "paragraphStyle": {
+                  "namedStyleType": "NORMAL_TEXT",
+                  "direction": "LEFT_TO_RIGHT"
+                }
+              }
+            },
+            {
+              "startIndex": 38,
+              "endIndex": 55,
+              "paragraph": {
+                "elements": [
+                  {
+                    "startIndex": 38,
+                    "endIndex": 54,
+                    "textRun": {
+                      "content": "Looker Dashboard",
+                      "textStyle": {
+                        "underline": true,
+                        "foregroundColor": {
+                          "color": {
+                            "rgbColor": {
+                              "red": 0.06666667,
+                              "green": 0.33333334,
+                              "blue": 0.8
+                            }
+                          }
+                        },
+                        "link": {
+                          "url": "https://xometry.looker.com/dashboards/5367?Outsourcing+Group+Name=&Verified+Country=&Session+Start+Date=after+2025%2F09%2F07&Is+JCP+Certified%3F+%28Yes+%2F+No%29=&Is+AS9100+Certified%3F+%28Yes+%2F+No%29=&Accepted+Partner+Company+Name=&Is+CMMC+Level+2+Self+Certified+%28Yes+%2F+No%29=&Is+CMMC+Level+1+Certified+%28Yes+%2F+No%29="
+                        }
+                      }
+                    }
+                  },
+                  {
+                    "startIndex": 54,
+                    "endIndex": 55,
+                    "textRun": {
+                      "content": "\n",
+                      "textStyle": {}
+                    }
+                  }
+                ],
+                "paragraphStyle": {
+                  "namedStyleType": "NORMAL_TEXT",
+                  "direction": "LEFT_TO_RIGHT"
+                }
+              }
+            },
+            {
+              "startIndex": 55,
+              "endIndex": 63,
+              "paragraph": {
+                "elements": [
+                  {
+                    "startIndex": 55,
+                    "endIndex": 63,
+                    "textRun": {
+                      "content": "Context\n",
+                      "textStyle": {}
+                    }
+                  }
+                ],
+                "paragraphStyle": {
+                  "headingId": "h.kv8n70uvcwdf",
+                  "namedStyleType": "HEADING_2",
+                  "direction": "LEFT_TO_RIGHT"
+                }
+              }
+            },
+            {
+              "startIndex": 63,
+              "endIndex": 312,
+              "paragraph": {
+                "elements": [
+                  {
+                    "startIndex": 63,
+                    "endIndex": 312,
+                    "textRun": {
+                      "content": "We often hear partner feedback stating that partners don’t see any jobs on their job board. In December of 2025, we implemented event tracking to see the jobs shown on a partner’s job board each time an event is triggered (view page, refresh, etc).\n",
+                      "textStyle": {}
+                    }
+                  }
+                ],
+                "paragraphStyle": {
+                  "namedStyleType": "NORMAL_TEXT",
+                  "direction": "LEFT_TO_RIGHT",
+                  "spaceAbove": {
+                    "magnitude": 12,
+                    "unit": "PT"
+                  },
+                  "spaceBelow": {
+                    "magnitude": 12,
+                    "unit": "PT"
+                  }
+                }
+              }
+            },
+            {
+              "startIndex": 312,
+              "endIndex": 449,
+              "paragraph": {
+                "elements": [
+                  {
+                    "startIndex": 312,
+                    "endIndex": 449,
+                    "textRun": {
+                      "content": "The purpose of this document is to share out the findings from a deep dive into the number of job offers shown on a partner’s job board.\n",
+                      "textStyle": {}
+                    }
+                  }
+                ],
+                "paragraphStyle": {
+                  "namedStyleType": "NORMAL_TEXT",
+                  "direction": "LEFT_TO_RIGHT",
+                  "spaceAbove": {
+                    "magnitude": 12,
+                    "unit": "PT"
+                  },
+                  "spaceBelow": {
+                    "magnitude": 12,
+                    "unit": "PT"
+                  }
+                }
+              }
+            },
+            {
+              "startIndex": 449,
+              "endIndex": 454,
+              "paragraph": {
+                "elements": [
+                  {
+                    "startIndex": 449,
+                    "endIndex": 454,
+                    "textRun": {
+                      "content": "TLDR\n",
+                      "textStyle": {}
+                    }
+                  }
+                ],
+                "paragraphStyle": {
+                  "headingId": "h.wweklkvi8x32",
+                  "namedStyleType": "HEADING_2",
+                  "direction": "LEFT_TO_RIGHT"
+                }
+              }
+            },
+            {
+              "startIndex": 454,
+              "endIndex": 817,
+              "paragraph": {
+                "elements": [
+                  {
+                    "startIndex": 454,
+                    "endIndex": 512,
+                    "textRun": {
+                      "content": "The job board is failing to present sufficient job offers ",
+                      "textStyle": {
+                        "backgroundColor": {
+                          "color": {
+                            "rgbColor": {
+                              "red": 1,
+                              "green": 1,
+                              "blue": 1
+                            }
+                          }
+                        },
+                        "foregroundColor": {
+                          "color": {
+                            "rgbColor": {
+                              "red": 0.12156863,
+                              "green": 0.12156863,
+                              "blue": 0.12156863
+                            }
+                          }
+                        }
+                      }
+                    }
+                  },
+                  {
+                    "startIndex": 512,
+                    "endIndex": 515,
+                    "textRun": {
+                      "content": "and",
+                      "textStyle": {
+                        "italic": true,
+                        "backgroundColor": {
+                          "color": {
+                            "rgbColor": {
+                              "red": 1,
+                              "green": 1,
+                              "blue": 1
+                            }
+                          }
+                        },
+                        "foregroundColor": {
+                          "color": {
+                            "rgbColor": {
+                              "red": 0.12156863,
+                              "green": 0.12156863,
+                              "blue": 0.12156863
+                            }
+                          }
+                        }
+                      }
+                    }
+                  },
+                  {
+                    "startIndex": 515,
+                    "endIndex": 527,
+                    "textRun": {
+                      "content": " sufficient ",
+                      "textStyle": {
+                        "backgroundColor": {
+                          "color": {
+                            "rgbColor": {
+                              "red": 1,
+                              "green": 1,
+                              "blue": 1
+                            }
+                          }
+                        },
+                        "foregroundColor": {
+                          "color": {
+                            "rgbColor": {
+                              "red": 0.12156863,
+                              "green": 0.12156863,
+                              "blue": 0.12156863
+                            }
+                          }
+                        }
+                      }
+                    }
+                  },
+                  {
+                    "startIndex": 527,
+                    "endIndex": 530,
+                    "textRun": {
+                      "content": "new",
+                      "textStyle": {
+                        "backgroundColor": {
+                          "color": {
+                            "rgbColor": {
+                              "red": 1,
+                              "green": 1,
+                              "blue": 1
+                            }
+                          }
+                        },
+                        "foregroundColor": {
+                          "color": {
+                            "rgbColor": {
+                              "red": 0.12156863,
+                              "green": 0.12156863,
+                              "blue": 0.12156863
+                            }
+                          }
+                        }
+                      }
+                    }
+                  },
+                  {
+                    "startIndex": 530,
+                    "endIndex": 531,
+                    "textRun": {
+                      "content": " ",
+                      "textStyle": {
+                        "italic": true,
+                        "backgroundColor": {
+                          "color": {
+                            "rgbColor": {
+                              "red": 1,
+                              "green": 1,
+                              "blue": 1
+                            }
+                          }
+                        },
+                        "foregroundColor": {
+                          "color": {
+                            "rgbColor": {
+                              "red": 0.12156863,
+                              "green": 0.12156863,
+                              "blue": 0.12156863
+                            }
+                          }
+                        }
+                      }
+                    }
+                  },
+                  {
+                    "startIndex": 531,
+                    "endIndex": 560,
+                    "textRun": {
+                      "content": "job offers to partners, with ",
+                      "textStyle": {
+                        "backgroundColor": {
+                          "color": {
+                            "rgbColor": {
+                              "red": 1,
+                              "green": 1,
+                              "blue": 1
+                            }
+                          }
+                        },
+                        "foregroundColor": {
+                          "color": {
+                            "rgbColor": {
+                              "red": 0.12156863,
+                              "green": 0.12156863,
+                              "blue": 0.12156863
+                            }
+                          }
+                        }
+                      }
+                    }
+                  },
+                  {
+                    "startIndex": 560,
+                    "endIndex": 606,
+                    "textRun": {
+                      "content": "50% of partner-visits resulting in zero offers",
+                      "textStyle": {
+                        "bold": true,
+                        "backgroundColor": {
+                          "color": {
+                            "rgbColor": {
+                              "red": 1,
+                              "green": 1,
+                              "blue": 1
+                            }
+                          }
+                        },
+                        "foregroundColor": {
+                          "color": {
+                            "rgbColor": {
+                              "red": 0.12156863,
+                              "green": 0.12156863,
+                              "blue": 0.12156863
+                            }
+                          }
+                        }
+                      }
+                    }
+                  },
+                  {
+                    "startIndex": 606,
+                    "endIndex": 611,
+                    "textRun": {
+                      "content": " and ",
+                      "textStyle": {
+                        "backgroundColor": {
+                          "color": {
+                            "rgbColor": {
+                              "red": 1,
+                              "green": 1,
+                              "blue": 1
+                            }
+                          }
+                        },
+                        "foregroundColor": {
+                          "color": {
+                            "rgbColor": {
+                              "red": 0.12156863,
+                              "green": 0.12156863,
+                              "blue": 0.12156863
+                            }
+                          }
+                        }
+                      }
+                    }
+                  },
+                  {
+                    "startIndex": 611,
+                    "endIndex": 684,
+                    "textRun": {
+                      "content": "97.4% of all offers shown being jobs the partner has already been offered",
+                      "textStyle": {
+                        "bold": true,
+                        "backgroundColor": {
+                          "color": {
+                            "rgbColor": {
+                              "red": 1,
+                              "green": 1,
+                              "blue": 1
+                            }
+                          }
+                        },
+                        "foregroundColor": {
+                          "color": {
+                            "rgbColor": {
+                              "red": 0.12156863,
+                              "green": 0.12156863,
+                              "blue": 0.12156863
+                            }
+                          }
+                        }
+                      }
+                    }
+                  },
+                  {
+                    "startIndex": 684,
+                    "endIndex": 816,
+                    "textRun": {
+                      "content": ". This directly impacts partner satisfaction, as partners who see fewer jobs have much lower Partner NPS (-22) vs others (around 0).",
+                      "textStyle": {
+                        "backgroundColor": {
+                          "color": {
+                            "rgbColor": {
+                              "red": 1,
+                              "green": 1,
+                              "blue": 1
+                            }
+                          }
+                        },
+                        "foregroundColor": {
+                          "color": {
+                            "rgbColor": {
+                              "red": 0.12156863,
+                              "green": 0.12156863,
+                              "blue": 0.12156863
+                            }
+                          }
+                        }
+                      }
+                    }
+                  },
+                  {
+                    "startIndex": 816,
+                    "endIndex": 817,
+                    "textRun": {
+                      "content": "\n",
+                      "textStyle": {}
+                    }
+                  }
+                ],
+                "paragraphStyle": {
+                  "namedStyleType": "NORMAL_TEXT",
+                  "direction": "LEFT_TO_RIGHT"
+                }
+              }
+            },
+            {
+              "startIndex": 817,
+              "endIndex": 826,
+              "paragraph": {
+                "elements": [
+                  {
+                    "startIndex": 817,
+                    "endIndex": 826,
+                    "textRun": {
+                      "content": "Timeline\n",
+                      "textStyle": {}
+                    }
+                  }
+                ],
+                "paragraphStyle": {
+                  "headingId": "h.sp1gh4vjq3sh",
+                  "namedStyleType": "HEADING_2",
+                  "direction": "LEFT_TO_RIGHT"
+                }
+              }
+            },
+            {
+              "startIndex": 826,
+              "endIndex": 1054,
+              "paragraph": {
+                "elements": [
+                  {
+                    "startIndex": 826,
+                    "endIndex": 864,
+                    "textRun": {
+                      "content": "The timeline of this analysis is from ",
+                      "textStyle": {}
+                    }
+                  },
+                  {
+                    "startIndex": 864,
+                    "endIndex": 865,
+                    "dateElement": {
+                      "dateId": "kix.ufzz5692u4o",
+                      "textStyle": {},
+                      "dateElementProperties": {
+                        "timestamp": "2025-12-12T12:00:00Z",
+                        "locale": "en",
+                        "dateFormat": "DATE_FORMAT_MONTH_DAY_YEAR_ABBREVIATED",
+                        "timeFormat": "TIME_FORMAT_DISABLED",
+                        "displayText": "Dec 12, 2025"
+                      }
+                    }
+                  },
+                  {
+                    "startIndex": 865,
+                    "endIndex": 868,
+                    "textRun": {
+                      "content": " - ",
+                      "textStyle": {}
+                    }
+                  },
+                  {
+                    "startIndex": 868,
+                    "endIndex": 869,
+                    "dateElement": {
+                      "dateId": "kix.ur371wwxpc3t",
+                      "textStyle": {},
+                      "dateElementProperties": {
+                        "timestamp": "2026-01-20T12:00:00Z",
+                        "locale": "en",
+                        "dateFormat": "DATE_FORMAT_MONTH_DAY_YEAR_ABBREVIATED",
+                        "timeFormat": "TIME_FORMAT_DISABLED",
+                        "displayText": "Jan 20, 2026"
+                      }
+                    }
+                  },
+                  {
+                    "startIndex": 869,
+                    "endIndex": 911,
+                    "textRun": {
+                      "content": ". The data shown below should be received ",
+                      "textStyle": {}
+                    }
+                  },
+                  {
+                    "startIndex": 911,
+                    "endIndex": 921,
+                    "textRun": {
+                      "content": "cautiously",
+                      "textStyle": {
+                        "bold": true
+                      }
+                    }
+                  },
+                  {
+                    "startIndex": 921,
+                    "endIndex": 1054,
+                    "textRun": {
+                      "content": " as the timeframe involves heavy seasonality, with strong variations in both job volume and the number of partners on the job board.\n",
+                      "textStyle": {}
+                    }
+                  }
+                ],
+                "paragraphStyle": {
+                  "namedStyleType": "NORMAL_TEXT",
+                  "direction": "LEFT_TO_RIGHT"
+                }
+              }
+            },
+            {
+              "startIndex": 1054,
+              "endIndex": 1071,
+              "paragraph": {
+                "elements": [
+                  {
+                    "startIndex": 1054,
+                    "endIndex": 1071,
+                    "textRun": {
+                      "content": "Data Definitions\n",
+                      "textStyle": {}
+                    }
+                  }
+                ],
+                "paragraphStyle": {
+                  "headingId": "h.j5oi10hpg7k9",
+                  "namedStyleType": "HEADING_2",
+                  "direction": "LEFT_TO_RIGHT"
+                }
+              }
+            },
+            {
+              "startIndex": 1071,
+              "endIndex": 1238,
+              "paragraph": {
+                "elements": [
+                  {
+                    "startIndex": 1071,
+                    "endIndex": 1089,
+                    "textRun": {
+                      "content": "Overall Partners: ",
+                      "textStyle": {
+                        "bold": true
+                      }
+                    }
+                  },
+                  {
+                    "startIndex": 1089,
+                    "endIndex": 1238,
+                    "textRun": {
+                      "content": "All partners regardless of country/approval status/limits/outsourcing group/etc who came to the job board and triggered an event during the timeline\n",
+                      "textStyle": {}
+                    }
+                  }
+                ],
+                "paragraphStyle": {
+                  "namedStyleType": "NORMAL_TEXT",
+                  "direction": "LEFT_TO_RIGHT",
+                  "indentFirstLine": {
+                    "magnitude": 18,
+                    "unit": "PT"
+                  },
+                  "indentStart": {
+                    "magnitude": 36,
+                    "unit": "PT"
+                  }
+                },
+                "bullet": {
+                  "listId": "kix.o7o7wxbpffgm",
+                  "textStyle": {
+                    "underline": false
+                  }
+                }
+              }
+            },
+            {
+              "startIndex": 1238,
+              "endIndex": 1325,
+              "paragraph": {
+                "elements": [
+                  {
+                    "startIndex": 1238,
+                    "endIndex": 1250,
+                    "textRun": {
+                      "content": "Event Level:",
+                      "textStyle": {
+                        "bold": true
+                      }
+                    }
+                  },
+                  {
+                    "startIndex": 1250,
+                    "endIndex": 1325,
+                    "textRun": {
+                      "content": " Every time a partner comes to the job board, refreshes the job board, etc\n",
+                      "textStyle": {}
+                    }
+                  }
+                ],
+                "paragraphStyle": {
+                  "namedStyleType": "NORMAL_TEXT",
+                  "direction": "LEFT_TO_RIGHT",
+                  "indentFirstLine": {
+                    "magnitude": 18,
+                    "unit": "PT"
+                  },
+                  "indentStart": {
+                    "magnitude": 36,
+                    "unit": "PT"
+                  }
+                },
+                "bullet": {
+                  "listId": "kix.o7o7wxbpffgm",
+                  "textStyle": {
+                    "underline": false
+                  }
+                }
+              }
+            },
+            {
+              "startIndex": 1325,
+              "endIndex": 1360,
+              "paragraph": {
+                "elements": [
+                  {
+                    "startIndex": 1325,
+                    "endIndex": 1329,
+                    "textRun": {
+                      "content": "Day:",
+                      "textStyle": {
+                        "bold": true
+                      }
+                    }
+                  },
+                  {
+                    "startIndex": 1329,
+                    "endIndex": 1360,
+                    "textRun": {
+                      "content": " One single job board view day\n",
+                      "textStyle": {}
+                    }
+                  }
+                ],
+                "paragraphStyle": {
+                  "namedStyleType": "NORMAL_TEXT",
+                  "direction": "LEFT_TO_RIGHT",
+                  "indentFirstLine": {
+                    "magnitude": 18,
+                    "unit": "PT"
+                  },
+                  "indentStart": {
+                    "magnitude": 36,
+                    "unit": "PT"
+                  }
+                },
+                "bullet": {
+                  "listId": "kix.o7o7wxbpffgm",
+                  "textStyle": {
+                    "underline": false
+                  }
+                }
+              }
+            },
+            {
+              "startIndex": 1360,
+              "endIndex": 1402,
+              "paragraph": {
+                "elements": [
+                  {
+                    "startIndex": 1360,
+                    "endIndex": 1369,
+                    "textRun": {
+                      "content": "Domestic:",
+                      "textStyle": {
+                        "bold": true
+                      }
+                    }
+                  },
+                  {
+                    "startIndex": 1369,
+                    "endIndex": 1402,
+                    "textRun": {
+                      "content": " Partner verified country = ‘US’\n",
+                      "textStyle": {}
+                    }
+                  }
+                ],
+                "paragraphStyle": {
+                  "namedStyleType": "NORMAL_TEXT",
+                  "direction": "LEFT_TO_RIGHT",
+                  "indentFirstLine": {
+                    "magnitude": 18,
+                    "unit": "PT"
+                  },
+                  "indentStart": {
+                    "magnitude": 36,
+                    "unit": "PT"
+                  }
+                },
+                "bullet": {
+                  "listId": "kix.o7o7wxbpffgm",
+                  "textStyle": {
+                    "underline": false
+                  }
+                }
+              }
+            },
+            {
+              "startIndex": 1402,
+              "endIndex": 1569,
+              "paragraph": {
+                "elements": [
+                  {
+                    "startIndex": 1402,
+                    "endIndex": 1411,
+                    "textRun": {
+                      "content": "Approved:",
+                      "textStyle": {
+                        "bold": true
+                      }
+                    }
+                  },
+                  {
+                    "startIndex": 1411,
+                    "endIndex": 1569,
+                    "textRun": {
+                      "content": " partner has an approved status, although they may not have approved capabilities, which means their limits will be at zero and they aren’t eligible for jobs\n",
+                      "textStyle": {}
+                    }
+                  }
+                ],
+                "paragraphStyle": {
+                  "namedStyleType": "NORMAL_TEXT",
+                  "direction": "LEFT_TO_RIGHT",
+                  "indentFirstLine": {
+                    "magnitude": 18,
+                    "unit": "PT"
+                  },
+                  "indentStart": {
+                    "magnitude": 36,
+                    "unit": "PT"
+                  }
+                },
+                "bullet": {
+                  "listId": "kix.o7o7wxbpffgm",
+                  "textStyle": {
+                    "underline": false
+                  }
+                }
+              }
+            },
+            {
+              "startIndex": 1569,
+              "endIndex": 1703,
+              "paragraph": {
+                "elements": [
+                  {
+                    "startIndex": 1569,
+                    "endIndex": 1581,
+                    "textRun": {
+                      "content": "Partner NPS:",
+                      "textStyle": {
+                        "bold": true
+                      }
+                    }
+                  },
+                  {
+                    "startIndex": 1581,
+                    "endIndex": 1703,
+                    "textRun": {
+                      "content": " scores are taken from a recent partner NPS initiative that was launched in January 2026 (readout coming soon from UXR!!)\n",
+                      "textStyle": {}
+                    }
+                  }
+                ],
+                "paragraphStyle": {
+                  "namedStyleType": "NORMAL_TEXT",
+                  "direction": "LEFT_TO_RIGHT",
+                  "indentFirstLine": {
+                    "magnitude": 18,
+                    "unit": "PT"
+                  },
+                  "indentStart": {
+                    "magnitude": 36,
+                    "unit": "PT"
+                  }
+                },
+                "bullet": {
+                  "listId": "kix.o7o7wxbpffgm",
+                  "textStyle": {
+                    "underline": false
+                  }
+                }
+              }
+            },
+            {
+              "startIndex": 1703,
+              "endIndex": 1704,
+              "paragraph": {
+                "elements": [
+                  {
+                    "startIndex": 1703,
+                    "endIndex": 1704,
+                    "textRun": {
+                      "content": "\n",
+                      "textStyle": {}
+                    }
+                  }
+                ],
+                "paragraphStyle": {
+                  "namedStyleType": "NORMAL_TEXT",
+                  "direction": "LEFT_TO_RIGHT"
+                }
+              }
+            },
+            {
+              "startIndex": 1704,
+              "endIndex": 1718,
+              "paragraph": {
+                "elements": [
+                  {
+                    "startIndex": 1704,
+                    "endIndex": 1718,
+                    "textRun": {
+                      "content": "Data Overview\n",
+                      "textStyle": {}
+                    }
+                  }
+                ],
+                "paragraphStyle": {
+                  "headingId": "h.i0z81hniydt0",
+                  "namedStyleType": "HEADING_2",
+                  "direction": "LEFT_TO_RIGHT"
+                }
+              }
+            },
+            {
+              "startIndex": 1718,
+              "endIndex": 1747,
+              "paragraph": {
+                "elements": [
+                  {
+                    "startIndex": 1718,
+                    "endIndex": 1746,
+                    "textRun": {
+                      "content": "Included in the Appendix tab",
+                      "textStyle": {
+                        "underline": true,
+                        "foregroundColor": {
+                          "color": {
+                            "rgbColor": {
+                              "red": 0.06666667,
+                              "green": 0.33333334,
+                              "blue": 0.8
+                            }
+                          }
+                        },
+                        "link": {
+                          "tabId": "t.ocnvdqbzt2nx"
+                        }
+                      }
+                    }
+                  },
+                  {
+                    "startIndex": 1746,
+                    "endIndex": 1747,
+                    "textRun": {
+                      "content": "\n",
+                      "textStyle": {}
+                    }
+                  }
+                ],
+                "paragraphStyle": {
+                  "namedStyleType": "NORMAL_TEXT",
+                  "direction": "LEFT_TO_RIGHT"
+                }
+              }
+            },
+            {
+              "startIndex": 1747,
+              "endIndex": 1755,
+              "paragraph": {
+                "elements": [
+                  {
+                    "startIndex": 1747,
+                    "endIndex": 1754,
+                    "textRun": {
+                      "content": "Details",
+                      "textStyle": {}
+                    }
+                  },
+                  {
+                    "startIndex": 1754,
+                    "endIndex": 1755,
+                    "textRun": {
+                      "content": "\n",
+                      "textStyle": {}
+                    }
+                  }
+                ],
+                "paragraphStyle": {
+                  "headingId": "h.nk5ey1j1p7n2",
+                  "namedStyleType": "HEADING_2",
+                  "direction": "LEFT_TO_RIGHT"
+                }
+              }
+            },
+            {
+              "startIndex": 1755,
+              "endIndex": 1842,
+              "paragraph": {
+                "elements": [
+                  {
+                    "startIndex": 1755,
+                    "endIndex": 1842,
+                    "textRun": {
+                      "content": "Section 1: When partners land on/refresh the job board, they don’t see many job offers\n",
+                      "textStyle": {
+                        "bold": true,
+                        "fontSize": {
+                          "magnitude": 13,
+                          "unit": "PT"
+                        }
+                      }
+                    }
+                  }
+                ],
+                "paragraphStyle": {
+                  "namedStyleType": "NORMAL_TEXT",
+                  "direction": "LEFT_TO_RIGHT",
+                  "indentFirstLine": {
+                    "unit": "PT"
+                  },
+                  "indentStart": {
+                    "unit": "PT"
+                  }
+                }
+              }
+            },
+            {
+              "startIndex": 1842,
+              "endIndex": 2078,
+              "paragraph": {
+                "elements": [
+                  {
+                    "startIndex": 1842,
+                    "endIndex": 2077,
+                    "textRun": {
+                      "content": "These findings are based on data from 2,581 partners regardless of country/approval/limits/outsourcing group/etc who came to the job board and triggered an event (visits the job board, refreshes the job board, etc) during the timeline.",
+                      "textStyle": {}
+                    }
+                  },
+                  {
+                    "startIndex": 2077,
+                    "endIndex": 2078,
+                    "textRun": {
+                      "content": "\n",
+                      "textStyle": {
+                        "bold": true,
+                        "fontSize": {
+                          "magnitude": 13,
+                          "unit": "PT"
+                        }
+                      }
+                    }
+                  }
+                ],
+                "paragraphStyle": {
+                  "namedStyleType": "NORMAL_TEXT",
+                  "direction": "LEFT_TO_RIGHT"
+                }
+              }
+            },
+            {
+              "startIndex": 2078,
+              "endIndex": 2079,
+              "paragraph": {
+                "elements": [
+                  {
+                    "startIndex": 2078,
+                    "endIndex": 2079,
+                    "textRun": {
+                      "content": "\n",
+                      "textStyle": {}
+                    }
+                  }
+                ],
+                "paragraphStyle": {
+                  "namedStyleType": "NORMAL_TEXT",
+                  "direction": "LEFT_TO_RIGHT",
+                  "indentFirstLine": {
+                    "unit": "PT"
+                  },
+                  "indentStart": {
+                    "unit": "PT"
+                  }
+                }
+              }
+            },
+            {
+              "startIndex": 2079,
+              "endIndex": 2151,
+              "paragraph": {
+                "elements": [
+                  {
+                    "startIndex": 2079,
+                    "endIndex": 2087,
+                    "textRun": {
+                      "content": "Image 1:",
+                      "textStyle": {
+                        "bold": true,
+                        "italic": true
+                      }
+                    }
+                  },
+                  {
+                    "startIndex": 2087,
+                    "endIndex": 2151,
+                    "textRun": {
+                      "content": " The number of jobs offered at the event level for all partners\n",
+                      "textStyle": {
+                        "italic": true
+                      }
+                    }
+                  }
+                ],
+                "paragraphStyle": {
+                  "namedStyleType": "NORMAL_TEXT",
+                  "direction": "LEFT_TO_RIGHT",
+                  "indentFirstLine": {
+                    "unit": "PT"
+                  },
+                  "indentStart": {
+                    "unit": "PT"
+                  }
+                }
+              }
+            },
+            {
+              "startIndex": 2151,
+              "endIndex": 2153,
+              "paragraph": {
+                "elements": [
+                  {
+                    "startIndex": 2151,
+                    "endIndex": 2152,
+                    "inlineObjectElement": {
+                      "inlineObjectId": "kix.lm9v2t8cj1u4",
+                      "textStyle": {
+                        "foregroundColor": {
+                          "color": {
+                            "rgbColor": {
+                              "red": 0.11372549,
+                              "green": 0.10980392,
+                              "blue": 0.11372549
+                            }
+                          }
+                        },
+                        "fontSize": {
+                          "magnitude": 11.5,
+                          "unit": "PT"
+                        }
+                      }
+                    }
+                  },
+                  {
+                    "startIndex": 2152,
+                    "endIndex": 2153,
+                    "textRun": {
+                      "content": "\n",
+                      "textStyle": {
+                        "foregroundColor": {
+                          "color": {
+                            "rgbColor": {
+                              "red": 0.11372549,
+                              "green": 0.10980392,
+                              "blue": 0.11372549
+                            }
+                          }
+                        },
+                        "fontSize": {
+                          "magnitude": 11.5,
+                          "unit": "PT"
+                        }
+                      }
+                    }
+                  }
+                ],
+                "paragraphStyle": {
+                  "namedStyleType": "NORMAL_TEXT",
+                  "direction": "LEFT_TO_RIGHT",
+                  "indentFirstLine": {
+                    "magnitude": 144,
+                    "unit": "PT"
+                  },
+                  "indentStart": {
+                    "magnitude": 144,
+                    "unit": "PT"
+                  }
+                }
+              }
+            },
+            {
+              "startIndex": 2153,
+              "endIndex": 2355,
+              "paragraph": {
+                "elements": [
+                  {
+                    "startIndex": 2153,
+                    "endIndex": 2355,
+                    "textRun": {
+                      "content": "At the event level for all partners, 50% of events result in zero offers being shown. The average is 4 job offers, although those 4 job offers include largely the same job offers they have seen before.\n",
+                      "textStyle": {}
+                    }
+                  }
+                ],
+                "paragraphStyle": {
+                  "namedStyleType": "NORMAL_TEXT",
+                  "direction": "LEFT_TO_RIGHT"
+                }
+              }
+            },
+            {
+              "startIndex": 2355,
+              "endIndex": 2356,
+              "paragraph": {
+                "elements": [
+                  {
+                    "startIndex": 2355,
+                    "endIndex": 2356,
+                    "textRun": {
+                      "content": "\n",
+                      "textStyle": {}
+                    }
+                  }
+                ],
+                "paragraphStyle": {
+                  "namedStyleType": "NORMAL_TEXT",
+                  "direction": "LEFT_TO_RIGHT"
+                }
+              }
+            },
+            {
+              "startIndex": 2356,
+              "endIndex": 2440,
+              "paragraph": {
+                "elements": [
+                  {
+                    "startIndex": 2356,
+                    "endIndex": 2364,
+                    "textRun": {
+                      "content": "Image 2:",
+                      "textStyle": {
+                        "bold": true,
+                        "italic": true,
+                        "foregroundColor": {
+                          "color": {
+                            "rgbColor": {
+                              "red": 0.11372549,
+                              "green": 0.10980392,
+                              "blue": 0.11372549
+                            }
+                          }
+                        },
+                        "fontSize": {
+                          "magnitude": 11.5,
+                          "unit": "PT"
+                        }
+                      }
+                    }
+                  },
+                  {
+                    "startIndex": 2364,
+                    "endIndex": 2365,
+                    "textRun": {
+                      "content": " ",
+                      "textStyle": {
+                        "italic": true,
+                        "foregroundColor": {
+                          "color": {
+                            "rgbColor": {
+                              "red": 0.11372549,
+                              "green": 0.10980392,
+                              "blue": 0.11372549
+                            }
+                          }
+                        },
+                        "fontSize": {
+                          "magnitude": 11.5,
+                          "unit": "PT"
+                        }
+                      }
+                    }
+                  },
+                  {
+                    "startIndex": 2365,
+                    "endIndex": 2440,
+                    "textRun": {
+                      "content": "The number of jobs offered at the event level by partner outsourcing group\n",
+                      "textStyle": {
+                        "italic": true,
+                        "foregroundColor": {
+                          "color": {
+                            "rgbColor": {
+                              "red": 0.11372549,
+                              "green": 0.10980392,
+                              "blue": 0.11372549
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                ],
+                "paragraphStyle": {
+                  "namedStyleType": "NORMAL_TEXT",
+                  "direction": "LEFT_TO_RIGHT",
+                  "indentFirstLine": {
+                    "unit": "PT"
+                  },
+                  "indentStart": {
+                    "unit": "PT"
+                  }
+                }
+              }
+            },
+            {
+              "startIndex": 2440,
+              "endIndex": 2442,
+              "paragraph": {
+                "elements": [
+                  {
+                    "startIndex": 2440,
+                    "endIndex": 2441,
+                    "inlineObjectElement": {
+                      "inlineObjectId": "kix.gahyxfornoyn",
+                      "textStyle": {
+                        "foregroundColor": {
+                          "color": {
+                            "rgbColor": {
+                              "red": 0.11372549,
+                              "green": 0.10980392,
+                              "blue": 0.11372549
+                            }
+                          }
+                        },
+                        "fontSize": {
+                          "magnitude": 11.5,
+                          "unit": "PT"
+                        }
+                      }
+                    }
+                  },
+                  {
+                    "startIndex": 2441,
+                    "endIndex": 2442,
+                    "textRun": {
+                      "content": "\n",
+                      "textStyle": {
+                        "foregroundColor": {
+                          "color": {
+                            "rgbColor": {
+                              "red": 0.11372549,
+                              "green": 0.10980392,
+                              "blue": 0.11372549
+                            }
+                          }
+                        },
+                        "fontSize": {
+                          "magnitude": 11.5,
+                          "unit": "PT"
+                        }
+                      }
+                    }
+                  }
+                ],
+                "paragraphStyle": {
+                  "namedStyleType": "NORMAL_TEXT",
+                  "alignment": "CENTER",
+                  "direction": "LEFT_TO_RIGHT",
+                  "indentFirstLine": {
+                    "unit": "PT"
+                  },
+                  "indentStart": {
+                    "unit": "PT"
+                  }
+                }
+              }
+            },
+            {
+              "startIndex": 2442,
+              "endIndex": 2797,
+              "paragraph": {
+                "elements": [
+                  {
+                    "startIndex": 2442,
+                    "endIndex": 2797,
+                    "textRun": {
+                      "content": "By outsourcing group, the average number of job offers shown are as follows: Default Group sees ~2 jobs per event, Expanded Premium Group sees ~2 jobs per event, Premium sees ~14 jobs per event, Expanded Ultra Premium sees ~12 jobs per event, Ultra Premium sees ~16 jobs per event, Expanded Elite sees ~5 jobs per event, and Elite sees ~4 jobs per event.\n",
+                      "textStyle": {
+                        "foregroundColor": {
+                          "color": {
+                            "rgbColor": {
+                              "red": 0.11372549,
+                              "green": 0.10980392,
+                              "blue": 0.11372549
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                ],
+                "paragraphStyle": {
+                  "namedStyleType": "NORMAL_TEXT",
+                  "alignment": "START",
+                  "direction": "LEFT_TO_RIGHT",
+                  "indentFirstLine": {
+                    "unit": "PT"
+                  },
+                  "indentStart": {
+                    "unit": "PT"
+                  }
+                }
+              }
+            },
+            {
+              "startIndex": 2797,
+              "endIndex": 2798,
+              "paragraph": {
+                "elements": [
+                  {
+                    "startIndex": 2797,
+                    "endIndex": 2798,
+                    "textRun": {
+                      "content": "\n",
+                      "textStyle": {
+                        "foregroundColor": {
+                          "color": {
+                            "rgbColor": {
+                              "red": 0.11372549,
+                              "green": 0.10980392,
+                              "blue": 0.11372549
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                ],
+                "paragraphStyle": {
+                  "namedStyleType": "NORMAL_TEXT",
+                  "alignment": "START",
+                  "direction": "LEFT_TO_RIGHT",
+                  "indentFirstLine": {
+                    "unit": "PT"
+                  },
+                  "indentStart": {
+                    "unit": "PT"
+                  }
+                }
+              }
+            },
+            {
+              "startIndex": 2798,
+              "endIndex": 3051,
+              "paragraph": {
+                "elements": [
+                  {
+                    "startIndex": 2798,
+                    "endIndex": 2862,
+                    "textRun": {
+                      "content": "Looking at only domestic and approved partners (2,204 partners),",
+                      "textStyle": {
+                        "underline": true
+                      }
+                    }
+                  },
+                  {
+                    "startIndex": 2862,
+                    "endIndex": 2915,
+                    "textRun": {
+                      "content": " a similar (slightly better) pattern is found across ",
+                      "textStyle": {}
+                    }
+                  },
+                  {
+                    "startIndex": 2915,
+                    "endIndex": 3051,
+                    "textRun": {
+                      "content": "all partner outsourcing groups, except for premium partners (13.7 to 1.3), likely due to international partners having a lot of offers.\n",
+                      "textStyle": {
+                        "foregroundColor": {
+                          "color": {
+                            "rgbColor": {
+                              "red": 0.11372549,
+                              "green": 0.10980392,
+                              "blue": 0.11372549
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                ],
+                "paragraphStyle": {
+                  "namedStyleType": "NORMAL_TEXT",
+                  "direction": "LEFT_TO_RIGHT"
+                }
+              }
+            },
+            {
+              "startIndex": 3051,
+              "endIndex": 3052,
+              "paragraph": {
+                "elements": [
+                  {
+                    "startIndex": 3051,
+                    "endIndex": 3052,
+                    "textRun": {
+                      "content": "\n",
+                      "textStyle": {}
+                    }
+                  }
+                ],
+                "paragraphStyle": {
+                  "namedStyleType": "NORMAL_TEXT",
+                  "direction": "LEFT_TO_RIGHT"
+                }
+              }
+            },
+            {
+              "startIndex": 3052,
+              "endIndex": 3181,
+              "paragraph": {
+                "elements": [
+                  {
+                    "startIndex": 3052,
+                    "endIndex": 3060,
+                    "textRun": {
+                      "content": "Image 3:",
+                      "textStyle": {
+                        "bold": true,
+                        "italic": true,
+                        "foregroundColor": {
+                          "color": {
+                            "rgbColor": {
+                              "red": 0.11372549,
+                              "green": 0.10980392,
+                              "blue": 0.11372549
+                            }
+                          }
+                        },
+                        "fontSize": {
+                          "magnitude": 11.5,
+                          "unit": "PT"
+                        }
+                      }
+                    }
+                  },
+                  {
+                    "startIndex": 3060,
+                    "endIndex": 3061,
+                    "textRun": {
+                      "content": " ",
+                      "textStyle": {
+                        "italic": true,
+                        "foregroundColor": {
+                          "color": {
+                            "rgbColor": {
+                              "red": 0.11372549,
+                              "green": 0.10980392,
+                              "blue": 0.11372549
+                            }
+                          }
+                        },
+                        "fontSize": {
+                          "magnitude": 11.5,
+                          "unit": "PT"
+                        }
+                      }
+                    }
+                  },
+                  {
+                    "startIndex": 3061,
+                    "endIndex": 3181,
+                    "textRun": {
+                      "content": "The number of jobs offered at the event level by partner outsourcing group among partners who are domestic and approved\n",
+                      "textStyle": {
+                        "italic": true,
+                        "foregroundColor": {
+                          "color": {
+                            "rgbColor": {
+                              "red": 0.11372549,
+                              "green": 0.10980392,
+                              "blue": 0.11372549
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                ],
+                "paragraphStyle": {
+                  "namedStyleType": "NORMAL_TEXT",
+                  "direction": "LEFT_TO_RIGHT"
+                }
+              }
+            },
+            {
+              "startIndex": 3181,
+              "endIndex": 3183,
+              "paragraph": {
+                "elements": [
+                  {
+                    "startIndex": 3181,
+                    "endIndex": 3182,
+                    "inlineObjectElement": {
+                      "inlineObjectId": "kix.16a2leki7wtf",
+                      "textStyle": {
+                        "foregroundColor": {
+                          "color": {
+                            "rgbColor": {
+                              "red": 0.11372549,
+                              "green": 0.10980392,
+                              "blue": 0.11372549
+                            }
+                          }
+                        },
+                        "fontSize": {
+                          "magnitude": 11.5,
+                          "unit": "PT"
+                        }
+                      }
+                    }
+                  },
+                  {
+                    "startIndex": 3182,
+                    "endIndex": 3183,
+                    "textRun": {
+                      "content": "\n",
+                      "textStyle": {
+                        "foregroundColor": {
+                          "color": {
+                            "rgbColor": {
+                              "red": 0.11372549,
+                              "green": 0.10980392,
+                              "blue": 0.11372549
+                            }
+                          }
+                        },
+                        "fontSize": {
+                          "magnitude": 11.5,
+                          "unit": "PT"
+                        }
+                      }
+                    }
+                  }
+                ],
+                "paragraphStyle": {
+                  "namedStyleType": "NORMAL_TEXT",
+                  "alignment": "CENTER",
+                  "direction": "LEFT_TO_RIGHT"
+                }
+              }
+            },
+            {
+              "startIndex": 3183,
+              "endIndex": 3184,
+              "paragraph": {
+                "elements": [
+                  {
+                    "startIndex": 3183,
+                    "endIndex": 3184,
+                    "textRun": {
+                      "content": "\n",
+                      "textStyle": {
+                        "foregroundColor": {
+                          "color": {
+                            "rgbColor": {
+                              "red": 0.11372549,
+                              "green": 0.10980392,
+                              "blue": 0.11372549
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                ],
+                "paragraphStyle": {
+                  "namedStyleType": "NORMAL_TEXT",
+                  "direction": "LEFT_TO_RIGHT"
+                }
+              }
+            },
+            {
+              "startIndex": 3184,
+              "endIndex": 3293,
+              "paragraph": {
+                "elements": [
+                  {
+                    "startIndex": 3184,
+                    "endIndex": 3293,
+                    "textRun": {
+                      "content": "Section 2: In addition to not seeing many job offers, partners often see the same offers over and over again\n",
+                      "textStyle": {
+                        "bold": true,
+                        "fontSize": {
+                          "magnitude": 13,
+                          "unit": "PT"
+                        }
+                      }
+                    }
+                  }
+                ],
+                "paragraphStyle": {
+                  "namedStyleType": "NORMAL_TEXT",
+                  "direction": "LEFT_TO_RIGHT"
+                }
+              }
+            },
+            {
+              "startIndex": 3293,
+              "endIndex": 3524,
+              "paragraph": {
+                "elements": [
+                  {
+                    "startIndex": 3293,
+                    "endIndex": 3355,
+                    "textRun": {
+                      "content": "Although partners may be seeing offers, the offers are likely ",
+                      "textStyle": {}
+                    }
+                  },
+                  {
+                    "startIndex": 3355,
+                    "endIndex": 3358,
+                    "textRun": {
+                      "content": "not",
+                      "textStyle": {
+                        "bold": true
+                      }
+                    }
+                  },
+                  {
+                    "startIndex": 3358,
+                    "endIndex": 3373,
+                    "textRun": {
+                      "content": " new offers as ",
+                      "textStyle": {}
+                    }
+                  },
+                  {
+                    "startIndex": 3373,
+                    "endIndex": 3378,
+                    "textRun": {
+                      "content": "97.4%",
+                      "textStyle": {
+                        "bold": true
+                      }
+                    }
+                  },
+                  {
+                    "startIndex": 3378,
+                    "endIndex": 3524,
+                    "textRun": {
+                      "content": " of the offers shown to partners are offers that have already been presented to the partner viewing the offer. ((41830515 - 1086572) / 41830515).\n",
+                      "textStyle": {}
+                    }
+                  }
+                ],
+                "paragraphStyle": {
+                  "namedStyleType": "NORMAL_TEXT",
+                  "direction": "LEFT_TO_RIGHT"
+                }
+              }
+            },
+            {
+              "startIndex": 3524,
+              "endIndex": 3525,
+              "paragraph": {
+                "elements": [
+                  {
+                    "startIndex": 3524,
+                    "endIndex": 3525,
+                    "textRun": {
+                      "content": "\n",
+                      "textStyle": {}
+                    }
+                  }
+                ],
+                "paragraphStyle": {
+                  "namedStyleType": "NORMAL_TEXT",
+                  "direction": "LEFT_TO_RIGHT"
+                }
+              }
+            },
+            {
+              "startIndex": 3525,
+              "endIndex": 3558,
+              "paragraph": {
+                "elements": [
+                  {
+                    "startIndex": 3525,
+                    "endIndex": 3533,
+                    "textRun": {
+                      "content": "Chart 1:",
+                      "textStyle": {
+                        "bold": true
+                      }
+                    }
+                  },
+                  {
+                    "startIndex": 3533,
+                    "endIndex": 3534,
+                    "textRun": {
+                      "content": " ",
+                      "textStyle": {}
+                    }
+                  },
+                  {
+                    "startIndex": 3534,
+                    "endIndex": 3558,
+                    "textRun": {
+                      "content": "Offers overview metrics\n",
+                      "textStyle": {
+                        "italic": true
+                      }
+                    }
+                  }
+                ],
+                "paragraphStyle": {
+                  "namedStyleType": "NORMAL_TEXT",
+                  "direction": "LEFT_TO_RIGHT"
+                }
+              }
+            },
+            {
+              "startIndex": 3558,
+              "endIndex": 3655,
+              "table": {
+                "rows": 2,
+                "columns": 2,
+                "tableRows": [
+                  {
+                    "startIndex": 3559,
+                    "endIndex": 3611,
+                    "tableCells": [
+                      {
+                        "startIndex": 3560,
+                        "endIndex": 3600,
+                        "content": [
+                          {
+                            "startIndex": 3561,
+                            "endIndex": 3599,
+                            "paragraph": {
+                              "elements": [
+                                {
+                                  "startIndex": 3561,
+                                  "endIndex": 3599,
+                                  "textRun": {
+                                    "content": "Number of Unique Partner-Offers shown\n",
+                                    "textStyle": {
+                                      "foregroundColor": {
+                                        "color": {
+                                          "rgbColor": {
+                                            "red": 0.11372549,
+                                            "green": 0.10980392,
+                                            "blue": 0.11372549
+                                          }
+                                        }
+                                      },
+                                      "fontSize": {
+                                        "magnitude": 11.5,
+                                        "unit": "PT"
+                                      }
+                                    }
+                                  }
+                                }
+                              ],
+                              "paragraphStyle": {
+                                "namedStyleType": "NORMAL_TEXT",
+                                "alignment": "CENTER",
+                                "direction": "LEFT_TO_RIGHT"
+                              }
+                            }
+                          },
+                          {
+                            "startIndex": 3599,
+                            "endIndex": 3600,
+                            "paragraph": {
+                              "elements": [
+                                {
+                                  "startIndex": 3599,
+                                  "endIndex": 3600,
+                                  "textRun": {
+                                    "content": "\n",
+                                    "textStyle": {}
+                                  }
+                                }
+                              ],
+                              "paragraphStyle": {
+                                "namedStyleType": "NORMAL_TEXT",
+                                "alignment": "CENTER",
+                                "lineSpacing": 100,
+                                "direction": "LEFT_TO_RIGHT",
+                                "spacingMode": "COLLAPSE_LISTS",
+                                "spaceAbove": {
+                                  "unit": "PT"
+                                },
+                                "spaceBelow": {
+                                  "unit": "PT"
+                                },
+                                "borderBetween": {
+                                  "color": {},
+                                  "width": {
+                                    "unit": "PT"
+                                  },
+                                  "padding": {
+                                    "unit": "PT"
+                                  },
+                                  "dashStyle": "SOLID"
+                                },
+                                "borderTop": {
+                                  "color": {},
+                                  "width": {
+                                    "unit": "PT"
+                                  },
+                                  "padding": {
+                                    "unit": "PT"
+                                  },
+                                  "dashStyle": "SOLID"
+                                },
+                                "borderBottom": {
+                                  "color": {},
+                                  "width": {
+                                    "unit": "PT"
+                                  },
+                                  "padding": {
+                                    "unit": "PT"
+                                  },
+                                  "dashStyle": "SOLID"
+                                },
+                                "borderLeft": {
+                                  "color": {},
+                                  "width": {
+                                    "unit": "PT"
+                                  },
+                                  "padding": {
+                                    "unit": "PT"
+                                  },
+                                  "dashStyle": "SOLID"
+                                },
+                                "borderRight": {
+                                  "color": {},
+                                  "width": {
+                                    "unit": "PT"
+                                  },
+                                  "padding": {
+                                    "unit": "PT"
+                                  },
+                                  "dashStyle": "SOLID"
+                                },
+                                "indentFirstLine": {
+                                  "unit": "PT"
+                                },
+                                "indentStart": {
+                                  "unit": "PT"
+                                },
+                                "indentEnd": {
+                                  "unit": "PT"
+                                },
+                                "keepLinesTogether": false,
+                                "keepWithNext": false,
+                                "avoidWidowAndOrphan": false,
+                                "shading": {
+                                  "backgroundColor": {}
+                                },
+                                "pageBreakBefore": false
+                              }
+                            }
+                          }
+                        ],
+                        "tableCellStyle": {
+                          "rowSpan": 1,
+                          "columnSpan": 1,
+                          "backgroundColor": {},
+                          "paddingLeft": {
+                            "magnitude": 5,
+                            "unit": "PT"
+                          },
+                          "paddingRight": {
+                            "magnitude": 5,
+                            "unit": "PT"
+                          },
+                          "paddingTop": {
+                            "magnitude": 5,
+                            "unit": "PT"
+                          },
+                          "paddingBottom": {
+                            "magnitude": 5,
+                            "unit": "PT"
+                          },
+                          "contentAlignment": "TOP"
+                        }
+                      },
+                      {
+                        "startIndex": 3600,
+                        "endIndex": 3611,
+                        "content": [
+                          {
+                            "startIndex": 3601,
+                            "endIndex": 3611,
+                            "paragraph": {
+                              "elements": [
+                                {
+                                  "startIndex": 3601,
+                                  "endIndex": 3610,
+                                  "textRun": {
+                                    "content": "1,086,572",
+                                    "textStyle": {
+                                      "foregroundColor": {
+                                        "color": {
+                                          "rgbColor": {
+                                            "red": 0.11372549,
+                                            "green": 0.10980392,
+                                            "blue": 0.11372549
+                                          }
+                                        }
+                                      },
+                                      "fontSize": {
+                                        "magnitude": 11.5,
+                                        "unit": "PT"
+                                      }
+                                    }
+                                  }
+                                },
+                                {
+                                  "startIndex": 3610,
+                                  "endIndex": 3611,
+                                  "textRun": {
+                                    "content": "\n",
+                                    "textStyle": {}
+                                  }
+                                }
+                              ],
+                              "paragraphStyle": {
+                                "namedStyleType": "NORMAL_TEXT",
+                                "alignment": "CENTER",
+                                "direction": "LEFT_TO_RIGHT"
+                              }
+                            }
+                          }
+                        ],
+                        "tableCellStyle": {
+                          "rowSpan": 1,
+                          "columnSpan": 1,
+                          "backgroundColor": {},
+                          "paddingLeft": {
+                            "magnitude": 5,
+                            "unit": "PT"
+                          },
+                          "paddingRight": {
+                            "magnitude": 5,
+                            "unit": "PT"
+                          },
+                          "paddingTop": {
+                            "magnitude": 5,
+                            "unit": "PT"
+                          },
+                          "paddingBottom": {
+                            "magnitude": 5,
+                            "unit": "PT"
+                          },
+                          "contentAlignment": "TOP"
+                        }
+                      }
+                    ],
+                    "tableRowStyle": {
+                      "minRowHeight": {
+                        "magnitude": 22.60638427734375,
+                        "unit": "PT"
+                      }
+                    }
+                  },
+                  {
+                    "startIndex": 3611,
+                    "endIndex": 3654,
+                    "tableCells": [
+                      {
+                        "startIndex": 3612,
+                        "endIndex": 3642,
+                        "content": [
+                          {
+                            "startIndex": 3613,
+                            "endIndex": 3642,
+                            "paragraph": {
+                              "elements": [
+                                {
+                                  "startIndex": 3613,
+                                  "endIndex": 3641,
+                                  "textRun": {
+                                    "content": "Total Number of Offers Shown",
+                                    "textStyle": {
+                                      "foregroundColor": {
+                                        "color": {
+                                          "rgbColor": {
+                                            "red": 0.11372549,
+                                            "green": 0.10980392,
+                                            "blue": 0.11372549
+                                          }
+                                        }
+                                      },
+                                      "fontSize": {
+                                        "magnitude": 11.5,
+                                        "unit": "PT"
+                                      }
+                                    }
+                                  }
+                                },
+                                {
+                                  "startIndex": 3641,
+                                  "endIndex": 3642,
+                                  "textRun": {
+                                    "content": "\n",
+                                    "textStyle": {}
+                                  }
+                                }
+                              ],
+                              "paragraphStyle": {
+                                "namedStyleType": "NORMAL_TEXT",
+                                "alignment": "CENTER",
+                                "direction": "LEFT_TO_RIGHT",
+                                "indentFirstLine": {
+                                  "unit": "PT"
+                                },
+                                "indentStart": {
+                                  "unit": "PT"
+                                }
+                              }
+                            }
+                          }
+                        ],
+                        "tableCellStyle": {
+                          "rowSpan": 1,
+                          "columnSpan": 1,
+                          "backgroundColor": {},
+                          "paddingLeft": {
+                            "magnitude": 5,
+                            "unit": "PT"
+                          },
+                          "paddingRight": {
+                            "magnitude": 5,
+                            "unit": "PT"
+                          },
+                          "paddingTop": {
+                            "magnitude": 5,
+                            "unit": "PT"
+                          },
+                          "paddingBottom": {
+                            "magnitude": 5,
+                            "unit": "PT"
+                          },
+                          "contentAlignment": "TOP"
+                        }
+                      },
+                      {
+                        "startIndex": 3642,
+                        "endIndex": 3654,
+                        "content": [
+                          {
+                            "startIndex": 3643,
+                            "endIndex": 3654,
+                            "paragraph": {
+                              "elements": [
+                                {
+                                  "startIndex": 3643,
+                                  "endIndex": 3653,
+                                  "textRun": {
+                                    "content": "41,830,515",
+                                    "textStyle": {
+                                      "foregroundColor": {
+                                        "color": {
+                                          "rgbColor": {
+                                            "red": 0.11372549,
+                                            "green": 0.10980392,
+                                            "blue": 0.11372549
+                                          }
+                                        }
+                                      },
+                                      "fontSize": {
+                                        "magnitude": 11.5,
+                                        "unit": "PT"
+                                      }
+                                    }
+                                  }
+                                },
+                                {
+                                  "startIndex": 3653,
+                                  "endIndex": 3654,
+                                  "textRun": {
+                                    "content": "\n",
+                                    "textStyle": {}
+                                  }
+                                }
+                              ],
+                              "paragraphStyle": {
+                                "namedStyleType": "NORMAL_TEXT",
+                                "alignment": "CENTER",
+                                "direction": "LEFT_TO_RIGHT",
+                                "indentFirstLine": {
+                                  "unit": "PT"
+                                },
+                                "indentStart": {
+                                  "unit": "PT"
+                                }
+                              }
+                            }
+                          }
+                        ],
+                        "tableCellStyle": {
+                          "rowSpan": 1,
+                          "columnSpan": 1,
+                          "backgroundColor": {},
+                          "paddingLeft": {
+                            "magnitude": 5,
+                            "unit": "PT"
+                          },
+                          "paddingRight": {
+                            "magnitude": 5,
+                            "unit": "PT"
+                          },
+                          "paddingTop": {
+                            "magnitude": 5,
+                            "unit": "PT"
+                          },
+                          "paddingBottom": {
+                            "magnitude": 5,
+                            "unit": "PT"
+                          },
+                          "contentAlignment": "TOP"
+                        }
+                      }
+                    ],
+                    "tableRowStyle": {
+                      "minRowHeight": {
+                        "unit": "PT"
+                      }
+                    }
+                  }
+                ],
+                "tableStyle": {
+                  "tableColumnProperties": [
+                    {
+                      "widthType": "FIXED_WIDTH",
+                      "width": {
+                        "magnitude": 266.25,
+                        "unit": "PT"
+                      }
+                    },
+                    {
+                      "widthType": "FIXED_WIDTH",
+                      "width": {
+                        "magnitude": 201.75,
+                        "unit": "PT"
+                      }
+                    }
+                  ]
+                }
+              }
+            },
+            {
+              "startIndex": 3655,
+              "endIndex": 3656,
+              "paragraph": {
+                "elements": [
+                  {
+                    "startIndex": 3655,
+                    "endIndex": 3656,
+                    "textRun": {
+                      "content": "\n",
+                      "textStyle": {}
+                    }
+                  }
+                ],
+                "paragraphStyle": {
+                  "namedStyleType": "NORMAL_TEXT",
+                  "direction": "LEFT_TO_RIGHT"
+                }
+              }
+            },
+            {
+              "startIndex": 3656,
+              "endIndex": 3657,
+              "paragraph": {
+                "elements": [
+                  {
+                    "startIndex": 3656,
+                    "endIndex": 3657,
+                    "textRun": {
+                      "content": "\n",
+                      "textStyle": {
+                        "foregroundColor": {
+                          "color": {
+                            "rgbColor": {
+                              "red": 0.11372549,
+                              "green": 0.10980392,
+                              "blue": 0.11372549
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                ],
+                "paragraphStyle": {
+                  "namedStyleType": "NORMAL_TEXT",
+                  "direction": "LEFT_TO_RIGHT"
+                }
+              }
+            },
+            {
+              "startIndex": 3657,
+              "endIndex": 3739,
+              "paragraph": {
+                "elements": [
+                  {
+                    "startIndex": 3657,
+                    "endIndex": 3739,
+                    "textRun": {
+                      "content": "Section 3: Partners are more satisfied with Xometry when they see more job offers\n",
+                      "textStyle": {
+                        "bold": true,
+                        "fontSize": {
+                          "magnitude": 13,
+                          "unit": "PT"
+                        }
+                      }
+                    }
+                  }
+                ],
+                "paragraphStyle": {
+                  "namedStyleType": "NORMAL_TEXT",
+                  "direction": "LEFT_TO_RIGHT"
+                }
+              }
+            },
+            {
+              "startIndex": 3739,
+              "endIndex": 3933,
+              "paragraph": {
+                "elements": [
+                  {
+                    "startIndex": 3739,
+                    "endIndex": 3933,
+                    "textRun": {
+                      "content": "Partner NPS score generally increases as partners see more jobs from -22 at the lowest job offer count bin (less than 4 job offers) to 13 at the highest job offer bin (more than 53 job offers).\n",
+                      "textStyle": {}
+                    }
+                  }
+                ],
+                "paragraphStyle": {
+                  "namedStyleType": "NORMAL_TEXT",
+                  "direction": "LEFT_TO_RIGHT",
+                  "indentFirstLine": {
+                    "unit": "PT"
+                  },
+                  "indentStart": {
+                    "unit": "PT"
+                  }
+                }
+              }
+            },
+            {
+              "startIndex": 3933,
+              "endIndex": 3934,
+              "paragraph": {
+                "elements": [
+                  {
+                    "startIndex": 3933,
+                    "endIndex": 3934,
+                    "textRun": {
+                      "content": "\n",
+                      "textStyle": {}
+                    }
+                  }
+                ],
+                "paragraphStyle": {
+                  "namedStyleType": "NORMAL_TEXT",
+                  "direction": "LEFT_TO_RIGHT",
+                  "indentFirstLine": {
+                    "unit": "PT"
+                  },
+                  "indentStart": {
+                    "unit": "PT"
+                  }
+                }
+              }
+            },
+            {
+              "startIndex": 3934,
+              "endIndex": 3995,
+              "paragraph": {
+                "elements": [
+                  {
+                    "startIndex": 3934,
+                    "endIndex": 3942,
+                    "textRun": {
+                      "content": "Image 6:",
+                      "textStyle": {
+                        "bold": true
+                      }
+                    }
+                  },
+                  {
+                    "startIndex": 3942,
+                    "endIndex": 3943,
+                    "textRun": {
+                      "content": " ",
+                      "textStyle": {}
+                    }
+                  },
+                  {
+                    "startIndex": 3943,
+                    "endIndex": 3995,
+                    "textRun": {
+                      "content": "Partner NPS score by number of new jobs offered bin\n",
+                      "textStyle": {
+                        "italic": true
+                      }
+                    }
+                  }
+                ],
+                "paragraphStyle": {
+                  "namedStyleType": "NORMAL_TEXT",
+                  "direction": "LEFT_TO_RIGHT",
+                  "indentFirstLine": {
+                    "unit": "PT"
+                  },
+                  "indentStart": {
+                    "unit": "PT"
+                  }
+                }
+              }
+            },
+            {
+              "startIndex": 3995,
+              "endIndex": 3997,
+              "paragraph": {
+                "elements": [
+                  {
+                    "startIndex": 3995,
+                    "endIndex": 3996,
+                    "inlineObjectElement": {
+                      "inlineObjectId": "kix.pqs9a11gs79",
+                      "textStyle": {}
+                    }
+                  },
+                  {
+                    "startIndex": 3996,
+                    "endIndex": 3997,
+                    "textRun": {
+                      "content": "\n",
+                      "textStyle": {
+                        "bold": true
+                      }
+                    }
+                  }
+                ],
+                "paragraphStyle": {
+                  "namedStyleType": "NORMAL_TEXT",
+                  "direction": "LEFT_TO_RIGHT",
+                  "indentFirstLine": {
+                    "unit": "PT"
+                  },
+                  "indentStart": {
+                    "unit": "PT"
+                  }
+                }
+              }
+            },
+            {
+              "startIndex": 3997,
+              "endIndex": 4007,
+              "paragraph": {
+                "elements": [
+                  {
+                    "startIndex": 3997,
+                    "endIndex": 4007,
+                    "textRun": {
+                      "content": "Call Outs\n",
+                      "textStyle": {}
+                    }
+                  }
+                ],
+                "paragraphStyle": {
+                  "headingId": "h.73u5s9fy1d5m",
+                  "namedStyleType": "HEADING_2",
+                  "direction": "LEFT_TO_RIGHT"
+                }
+              }
+            },
+            {
+              "startIndex": 4007,
+              "endIndex": 4014,
+              "paragraph": {
+                "elements": [
+                  {
+                    "startIndex": 4007,
+                    "endIndex": 4014,
+                    "textRun": {
+                      "content": "Margin\n",
+                      "textStyle": {}
+                    }
+                  }
+                ],
+                "paragraphStyle": {
+                  "namedStyleType": "NORMAL_TEXT",
+                  "direction": "LEFT_TO_RIGHT",
+                  "indentFirstLine": {
+                    "magnitude": 18,
+                    "unit": "PT"
+                  },
+                  "indentStart": {
+                    "magnitude": 36,
+                    "unit": "PT"
+                  }
+                },
+                "bullet": {
+                  "listId": "kix.6d6mfm6c5qe4",
+                  "textStyle": {
+                    "underline": false
+                  }
+                }
+              }
+            },
+            {
+              "startIndex": 4014,
+              "endIndex": 4158,
+              "paragraph": {
+                "elements": [
+                  {
+                    "startIndex": 4014,
+                    "endIndex": 4131,
+                    "textRun": {
+                      "content": "Avan Vora recently did an analysis that looks into job board visits and acceptance/margin. The analysis can be found ",
+                      "textStyle": {}
+                    }
+                  },
+                  {
+                    "startIndex": 4131,
+                    "endIndex": 4135,
+                    "textRun": {
+                      "content": "here",
+                      "textStyle": {
+                        "underline": true,
+                        "foregroundColor": {
+                          "color": {
+                            "rgbColor": {
+                              "red": 0.06666667,
+                              "green": 0.33333334,
+                              "blue": 0.8
+                            }
+                          }
+                        },
+                        "link": {
+                          "url": "https://docs.google.com/document/d/1tOklkBiu8FKsU83NTQRQhuWDfSD6st0iGOX9cv7DIdE/edit?tab=t.0#heading=h.7c5x825ygvng"
+                        }
+                      }
+                    }
+                  },
+                  {
+                    "startIndex": 4135,
+                    "endIndex": 4152,
+                    "textRun": {
+                      "content": " and the data is ",
+                      "textStyle": {}
+                    }
+                  },
+                  {
+                    "startIndex": 4152,
+                    "endIndex": 4156,
+                    "textRun": {
+                      "content": "here",
+                      "textStyle": {
+                        "underline": true,
+                        "foregroundColor": {
+                          "color": {
+                            "rgbColor": {
+                              "red": 0.06666667,
+                              "green": 0.33333334,
+                              "blue": 0.8
+                            }
+                          }
+                        },
+                        "link": {
+                          "url": "https://docs.google.com/spreadsheets/d/17jOs2UaWN0Qso6hVjLom78R8ssMEiE9hSel_wXEfZbE/edit?gid=1024110596#gid=1024110596"
+                        }
+                      }
+                    }
+                  },
+                  {
+                    "startIndex": 4156,
+                    "endIndex": 4157,
+                    "textRun": {
+                      "content": ".",
+                      "textStyle": {}
+                    }
+                  },
+                  {
+                    "startIndex": 4157,
+                    "endIndex": 4158,
+                    "textRun": {
+                      "content": "\n",
+                      "textStyle": {}
+                    }
+                  }
+                ],
+                "paragraphStyle": {
+                  "namedStyleType": "NORMAL_TEXT",
+                  "direction": "LEFT_TO_RIGHT",
+                  "indentFirstLine": {
+                    "magnitude": 54,
+                    "unit": "PT"
+                  },
+                  "indentStart": {
+                    "magnitude": 72,
+                    "unit": "PT"
+                  }
+                },
+                "bullet": {
+                  "listId": "kix.6d6mfm6c5qe4",
+                  "nestingLevel": 1,
+                  "textStyle": {
+                    "underline": false
+                  }
+                }
+              }
+            },
+            {
+              "startIndex": 4158,
+              "endIndex": 4164,
+              "paragraph": {
+                "elements": [
+                  {
+                    "startIndex": 4158,
+                    "endIndex": 4164,
+                    "textRun": {
+                      "content": "Churn\n",
+                      "textStyle": {}
+                    }
+                  }
+                ],
+                "paragraphStyle": {
+                  "namedStyleType": "NORMAL_TEXT",
+                  "direction": "LEFT_TO_RIGHT",
+                  "indentFirstLine": {
+                    "magnitude": 18,
+                    "unit": "PT"
+                  },
+                  "indentStart": {
+                    "magnitude": 36,
+                    "unit": "PT"
+                  }
+                },
+                "bullet": {
+                  "listId": "kix.6d6mfm6c5qe4",
+                  "textStyle": {
+                    "underline": false
+                  }
+                }
+              }
+            },
+            {
+              "startIndex": 4164,
+              "endIndex": 4407,
+              "paragraph": {
+                "elements": [
+                  {
+                    "startIndex": 4164,
+                    "endIndex": 4406,
+                    "textRun": {
+                      "content": "We plan to investigate partner job board habits and patterns of new offers/lack of new offers that may lead to job board visits decreasing. We are limited on this piece due to churn being based on 90 days with us only having ~40 days of data.",
+                      "textStyle": {}
+                    }
+                  },
+                  {
+                    "startIndex": 4406,
+                    "endIndex": 4407,
+                    "textRun": {
+                      "content": "\n",
+                      "textStyle": {}
+                    }
+                  }
+                ],
+                "paragraphStyle": {
+                  "namedStyleType": "NORMAL_TEXT",
+                  "direction": "LEFT_TO_RIGHT",
+                  "indentFirstLine": {
+                    "magnitude": 54,
+                    "unit": "PT"
+                  },
+                  "indentStart": {
+                    "magnitude": 72,
+                    "unit": "PT"
+                  }
+                },
+                "bullet": {
+                  "listId": "kix.6d6mfm6c5qe4",
+                  "nestingLevel": 1,
+                  "textStyle": {
+                    "fontSize": {
+                      "magnitude": 9,
+                      "unit": "PT"
+                    }
+                  }
+                }
+              }
+            }
+          ]
+        },
+        "documentStyle": {
+          "background": {
+            "color": {}
+          },
+          "pageNumberStart": 1,
+          "marginTop": {
+            "magnitude": 72,
+            "unit": "PT"
+          },
+          "marginBottom": {
+            "magnitude": 72,
+            "unit": "PT"
+          },
+          "marginRight": {
+            "magnitude": 72,
+            "unit": "PT"
+          },
+          "marginLeft": {
+            "magnitude": 72,
+            "unit": "PT"
+          },
+          "pageSize": {
+            "height": {
+              "magnitude": 792,
+              "unit": "PT"
+            },
+            "width": {
+              "magnitude": 612,
+              "unit": "PT"
+            }
+          },
+          "marginHeader": {
+            "magnitude": 36,
+            "unit": "PT"
+          },
+          "marginFooter": {
+            "magnitude": 36,
+            "unit": "PT"
+          },
+          "useCustomHeaderFooterMargins": true,
+          "documentFormat": {
+            "documentMode": "PAGES"
+          }
+        },
+        "namedStyles": {
+          "styles": [
+            {
+              "namedStyleType": "NORMAL_TEXT",
+              "textStyle": {
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "strikethrough": false,
+                "smallCaps": false,
+                "backgroundColor": {},
+                "foregroundColor": {
+                  "color": {
+                    "rgbColor": {}
+                  }
+                },
+                "fontSize": {
+                  "magnitude": 11,
+                  "unit": "PT"
+                },
+                "weightedFontFamily": {
+                  "fontFamily": "Arial",
+                  "weight": 400
+                },
+                "baselineOffset": "NONE"
+              },
+              "paragraphStyle": {
+                "namedStyleType": "NORMAL_TEXT",
+                "alignment": "START",
+                "lineSpacing": 115,
+                "direction": "LEFT_TO_RIGHT",
+                "spacingMode": "COLLAPSE_LISTS",
+                "spaceAbove": {
+                  "unit": "PT"
+                },
+                "spaceBelow": {
+                  "unit": "PT"
+                },
+                "borderBetween": {
+                  "color": {},
+                  "width": {
+                    "unit": "PT"
+                  },
+                  "padding": {
+                    "unit": "PT"
+                  },
+                  "dashStyle": "SOLID"
+                },
+                "borderTop": {
+                  "color": {},
+                  "width": {
+                    "unit": "PT"
+                  },
+                  "padding": {
+                    "unit": "PT"
+                  },
+                  "dashStyle": "SOLID"
+                },
+                "borderBottom": {
+                  "color": {},
+                  "width": {
+                    "unit": "PT"
+                  },
+                  "padding": {
+                    "unit": "PT"
+                  },
+                  "dashStyle": "SOLID"
+                },
+                "borderLeft": {
+                  "color": {},
+                  "width": {
+                    "unit": "PT"
+                  },
+                  "padding": {
+                    "unit": "PT"
+                  },
+                  "dashStyle": "SOLID"
+                },
+                "borderRight": {
+                  "color": {},
+                  "width": {
+                    "unit": "PT"
+                  },
+                  "padding": {
+                    "unit": "PT"
+                  },
+                  "dashStyle": "SOLID"
+                },
+                "indentFirstLine": {
+                  "unit": "PT"
+                },
+                "indentStart": {
+                  "unit": "PT"
+                },
+                "indentEnd": {
+                  "unit": "PT"
+                },
+                "keepLinesTogether": false,
+                "keepWithNext": false,
+                "avoidWidowAndOrphan": true,
+                "shading": {
+                  "backgroundColor": {}
+                },
+                "pageBreakBefore": false
+              }
+            },
+            {
+              "namedStyleType": "HEADING_1",
+              "textStyle": {
+                "fontSize": {
+                  "magnitude": 20,
+                  "unit": "PT"
+                }
+              },
+              "paragraphStyle": {
+                "namedStyleType": "NORMAL_TEXT",
+                "direction": "LEFT_TO_RIGHT",
+                "spaceAbove": {
+                  "magnitude": 20,
+                  "unit": "PT"
+                },
+                "spaceBelow": {
+                  "magnitude": 6,
+                  "unit": "PT"
+                },
+                "keepLinesTogether": true,
+                "keepWithNext": true,
+                "pageBreakBefore": false
+              }
+            },
+            {
+              "namedStyleType": "HEADING_2",
+              "textStyle": {
+                "bold": false,
+                "fontSize": {
+                  "magnitude": 16,
+                  "unit": "PT"
+                }
+              },
+              "paragraphStyle": {
+                "namedStyleType": "NORMAL_TEXT",
+                "direction": "LEFT_TO_RIGHT",
+                "spaceAbove": {
+                  "magnitude": 18,
+                  "unit": "PT"
+                },
+                "spaceBelow": {
+                  "magnitude": 6,
+                  "unit": "PT"
+                },
+                "keepLinesTogether": true,
+                "keepWithNext": true,
+                "pageBreakBefore": false
+              }
+            },
+            {
+              "namedStyleType": "HEADING_3",
+              "textStyle": {
+                "bold": false,
+                "foregroundColor": {
+                  "color": {
+                    "rgbColor": {
+                      "red": 0.2627451,
+                      "green": 0.2627451,
+                      "blue": 0.2627451
+                    }
+                  }
+                },
+                "fontSize": {
+                  "magnitude": 14,
+                  "unit": "PT"
+                }
+              },
+              "paragraphStyle": {
+                "namedStyleType": "NORMAL_TEXT",
+                "direction": "LEFT_TO_RIGHT",
+                "spaceAbove": {
+                  "magnitude": 16,
+                  "unit": "PT"
+                },
+                "spaceBelow": {
+                  "magnitude": 4,
+                  "unit": "PT"
+                },
+                "keepLinesTogether": true,
+                "keepWithNext": true,
+                "pageBreakBefore": false
+              }
+            },
+            {
+              "namedStyleType": "HEADING_4",
+              "textStyle": {
+                "foregroundColor": {
+                  "color": {
+                    "rgbColor": {
+                      "red": 0.4,
+                      "green": 0.4,
+                      "blue": 0.4
+                    }
+                  }
+                },
+                "fontSize": {
+                  "magnitude": 12,
+                  "unit": "PT"
+                }
+              },
+              "paragraphStyle": {
+                "namedStyleType": "NORMAL_TEXT",
+                "direction": "LEFT_TO_RIGHT",
+                "spaceAbove": {
+                  "magnitude": 14,
+                  "unit": "PT"
+                },
+                "spaceBelow": {
+                  "magnitude": 4,
+                  "unit": "PT"
+                },
+                "keepLinesTogether": true,
+                "keepWithNext": true,
+                "pageBreakBefore": false
+              }
+            },
+            {
+              "namedStyleType": "HEADING_5",
+              "textStyle": {
+                "foregroundColor": {
+                  "color": {
+                    "rgbColor": {
+                      "red": 0.4,
+                      "green": 0.4,
+                      "blue": 0.4
+                    }
+                  }
+                },
+                "fontSize": {
+                  "magnitude": 11,
+                  "unit": "PT"
+                }
+              },
+              "paragraphStyle": {
+                "namedStyleType": "NORMAL_TEXT",
+                "direction": "LEFT_TO_RIGHT",
+                "spaceAbove": {
+                  "magnitude": 12,
+                  "unit": "PT"
+                },
+                "spaceBelow": {
+                  "magnitude": 4,
+                  "unit": "PT"
+                },
+                "keepLinesTogether": true,
+                "keepWithNext": true,
+                "pageBreakBefore": false
+              }
+            },
+            {
+              "namedStyleType": "HEADING_6",
+              "textStyle": {
+                "italic": true,
+                "foregroundColor": {
+                  "color": {
+                    "rgbColor": {
+                      "red": 0.4,
+                      "green": 0.4,
+                      "blue": 0.4
+                    }
+                  }
+                },
+                "fontSize": {
+                  "magnitude": 11,
+                  "unit": "PT"
+                }
+              },
+              "paragraphStyle": {
+                "namedStyleType": "NORMAL_TEXT",
+                "direction": "LEFT_TO_RIGHT",
+                "spaceAbove": {
+                  "magnitude": 12,
+                  "unit": "PT"
+                },
+                "spaceBelow": {
+                  "magnitude": 4,
+                  "unit": "PT"
+                },
+                "keepLinesTogether": true,
+                "keepWithNext": true,
+                "pageBreakBefore": false
+              }
+            },
+            {
+              "namedStyleType": "TITLE",
+              "textStyle": {
+                "fontSize": {
+                  "magnitude": 26,
+                  "unit": "PT"
+                }
+              },
+              "paragraphStyle": {
+                "namedStyleType": "NORMAL_TEXT",
+                "direction": "LEFT_TO_RIGHT",
+                "spaceAbove": {
+                  "unit": "PT"
+                },
+                "spaceBelow": {
+                  "magnitude": 3,
+                  "unit": "PT"
+                },
+                "keepLinesTogether": true,
+                "keepWithNext": true,
+                "pageBreakBefore": false
+              }
+            },
+            {
+              "namedStyleType": "SUBTITLE",
+              "textStyle": {
+                "italic": false,
+                "foregroundColor": {
+                  "color": {
+                    "rgbColor": {
+                      "red": 0.4,
+                      "green": 0.4,
+                      "blue": 0.4
+                    }
+                  }
+                },
+                "fontSize": {
+                  "magnitude": 15,
+                  "unit": "PT"
+                },
+                "weightedFontFamily": {
+                  "fontFamily": "Arial",
+                  "weight": 400
+                }
+              },
+              "paragraphStyle": {
+                "namedStyleType": "NORMAL_TEXT",
+                "direction": "LEFT_TO_RIGHT",
+                "spaceAbove": {
+                  "unit": "PT"
+                },
+                "spaceBelow": {
+                  "magnitude": 16,
+                  "unit": "PT"
+                },
+                "keepLinesTogether": true,
+                "keepWithNext": true,
+                "pageBreakBefore": false
+              }
+            }
+          ]
+        },
+        "lists": {
+          "kix.6d6mfm6c5qe4": {
+            "listProperties": {
+              "nestingLevels": [
+                {
+                  "bulletAlignment": "START",
+                  "glyphType": "DECIMAL",
+                  "glyphFormat": "%0.",
+                  "indentFirstLine": {
+                    "magnitude": 18,
+                    "unit": "PT"
+                  },
+                  "indentStart": {
+                    "magnitude": 36,
+                    "unit": "PT"
+                  },
+                  "textStyle": {
+                    "underline": false
+                  },
+                  "startNumber": 1
+                },
+                {
+                  "bulletAlignment": "START",
+                  "glyphType": "ALPHA",
+                  "glyphFormat": "%1.",
+                  "indentFirstLine": {
+                    "magnitude": 54,
+                    "unit": "PT"
+                  },
+                  "indentStart": {
+                    "magnitude": 72,
+                    "unit": "PT"
+                  },
+                  "textStyle": {
+                    "underline": false
+                  },
+                  "startNumber": 1
+                },
+                {
+                  "bulletAlignment": "END",
+                  "glyphType": "ROMAN",
+                  "glyphFormat": "%2.",
+                  "indentFirstLine": {
+                    "magnitude": 90,
+                    "unit": "PT"
+                  },
+                  "indentStart": {
+                    "magnitude": 108,
+                    "unit": "PT"
+                  },
+                  "textStyle": {
+                    "underline": false
+                  },
+                  "startNumber": 1
+                },
+                {
+                  "bulletAlignment": "START",
+                  "glyphType": "DECIMAL",
+                  "glyphFormat": "%3.",
+                  "indentFirstLine": {
+                    "magnitude": 126,
+                    "unit": "PT"
+                  },
+                  "indentStart": {
+                    "magnitude": 144,
+                    "unit": "PT"
+                  },
+                  "textStyle": {
+                    "underline": false
+                  },
+                  "startNumber": 1
+                },
+                {
+                  "bulletAlignment": "START",
+                  "glyphType": "ALPHA",
+                  "glyphFormat": "%4.",
+                  "indentFirstLine": {
+                    "magnitude": 162,
+                    "unit": "PT"
+                  },
+                  "indentStart": {
+                    "magnitude": 180,
+                    "unit": "PT"
+                  },
+                  "textStyle": {
+                    "underline": false
+                  },
+                  "startNumber": 1
+                },
+                {
+                  "bulletAlignment": "END",
+                  "glyphType": "ROMAN",
+                  "glyphFormat": "%5.",
+                  "indentFirstLine": {
+                    "magnitude": 198,
+                    "unit": "PT"
+                  },
+                  "indentStart": {
+                    "magnitude": 216,
+                    "unit": "PT"
+                  },
+                  "textStyle": {
+                    "underline": false
+                  },
+                  "startNumber": 1
+                },
+                {
+                  "bulletAlignment": "START",
+                  "glyphType": "DECIMAL",
+                  "glyphFormat": "%6.",
+                  "indentFirstLine": {
+                    "magnitude": 234,
+                    "unit": "PT"
+                  },
+                  "indentStart": {
+                    "magnitude": 252,
+                    "unit": "PT"
+                  },
+                  "textStyle": {
+                    "underline": false
+                  },
+                  "startNumber": 1
+                },
+                {
+                  "bulletAlignment": "START",
+                  "glyphType": "ALPHA",
+                  "glyphFormat": "%7.",
+                  "indentFirstLine": {
+                    "magnitude": 270,
+                    "unit": "PT"
+                  },
+                  "indentStart": {
+                    "magnitude": 288,
+                    "unit": "PT"
+                  },
+                  "textStyle": {
+                    "underline": false
+                  },
+                  "startNumber": 1
+                },
+                {
+                  "bulletAlignment": "END",
+                  "glyphType": "ROMAN",
+                  "glyphFormat": "%8.",
+                  "indentFirstLine": {
+                    "magnitude": 306,
+                    "unit": "PT"
+                  },
+                  "indentStart": {
+                    "magnitude": 324,
+                    "unit": "PT"
+                  },
+                  "textStyle": {
+                    "underline": false
+                  },
+                  "startNumber": 1
+                }
+              ]
+            }
+          },
+          "kix.ixea9o8d8pft": {
+            "listProperties": {
+              "nestingLevels": [
+                {
+                  "bulletAlignment": "START",
+                  "glyphType": "DECIMAL",
+                  "glyphFormat": "%0.",
+                  "indentFirstLine": {
+                    "magnitude": 18,
+                    "unit": "PT"
+                  },
+                  "indentStart": {
+                    "magnitude": 36,
+                    "unit": "PT"
+                  },
+                  "textStyle": {
+                    "underline": false
+                  },
+                  "startNumber": 1
+                },
+                {
+                  "bulletAlignment": "START",
+                  "glyphType": "ALPHA",
+                  "glyphFormat": "%1.",
+                  "indentFirstLine": {
+                    "magnitude": 54,
+                    "unit": "PT"
+                  },
+                  "indentStart": {
+                    "magnitude": 72,
+                    "unit": "PT"
+                  },
+                  "textStyle": {
+                    "underline": false
+                  },
+                  "startNumber": 1
+                },
+                {
+                  "bulletAlignment": "END",
+                  "glyphType": "ROMAN",
+                  "glyphFormat": "%2.",
+                  "indentFirstLine": {
+                    "magnitude": 90,
+                    "unit": "PT"
+                  },
+                  "indentStart": {
+                    "magnitude": 108,
+                    "unit": "PT"
+                  },
+                  "textStyle": {
+                    "underline": false
+                  },
+                  "startNumber": 1
+                },
+                {
+                  "bulletAlignment": "START",
+                  "glyphType": "DECIMAL",
+                  "glyphFormat": "%3.",
+                  "indentFirstLine": {
+                    "magnitude": 126,
+                    "unit": "PT"
+                  },
+                  "indentStart": {
+                    "magnitude": 144,
+                    "unit": "PT"
+                  },
+                  "textStyle": {
+                    "underline": false
+                  },
+                  "startNumber": 1
+                },
+                {
+                  "bulletAlignment": "START",
+                  "glyphType": "ALPHA",
+                  "glyphFormat": "%4.",
+                  "indentFirstLine": {
+                    "magnitude": 162,
+                    "unit": "PT"
+                  },
+                  "indentStart": {
+                    "magnitude": 180,
+                    "unit": "PT"
+                  },
+                  "textStyle": {
+                    "underline": false
+                  },
+                  "startNumber": 1
+                },
+                {
+                  "bulletAlignment": "END",
+                  "glyphType": "ROMAN",
+                  "glyphFormat": "%5.",
+                  "indentFirstLine": {
+                    "magnitude": 198,
+                    "unit": "PT"
+                  },
+                  "indentStart": {
+                    "magnitude": 216,
+                    "unit": "PT"
+                  },
+                  "textStyle": {
+                    "underline": false
+                  },
+                  "startNumber": 1
+                },
+                {
+                  "bulletAlignment": "START",
+                  "glyphType": "DECIMAL",
+                  "glyphFormat": "%6.",
+                  "indentFirstLine": {
+                    "magnitude": 234,
+                    "unit": "PT"
+                  },
+                  "indentStart": {
+                    "magnitude": 252,
+                    "unit": "PT"
+                  },
+                  "textStyle": {
+                    "underline": false
+                  },
+                  "startNumber": 1
+                },
+                {
+                  "bulletAlignment": "START",
+                  "glyphType": "ALPHA",
+                  "glyphFormat": "%7.",
+                  "indentFirstLine": {
+                    "magnitude": 270,
+                    "unit": "PT"
+                  },
+                  "indentStart": {
+                    "magnitude": 288,
+                    "unit": "PT"
+                  },
+                  "textStyle": {
+                    "underline": false
+                  },
+                  "startNumber": 1
+                },
+                {
+                  "bulletAlignment": "END",
+                  "glyphType": "ROMAN",
+                  "glyphFormat": "%8.",
+                  "indentFirstLine": {
+                    "magnitude": 306,
+                    "unit": "PT"
+                  },
+                  "indentStart": {
+                    "magnitude": 324,
+                    "unit": "PT"
+                  },
+                  "textStyle": {
+                    "underline": false
+                  },
+                  "startNumber": 1
+                }
+              ]
+            }
+          },
+          "kix.o7o7wxbpffgm": {
+            "listProperties": {
+              "nestingLevels": [
+                {
+                  "bulletAlignment": "START",
+                  "glyphType": "DECIMAL",
+                  "glyphFormat": "%0.",
+                  "indentFirstLine": {
+                    "magnitude": 18,
+                    "unit": "PT"
+                  },
+                  "indentStart": {
+                    "magnitude": 36,
+                    "unit": "PT"
+                  },
+                  "textStyle": {
+                    "underline": false
+                  },
+                  "startNumber": 1
+                },
+                {
+                  "bulletAlignment": "START",
+                  "glyphType": "ALPHA",
+                  "glyphFormat": "%1.",
+                  "indentFirstLine": {
+                    "magnitude": 54,
+                    "unit": "PT"
+                  },
+                  "indentStart": {
+                    "magnitude": 72,
+                    "unit": "PT"
+                  },
+                  "textStyle": {
+                    "underline": false
+                  },
+                  "startNumber": 1
+                },
+                {
+                  "bulletAlignment": "END",
+                  "glyphType": "ROMAN",
+                  "glyphFormat": "%2.",
+                  "indentFirstLine": {
+                    "magnitude": 90,
+                    "unit": "PT"
+                  },
+                  "indentStart": {
+                    "magnitude": 108,
+                    "unit": "PT"
+                  },
+                  "textStyle": {
+                    "underline": false
+                  },
+                  "startNumber": 1
+                },
+                {
+                  "bulletAlignment": "START",
+                  "glyphType": "DECIMAL",
+                  "glyphFormat": "%3.",
+                  "indentFirstLine": {
+                    "magnitude": 126,
+                    "unit": "PT"
+                  },
+                  "indentStart": {
+                    "magnitude": 144,
+                    "unit": "PT"
+                  },
+                  "textStyle": {
+                    "underline": false
+                  },
+                  "startNumber": 1
+                },
+                {
+                  "bulletAlignment": "START",
+                  "glyphType": "ALPHA",
+                  "glyphFormat": "%4.",
+                  "indentFirstLine": {
+                    "magnitude": 162,
+                    "unit": "PT"
+                  },
+                  "indentStart": {
+                    "magnitude": 180,
+                    "unit": "PT"
+                  },
+                  "textStyle": {
+                    "underline": false
+                  },
+                  "startNumber": 1
+                },
+                {
+                  "bulletAlignment": "END",
+                  "glyphType": "ROMAN",
+                  "glyphFormat": "%5.",
+                  "indentFirstLine": {
+                    "magnitude": 198,
+                    "unit": "PT"
+                  },
+                  "indentStart": {
+                    "magnitude": 216,
+                    "unit": "PT"
+                  },
+                  "textStyle": {
+                    "underline": false
+                  },
+                  "startNumber": 1
+                },
+                {
+                  "bulletAlignment": "START",
+                  "glyphType": "DECIMAL",
+                  "glyphFormat": "%6.",
+                  "indentFirstLine": {
+                    "magnitude": 234,
+                    "unit": "PT"
+                  },
+                  "indentStart": {
+                    "magnitude": 252,
+                    "unit": "PT"
+                  },
+                  "textStyle": {
+                    "underline": false
+                  },
+                  "startNumber": 1
+                },
+                {
+                  "bulletAlignment": "START",
+                  "glyphType": "ALPHA",
+                  "glyphFormat": "%7.",
+                  "indentFirstLine": {
+                    "magnitude": 270,
+                    "unit": "PT"
+                  },
+                  "indentStart": {
+                    "magnitude": 288,
+                    "unit": "PT"
+                  },
+                  "textStyle": {
+                    "underline": false
+                  },
+                  "startNumber": 1
+                },
+                {
+                  "bulletAlignment": "END",
+                  "glyphType": "ROMAN",
+                  "glyphFormat": "%8.",
+                  "indentFirstLine": {
+                    "magnitude": 306,
+                    "unit": "PT"
+                  },
+                  "indentStart": {
+                    "magnitude": 324,
+                    "unit": "PT"
+                  },
+                  "textStyle": {
+                    "underline": false
+                  },
+                  "startNumber": 1
+                }
+              ]
+            }
+          }
+        },
+        "inlineObjects": {
+          "kix.16a2leki7wtf": {
+            "objectId": "kix.16a2leki7wtf",
+            "inlineObjectProperties": {
+              "embeddedObject": {
+                "imageProperties": {
+                  "contentUri": "https://lh7-rt.googleusercontent.com/docsz/AD_4nXfWTEcovHoiZ_IRjgxOSKFpas5i96OiAXY89i2JGjnDnI1JNS6ZetNiftarEi0D48ciKLwG9Mmgce-bITLgWoSkA3ap8yben6AgzAn-0VMLaSgFr3TMV3CxPyD7RsIsM57CW9SxhHZDKzbnLlhDogLeaxTm?key=ca7LIdFW1wY8kSYymF0-sA",
+                  "cropProperties": {}
+                },
+                "embeddedObjectBorder": {
+                  "color": {
+                    "color": {
+                      "rgbColor": {}
+                    }
+                  },
+                  "width": {
+                    "unit": "PT"
+                  },
+                  "dashStyle": "SOLID",
+                  "propertyState": "NOT_RENDERED"
+                },
+                "size": {
+                  "height": {
+                    "magnitude": 184,
+                    "unit": "PT"
+                  },
+                  "width": {
+                    "magnitude": 468,
+                    "unit": "PT"
+                  }
+                },
+                "marginTop": {
+                  "magnitude": 9,
+                  "unit": "PT"
+                },
+                "marginBottom": {
+                  "magnitude": 9,
+                  "unit": "PT"
+                },
+                "marginRight": {
+                  "magnitude": 9,
+                  "unit": "PT"
+                },
+                "marginLeft": {
+                  "magnitude": 9,
+                  "unit": "PT"
+                }
+              }
+            }
+          },
+          "kix.gahyxfornoyn": {
+            "objectId": "kix.gahyxfornoyn",
+            "inlineObjectProperties": {
+              "embeddedObject": {
+                "imageProperties": {
+                  "contentUri": "https://lh7-rt.googleusercontent.com/docsz/AD_4nXdqoRiRoMMoCkaYmEiVeUptjFh3zKBRHt_vEhS_9VD9IJusAOcTEX68bNo-72iaXxegsDMD5bGTFP5sDXX2sfOWR41DrciPESHc518DqQKPHa9cUYAdbOv0khi0NMYOxYM2FoBgGpQp_zkq74kL2ZQBuz_R?key=ca7LIdFW1wY8kSYymF0-sA",
+                  "cropProperties": {}
+                },
+                "embeddedObjectBorder": {
+                  "color": {
+                    "color": {
+                      "rgbColor": {}
+                    }
+                  },
+                  "width": {
+                    "unit": "PT"
+                  },
+                  "dashStyle": "SOLID",
+                  "propertyState": "NOT_RENDERED"
+                },
+                "size": {
+                  "height": {
+                    "magnitude": 149.3358154296874,
+                    "unit": "PT"
+                  },
+                  "width": {
+                    "magnitude": 388.5942724084338,
+                    "unit": "PT"
+                  }
+                },
+                "marginTop": {
+                  "magnitude": 9,
+                  "unit": "PT"
+                },
+                "marginBottom": {
+                  "magnitude": 9,
+                  "unit": "PT"
+                },
+                "marginRight": {
+                  "magnitude": 9,
+                  "unit": "PT"
+                },
+                "marginLeft": {
+                  "magnitude": 9,
+                  "unit": "PT"
+                }
+              }
+            }
+          },
+          "kix.lm9v2t8cj1u4": {
+            "objectId": "kix.lm9v2t8cj1u4",
+            "inlineObjectProperties": {
+              "embeddedObject": {
+                "imageProperties": {
+                  "contentUri": "https://lh7-rt.googleusercontent.com/docsz/AD_4nXdduGJypGLmf737lpeMM23alABG06eGlIRGOUFWGwFSioa3p0QbOSDQrlAprD7Z9xooD_zIR_LwrXETKQEEHxyLe1wxVie78pyKH6sYvX213EVc3dRM-NiFjNm3rUD37FgO9IyYdfVxvaHkRhkPSrfVWQ?key=ca7LIdFW1wY8kSYymF0-sA",
+                  "cropProperties": {}
+                },
+                "embeddedObjectBorder": {
+                  "color": {
+                    "color": {
+                      "rgbColor": {}
+                    }
+                  },
+                  "width": {
+                    "unit": "PT"
+                  },
+                  "dashStyle": "SOLID",
+                  "propertyState": "NOT_RENDERED"
+                },
+                "size": {
+                  "height": {
+                    "magnitude": 132.05357142857144,
+                    "unit": "PT"
+                  },
+                  "width": {
+                    "magnitude": 172.125,
+                    "unit": "PT"
+                  }
+                },
+                "marginTop": {
+                  "magnitude": 9,
+                  "unit": "PT"
+                },
+                "marginBottom": {
+                  "magnitude": 9,
+                  "unit": "PT"
+                },
+                "marginRight": {
+                  "magnitude": 9,
+                  "unit": "PT"
+                },
+                "marginLeft": {
+                  "magnitude": 9,
+                  "unit": "PT"
+                }
+              }
+            }
+          },
+          "kix.pqs9a11gs79": {
+            "objectId": "kix.pqs9a11gs79",
+            "inlineObjectProperties": {
+              "embeddedObject": {
+                "imageProperties": {
+                  "contentUri": "https://lh7-rt.googleusercontent.com/docsz/AD_4nXchV56SnKZQtFNNsCUUy-2KODtp-UTqvUnRDLcuA4KOIrFFD-6JjTKrVA-mDFHQT4P9ETCKwSsQyQnv1NgjDpjjV8u2qYHMkALMSNE7Y4lT_9-pd0G7hj40UZdxyt8cYH_R78BFfShMIuFbmLtyw2YgxekX?key=ca7LIdFW1wY8kSYymF0-sA",
+                  "cropProperties": {}
+                },
+                "embeddedObjectBorder": {
+                  "color": {
+                    "color": {
+                      "rgbColor": {}
+                    }
+                  },
+                  "width": {
+                    "unit": "PT"
+                  },
+                  "dashStyle": "SOLID",
+                  "propertyState": "NOT_RENDERED"
+                },
+                "size": {
+                  "height": {
+                    "magnitude": 167,
+                    "unit": "PT"
+                  },
+                  "width": {
+                    "magnitude": 468,
+                    "unit": "PT"
+                  }
+                },
+                "marginTop": {
+                  "magnitude": 9,
+                  "unit": "PT"
+                },
+                "marginBottom": {
+                  "magnitude": 9,
+                  "unit": "PT"
+                },
+                "marginRight": {
+                  "magnitude": 9,
+                  "unit": "PT"
+                },
+                "marginLeft": {
+                  "magnitude": 9,
+                  "unit": "PT"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "tabProperties": {
+        "tabId": "t.ocnvdqbzt2nx",
+        "title": "Appendix",
+        "index": 1
+      },
+      "documentTab": {
+        "body": {
+          "content": [
+            {
+              "endIndex": 1,
+              "sectionBreak": {
+                "sectionStyle": {
+                  "columnSeparatorStyle": "NONE",
+                  "contentDirection": "LEFT_TO_RIGHT",
+                  "sectionType": "CONTINUOUS"
+                }
+              }
+            },
+            {
+              "startIndex": 1,
+              "endIndex": 15,
+              "paragraph": {
+                "elements": [
+                  {
+                    "startIndex": 1,
+                    "endIndex": 15,
+                    "textRun": {
+                      "content": "Data Overview\n",
+                      "textStyle": {
+                        "bold": true,
+                        "fontSize": {
+                          "magnitude": 13,
+                          "unit": "PT"
+                        }
+                      }
+                    }
+                  }
+                ],
+                "paragraphStyle": {
+                  "namedStyleType": "NORMAL_TEXT",
+                  "direction": "LEFT_TO_RIGHT"
+                }
+              }
+            },
+            {
+              "startIndex": 15,
+              "endIndex": 251,
+              "paragraph": {
+                "elements": [
+                  {
+                    "startIndex": 15,
+                    "endIndex": 251,
+                    "textRun": {
+                      "content": "These findings are based on data from 2,581 partners regardless of country/approval/limits/outsourcing group/etc who came to the job board and triggered an event (visits the job board, refreshes the job board, etc) during the timeline.\n",
+                      "textStyle": {}
+                    }
+                  }
+                ],
+                "paragraphStyle": {
+                  "namedStyleType": "NORMAL_TEXT",
+                  "direction": "LEFT_TO_RIGHT"
+                }
+              }
+            },
+            {
+              "startIndex": 251,
+              "endIndex": 252,
+              "paragraph": {
+                "elements": [
+                  {
+                    "startIndex": 251,
+                    "endIndex": 252,
+                    "textRun": {
+                      "content": "\n",
+                      "textStyle": {}
+                    }
+                  }
+                ],
+                "paragraphStyle": {
+                  "namedStyleType": "NORMAL_TEXT",
+                  "direction": "LEFT_TO_RIGHT"
+                }
+              }
+            },
+            {
+              "startIndex": 252,
+              "endIndex": 319,
+              "paragraph": {
+                "elements": [
+                  {
+                    "startIndex": 252,
+                    "endIndex": 260,
+                    "textRun": {
+                      "content": "Image 1:",
+                      "textStyle": {
+                        "bold": true
+                      }
+                    }
+                  },
+                  {
+                    "startIndex": 260,
+                    "endIndex": 319,
+                    "textRun": {
+                      "content": " Fraction of Partners Included based on Jobs Completed Bin\n",
+                      "textStyle": {}
+                    }
+                  }
+                ],
+                "paragraphStyle": {
+                  "namedStyleType": "NORMAL_TEXT",
+                  "direction": "LEFT_TO_RIGHT"
+                }
+              }
+            },
+            {
+              "startIndex": 319,
+              "endIndex": 321,
+              "paragraph": {
+                "elements": [
+                  {
+                    "startIndex": 319,
+                    "endIndex": 320,
+                    "inlineObjectElement": {
+                      "inlineObjectId": "kix.wpmkkorkqn4g",
+                      "textStyle": {}
+                    }
+                  },
+                  {
+                    "startIndex": 320,
+                    "endIndex": 321,
+                    "textRun": {
+                      "content": "\n",
+                      "textStyle": {}
+                    }
+                  }
+                ],
+                "paragraphStyle": {
+                  "namedStyleType": "NORMAL_TEXT",
+                  "alignment": "CENTER",
+                  "direction": "LEFT_TO_RIGHT"
+                }
+              }
+            },
+            {
+              "startIndex": 321,
+              "endIndex": 567,
+              "paragraph": {
+                "elements": [
+                  {
+                    "startIndex": 321,
+                    "endIndex": 567,
+                    "textRun": {
+                      "content": "Image 1 indicates the number of jobs the partners included have taken to gain an understanding of who we are looking at, where it can be seen that ~72% of the partners included have accepted beyond six jobs in their entire duration with Xometry.\n",
+                      "textStyle": {}
+                    }
+                  }
+                ],
+                "paragraphStyle": {
+                  "namedStyleType": "NORMAL_TEXT",
+                  "direction": "LEFT_TO_RIGHT"
+                }
+              }
+            },
+            {
+              "startIndex": 567,
+              "endIndex": 568,
+              "paragraph": {
+                "elements": [
+                  {
+                    "startIndex": 567,
+                    "endIndex": 568,
+                    "textRun": {
+                      "content": "\n",
+                      "textStyle": {}
+                    }
+                  }
+                ],
+                "paragraphStyle": {
+                  "namedStyleType": "NORMAL_TEXT",
+                  "direction": "LEFT_TO_RIGHT"
+                }
+              }
+            },
+            {
+              "startIndex": 568,
+              "endIndex": 632,
+              "paragraph": {
+                "elements": [
+                  {
+                    "startIndex": 568,
+                    "endIndex": 575,
+                    "textRun": {
+                      "content": "Image 2",
+                      "textStyle": {
+                        "bold": true,
+                        "foregroundColor": {
+                          "color": {
+                            "rgbColor": {
+                              "red": 0.11372549,
+                              "green": 0.10980392,
+                              "blue": 0.11372549
+                            }
+                          }
+                        }
+                      }
+                    }
+                  },
+                  {
+                    "startIndex": 575,
+                    "endIndex": 576,
+                    "textRun": {
+                      "content": ":",
+                      "textStyle": {
+                        "foregroundColor": {
+                          "color": {
+                            "rgbColor": {
+                              "red": 0.11372549,
+                              "green": 0.10980392,
+                              "blue": 0.11372549
+                            }
+                          }
+                        },
+                        "fontSize": {
+                          "magnitude": 11.5,
+                          "unit": "PT"
+                        }
+                      }
+                    }
+                  },
+                  {
+                    "startIndex": 576,
+                    "endIndex": 632,
+                    "textRun": {
+                      "content": " The fraction of partners included by outsourcing group\n",
+                      "textStyle": {
+                        "foregroundColor": {
+                          "color": {
+                            "rgbColor": {
+                              "red": 0.11372549,
+                              "green": 0.10980392,
+                              "blue": 0.11372549
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                ],
+                "paragraphStyle": {
+                  "namedStyleType": "NORMAL_TEXT",
+                  "direction": "LEFT_TO_RIGHT"
+                }
+              }
+            },
+            {
+              "startIndex": 632,
+              "endIndex": 634,
+              "paragraph": {
+                "elements": [
+                  {
+                    "startIndex": 632,
+                    "endIndex": 633,
+                    "inlineObjectElement": {
+                      "inlineObjectId": "kix.u1jenrrzqdg",
+                      "textStyle": {
+                        "foregroundColor": {
+                          "color": {
+                            "rgbColor": {
+                              "red": 0.11372549,
+                              "green": 0.10980392,
+                              "blue": 0.11372549
+                            }
+                          }
+                        }
+                      }
+                    }
+                  },
+                  {
+                    "startIndex": 633,
+                    "endIndex": 634,
+                    "textRun": {
+                      "content": "\n",
+                      "textStyle": {
+                        "foregroundColor": {
+                          "color": {
+                            "rgbColor": {
+                              "red": 0.11372549,
+                              "green": 0.10980392,
+                              "blue": 0.11372549
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                ],
+                "paragraphStyle": {
+                  "namedStyleType": "NORMAL_TEXT",
+                  "alignment": "CENTER",
+                  "direction": "LEFT_TO_RIGHT"
+                }
+              }
+            },
+            {
+              "startIndex": 634,
+              "endIndex": 738,
+              "paragraph": {
+                "elements": [
+                  {
+                    "startIndex": 634,
+                    "endIndex": 737,
+                    "textRun": {
+                      "content": "Image 2 shows that ~63% of the partners included are in Default or Expanded Premium outsourcing groups.",
+                      "textStyle": {}
+                    }
+                  },
+                  {
+                    "startIndex": 737,
+                    "endIndex": 738,
+                    "textRun": {
+                      "content": "\n",
+                      "textStyle": {
+                        "backgroundColor": {
+                          "color": {
+                            "rgbColor": {
+                              "red": 1,
+                              "green": 0.9490196,
+                              "blue": 0.8
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                ],
+                "paragraphStyle": {
+                  "namedStyleType": "NORMAL_TEXT",
+                  "direction": "LEFT_TO_RIGHT"
+                }
+              }
+            }
+          ]
+        },
+        "documentStyle": {
+          "background": {
+            "color": {}
+          },
+          "pageNumberStart": 1,
+          "marginTop": {
+            "magnitude": 72,
+            "unit": "PT"
+          },
+          "marginBottom": {
+            "magnitude": 72,
+            "unit": "PT"
+          },
+          "marginRight": {
+            "magnitude": 72,
+            "unit": "PT"
+          },
+          "marginLeft": {
+            "magnitude": 72,
+            "unit": "PT"
+          },
+          "pageSize": {
+            "height": {
+              "magnitude": 792,
+              "unit": "PT"
+            },
+            "width": {
+              "magnitude": 612,
+              "unit": "PT"
+            }
+          },
+          "marginHeader": {
+            "magnitude": 36,
+            "unit": "PT"
+          },
+          "marginFooter": {
+            "magnitude": 36,
+            "unit": "PT"
+          },
+          "useCustomHeaderFooterMargins": true,
+          "documentFormat": {
+            "documentMode": "PAGES"
+          }
+        },
+        "namedStyles": {
+          "styles": [
+            {
+              "namedStyleType": "NORMAL_TEXT",
+              "textStyle": {
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "strikethrough": false,
+                "smallCaps": false,
+                "backgroundColor": {},
+                "foregroundColor": {
+                  "color": {
+                    "rgbColor": {}
+                  }
+                },
+                "fontSize": {
+                  "magnitude": 11,
+                  "unit": "PT"
+                },
+                "weightedFontFamily": {
+                  "fontFamily": "Arial",
+                  "weight": 400
+                },
+                "baselineOffset": "NONE"
+              },
+              "paragraphStyle": {
+                "namedStyleType": "NORMAL_TEXT",
+                "alignment": "START",
+                "lineSpacing": 115,
+                "direction": "LEFT_TO_RIGHT",
+                "spacingMode": "COLLAPSE_LISTS",
+                "spaceAbove": {
+                  "unit": "PT"
+                },
+                "spaceBelow": {
+                  "unit": "PT"
+                },
+                "borderBetween": {
+                  "color": {},
+                  "width": {
+                    "unit": "PT"
+                  },
+                  "padding": {
+                    "unit": "PT"
+                  },
+                  "dashStyle": "SOLID"
+                },
+                "borderTop": {
+                  "color": {},
+                  "width": {
+                    "unit": "PT"
+                  },
+                  "padding": {
+                    "unit": "PT"
+                  },
+                  "dashStyle": "SOLID"
+                },
+                "borderBottom": {
+                  "color": {},
+                  "width": {
+                    "unit": "PT"
+                  },
+                  "padding": {
+                    "unit": "PT"
+                  },
+                  "dashStyle": "SOLID"
+                },
+                "borderLeft": {
+                  "color": {},
+                  "width": {
+                    "unit": "PT"
+                  },
+                  "padding": {
+                    "unit": "PT"
+                  },
+                  "dashStyle": "SOLID"
+                },
+                "borderRight": {
+                  "color": {},
+                  "width": {
+                    "unit": "PT"
+                  },
+                  "padding": {
+                    "unit": "PT"
+                  },
+                  "dashStyle": "SOLID"
+                },
+                "indentFirstLine": {
+                  "unit": "PT"
+                },
+                "indentStart": {
+                  "unit": "PT"
+                },
+                "indentEnd": {
+                  "unit": "PT"
+                },
+                "keepLinesTogether": false,
+                "keepWithNext": false,
+                "avoidWidowAndOrphan": true,
+                "shading": {
+                  "backgroundColor": {}
+                },
+                "pageBreakBefore": false
+              }
+            },
+            {
+              "namedStyleType": "HEADING_1",
+              "textStyle": {
+                "fontSize": {
+                  "magnitude": 20,
+                  "unit": "PT"
+                }
+              },
+              "paragraphStyle": {
+                "namedStyleType": "NORMAL_TEXT",
+                "direction": "LEFT_TO_RIGHT",
+                "spaceAbove": {
+                  "magnitude": 20,
+                  "unit": "PT"
+                },
+                "spaceBelow": {
+                  "magnitude": 6,
+                  "unit": "PT"
+                },
+                "keepLinesTogether": true,
+                "keepWithNext": true,
+                "pageBreakBefore": false
+              }
+            },
+            {
+              "namedStyleType": "HEADING_2",
+              "textStyle": {
+                "bold": false,
+                "fontSize": {
+                  "magnitude": 16,
+                  "unit": "PT"
+                }
+              },
+              "paragraphStyle": {
+                "namedStyleType": "NORMAL_TEXT",
+                "direction": "LEFT_TO_RIGHT",
+                "spaceAbove": {
+                  "magnitude": 18,
+                  "unit": "PT"
+                },
+                "spaceBelow": {
+                  "magnitude": 6,
+                  "unit": "PT"
+                },
+                "keepLinesTogether": true,
+                "keepWithNext": true,
+                "pageBreakBefore": false
+              }
+            },
+            {
+              "namedStyleType": "HEADING_3",
+              "textStyle": {
+                "bold": false,
+                "foregroundColor": {
+                  "color": {
+                    "rgbColor": {
+                      "red": 0.2627451,
+                      "green": 0.2627451,
+                      "blue": 0.2627451
+                    }
+                  }
+                },
+                "fontSize": {
+                  "magnitude": 14,
+                  "unit": "PT"
+                }
+              },
+              "paragraphStyle": {
+                "namedStyleType": "NORMAL_TEXT",
+                "direction": "LEFT_TO_RIGHT",
+                "spaceAbove": {
+                  "magnitude": 16,
+                  "unit": "PT"
+                },
+                "spaceBelow": {
+                  "magnitude": 4,
+                  "unit": "PT"
+                },
+                "keepLinesTogether": true,
+                "keepWithNext": true,
+                "pageBreakBefore": false
+              }
+            },
+            {
+              "namedStyleType": "HEADING_4",
+              "textStyle": {
+                "foregroundColor": {
+                  "color": {
+                    "rgbColor": {
+                      "red": 0.4,
+                      "green": 0.4,
+                      "blue": 0.4
+                    }
+                  }
+                },
+                "fontSize": {
+                  "magnitude": 12,
+                  "unit": "PT"
+                }
+              },
+              "paragraphStyle": {
+                "namedStyleType": "NORMAL_TEXT",
+                "direction": "LEFT_TO_RIGHT",
+                "spaceAbove": {
+                  "magnitude": 14,
+                  "unit": "PT"
+                },
+                "spaceBelow": {
+                  "magnitude": 4,
+                  "unit": "PT"
+                },
+                "keepLinesTogether": true,
+                "keepWithNext": true,
+                "pageBreakBefore": false
+              }
+            },
+            {
+              "namedStyleType": "HEADING_5",
+              "textStyle": {
+                "foregroundColor": {
+                  "color": {
+                    "rgbColor": {
+                      "red": 0.4,
+                      "green": 0.4,
+                      "blue": 0.4
+                    }
+                  }
+                },
+                "fontSize": {
+                  "magnitude": 11,
+                  "unit": "PT"
+                }
+              },
+              "paragraphStyle": {
+                "namedStyleType": "NORMAL_TEXT",
+                "direction": "LEFT_TO_RIGHT",
+                "spaceAbove": {
+                  "magnitude": 12,
+                  "unit": "PT"
+                },
+                "spaceBelow": {
+                  "magnitude": 4,
+                  "unit": "PT"
+                },
+                "keepLinesTogether": true,
+                "keepWithNext": true,
+                "pageBreakBefore": false
+              }
+            },
+            {
+              "namedStyleType": "HEADING_6",
+              "textStyle": {
+                "italic": true,
+                "foregroundColor": {
+                  "color": {
+                    "rgbColor": {
+                      "red": 0.4,
+                      "green": 0.4,
+                      "blue": 0.4
+                    }
+                  }
+                },
+                "fontSize": {
+                  "magnitude": 11,
+                  "unit": "PT"
+                }
+              },
+              "paragraphStyle": {
+                "namedStyleType": "NORMAL_TEXT",
+                "direction": "LEFT_TO_RIGHT",
+                "spaceAbove": {
+                  "magnitude": 12,
+                  "unit": "PT"
+                },
+                "spaceBelow": {
+                  "magnitude": 4,
+                  "unit": "PT"
+                },
+                "keepLinesTogether": true,
+                "keepWithNext": true,
+                "pageBreakBefore": false
+              }
+            },
+            {
+              "namedStyleType": "TITLE",
+              "textStyle": {
+                "fontSize": {
+                  "magnitude": 26,
+                  "unit": "PT"
+                }
+              },
+              "paragraphStyle": {
+                "namedStyleType": "NORMAL_TEXT",
+                "direction": "LEFT_TO_RIGHT",
+                "spaceAbove": {
+                  "unit": "PT"
+                },
+                "spaceBelow": {
+                  "magnitude": 3,
+                  "unit": "PT"
+                },
+                "keepLinesTogether": true,
+                "keepWithNext": true,
+                "pageBreakBefore": false
+              }
+            },
+            {
+              "namedStyleType": "SUBTITLE",
+              "textStyle": {
+                "italic": false,
+                "foregroundColor": {
+                  "color": {
+                    "rgbColor": {
+                      "red": 0.4,
+                      "green": 0.4,
+                      "blue": 0.4
+                    }
+                  }
+                },
+                "fontSize": {
+                  "magnitude": 15,
+                  "unit": "PT"
+                },
+                "weightedFontFamily": {
+                  "fontFamily": "Arial",
+                  "weight": 400
+                }
+              },
+              "paragraphStyle": {
+                "namedStyleType": "NORMAL_TEXT",
+                "direction": "LEFT_TO_RIGHT",
+                "spaceAbove": {
+                  "unit": "PT"
+                },
+                "spaceBelow": {
+                  "magnitude": 16,
+                  "unit": "PT"
+                },
+                "keepLinesTogether": true,
+                "keepWithNext": true,
+                "pageBreakBefore": false
+              }
+            }
+          ]
+        },
+        "inlineObjects": {
+          "kix.u1jenrrzqdg": {
+            "objectId": "kix.u1jenrrzqdg",
+            "inlineObjectProperties": {
+              "embeddedObject": {
+                "imageProperties": {
+                  "contentUri": "https://lh7-rt.googleusercontent.com/docsz/AD_4nXdk0OfDnjG3MdsQAna01A4gudtreQr11f49qMaI1PxmQmsg3uyLzChOLhD8sLHoHAw_li0fcjPYpVT9m9qxp75s9XDS-pYsmg8Xi_oOu4YG_hAmMuhBG8dXGOkPerhyOhYBR6flJnG7ZB4aG5ONaYgaTxF9?key=ca7LIdFW1wY8kSYymF0-sA",
+                  "cropProperties": {}
+                },
+                "embeddedObjectBorder": {
+                  "color": {
+                    "color": {
+                      "rgbColor": {}
+                    }
+                  },
+                  "width": {
+                    "unit": "PT"
+                  },
+                  "dashStyle": "SOLID",
+                  "propertyState": "NOT_RENDERED"
+                },
+                "size": {
+                  "height": {
+                    "magnitude": 174.75,
+                    "unit": "PT"
+                  },
+                  "width": {
+                    "magnitude": 369,
+                    "unit": "PT"
+                  }
+                },
+                "marginTop": {
+                  "magnitude": 9,
+                  "unit": "PT"
+                },
+                "marginBottom": {
+                  "magnitude": 9,
+                  "unit": "PT"
+                },
+                "marginRight": {
+                  "magnitude": 9,
+                  "unit": "PT"
+                },
+                "marginLeft": {
+                  "magnitude": 9,
+                  "unit": "PT"
+                }
+              }
+            }
+          },
+          "kix.wpmkkorkqn4g": {
+            "objectId": "kix.wpmkkorkqn4g",
+            "inlineObjectProperties": {
+              "embeddedObject": {
+                "imageProperties": {
+                  "contentUri": "https://lh7-rt.googleusercontent.com/docsz/AD_4nXctEpeEs4bJZMhXjwf1mx1ALOERqP6hYQqVGL_eTZAaXpBzl18QwRY6r5A4Ve9I5mu7OoYSfWEsRB65utdlG5Hm414X26pkVqx4CHyZic4O2Z1L044GaqNHWlkW1d1k4VnXk8PKqhlQ7MrcyM4yjmd8sg?key=ca7LIdFW1wY8kSYymF0-sA",
+                  "cropProperties": {}
+                },
+                "embeddedObjectBorder": {
+                  "color": {
+                    "color": {
+                      "rgbColor": {}
+                    }
+                  },
+                  "width": {
+                    "unit": "PT"
+                  },
+                  "dashStyle": "SOLID",
+                  "propertyState": "NOT_RENDERED"
+                },
+                "size": {
+                  "height": {
+                    "magnitude": 132,
+                    "unit": "PT"
+                  },
+                  "width": {
+                    "magnitude": 247.5,
+                    "unit": "PT"
+                  }
+                },
+                "marginTop": {
+                  "magnitude": 9,
+                  "unit": "PT"
+                },
+                "marginBottom": {
+                  "magnitude": 9,
+                  "unit": "PT"
+                },
+                "marginRight": {
+                  "magnitude": 9,
+                  "unit": "PT"
+                },
+                "marginLeft": {
+                  "magnitude": 9,
+                  "unit": "PT"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  ]
+}

@@ -1,18 +1,12 @@
 """
-Google Docs Operation Managers
+Google Docs Operation Managers — REST API only
 
-This package provides high-level manager classes for complex Google Docs operations,
-extracting business logic from the main tools module to improve maintainability.
+Only TableOperationManager remains, for 3 RED tools (unmerge, row_style, pin_headers).
+All other table operations are handled directly in docs_tools.py.
 """
 
 from .table_operation_manager import TableOperationManager
-from .header_footer_manager import HeaderFooterManager
-from .validation_manager import ValidationManager
-from .batch_operation_manager import BatchOperationManager
 
 __all__ = [
     "TableOperationManager",
-    "HeaderFooterManager",
-    "ValidationManager",
-    "BatchOperationManager",
 ]

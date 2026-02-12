@@ -28,8 +28,6 @@ from auth.scopes import (
     GMAIL_MODIFY_SCOPE,
     GMAIL_LABELS_SCOPE,
     GMAIL_SETTINGS_BASIC_SCOPE,
-    DRIVE_READONLY_SCOPE,
-    DRIVE_FILE_SCOPE,
     DOCS_READONLY_SCOPE,
     DOCS_WRITE_SCOPE,
     CALENDAR_READONLY_SCOPE,
@@ -38,6 +36,8 @@ from auth.scopes import (
     SHEETS_WRITE_SCOPE,
     SLIDES_SCOPE,
     SLIDES_READONLY_SCOPE,
+    SCRIPT_PROJECTS_SCOPE,
+    SCRIPT_EXTERNAL_REQUEST_SCOPE,
 )
 
 logger = logging.getLogger(__name__)
@@ -385,7 +385,6 @@ def _remove_user_email_arg_from_docstring(docstring: str) -> str:
 # Service configuration mapping
 SERVICE_CONFIGS = {
     "gmail": {"service": "gmail", "version": "v1"},
-    "drive": {"service": "drive", "version": "v3"},
     "calendar": {"service": "calendar", "version": "v3"},
     "docs": {"service": "docs", "version": "v1"},
     "sheets": {"service": "sheets", "version": "v4"},
@@ -408,9 +407,6 @@ SCOPE_GROUPS = {
     "gmail_modify": GMAIL_MODIFY_SCOPE,
     "gmail_labels": GMAIL_LABELS_SCOPE,
     "gmail_settings_basic": GMAIL_SETTINGS_BASIC_SCOPE,
-    # Drive scopes
-    "drive_read": DRIVE_READONLY_SCOPE,
-    "drive_file": DRIVE_FILE_SCOPE,
     # Docs scopes
     "docs_read": DOCS_READONLY_SCOPE,
     "docs_write": DOCS_WRITE_SCOPE,
@@ -423,6 +419,9 @@ SCOPE_GROUPS = {
     # Slides scopes
     "slides": SLIDES_SCOPE,
     "slides_read": SLIDES_READONLY_SCOPE,
+    # Apps Script scopes
+    "script_projects": SCRIPT_PROJECTS_SCOPE,
+    "script_external": SCRIPT_EXTERNAL_REQUEST_SCOPE,
 }
 
 
@@ -530,7 +529,7 @@ def require_google_service(
     Decorator that automatically handles Google service authentication and injection.
 
     Args:
-        service_type: Type of Google service ("gmail", "drive", "calendar", etc.)
+        service_type: Type of Google service ("gmail", "calendar", "docs", etc.)
         scopes: Required scopes (can be scope group names or actual URLs)
         version: Service version (defaults to standard version for service type)
 
@@ -688,10 +687,10 @@ def require_multiple_services(service_configs: List[Dict[str, Any]]):
 
     Usage:
         @require_multiple_services([
-            {"service_type": "drive", "scopes": "drive_read", "param_name": "drive_service"},
-            {"service_type": "docs", "scopes": "docs_read", "param_name": "docs_service"}
+            {"service_type": "docs", "scopes": "docs_read", "param_name": "docs_service"},
+            {"service_type": "sheets", "scopes": "sheets_read", "param_name": "sheets_service"}
         ])
-        async def get_doc_with_metadata(drive_service, docs_service, user_google_email: str, doc_id: str):
+        async def get_doc_with_sheet(docs_service, sheets_service, user_google_email: str, doc_id: str):
             # Both services are automatically injected
     """
 

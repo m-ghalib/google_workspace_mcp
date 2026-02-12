@@ -3,7 +3,7 @@
   "name": "workspace-mcp",
   "display_name": "Google Workspace MCP",
   "version": "1.6.2",
-  "description": "Full natural language control over Google Calendar, Drive, Gmail, Docs, Sheets, Slides, Forms, Tasks, Chat and Custom Search through all MCP clients, AI assistants and developer tools",
+  "description": "Full natural language control over Google Calendar, Gmail, Docs, Sheets, Slides, Forms, Tasks, Chat and Custom Search through all MCP clients, AI assistants and developer tools",
   "long_description": "A production-ready MCP server that integrates all major Google Workspace services with AI assistants. Includes Google PSE integration for custom web searches.",
   "author": {
     "name": "Taylor Wilsdon",
@@ -45,10 +45,6 @@
     {
       "name": "google_calendar",
       "description": "Manage Google Calendar through AI with full calendar and event capability"
-    },
-    {
-      "name": "google_drive",
-      "description": "Manage Google Drive through AI with full search, list and create capability"
     },
     {
       "name": "gmail",
@@ -168,7 +164,6 @@
     "mcp",
     "server",
     "calendar",
-    "drive",
     "docs",
     "forms",
     "gmail",

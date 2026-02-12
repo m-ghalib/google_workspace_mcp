@@ -18,24 +18,6 @@ gmail:
   complete:
     - start_google_auth
 
-drive:
-  core:
-    - search_drive_files
-    - get_drive_file_content
-    - get_drive_file_download_url
-    - create_drive_file
-    - import_to_google_doc
-  extended:
-    - list_drive_items
-    - copy_drive_file
-    - update_drive_file
-  complete:
-    # Unified comment tools (work across Docs, Sheets, Slides via Drive API)
-    - read_comments
-    - create_comment
-    - reply_to_comment
-    - resolve_comment
-
 calendar:
   core:
     - list_calendars
@@ -53,10 +35,7 @@ docs:
     - create_doc
     - modify_doc_text
   extended:
-    - export_doc_to_pdf
-    - search_docs
     - find_and_replace_doc
-    - list_docs_in_folder
     - insert_doc_elements
     - update_paragraph_style
   complete:
@@ -66,7 +45,6 @@ docs:
     - inspect_doc_structure
     - create_table_with_data
     - debug_table_structure
-    # Comment tools moved to drive service (unified across Docs/Sheets/Slides)
 
 sheets:
   core:
@@ -74,7 +52,6 @@ sheets:
     - read_sheet_values
     - modify_sheet_values
   extended:
-    - list_spreadsheets
     - get_spreadsheet_info
   complete:
     - create_sheet
@@ -82,7 +59,6 @@ sheets:
     - add_conditional_formatting
     - update_conditional_formatting
     - delete_conditional_formatting
-    # Comment tools moved to drive service (unified across Docs/Sheets/Slides)
 
 slides:
   core:
@@ -92,6 +68,4 @@ slides:
     - batch_update_presentation
     - get_page
     - get_page_thumbnail
-  complete:
-    # Comment tools moved to drive service (unified across Docs/Sheets/Slides)
-    []
+  complete: []

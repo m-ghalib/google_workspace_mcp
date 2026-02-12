@@ -20,11 +20,6 @@ CALENDAR_SCOPE = "https://www.googleapis.com/auth/calendar"
 CALENDAR_READONLY_SCOPE = "https://www.googleapis.com/auth/calendar.readonly"
 CALENDAR_EVENTS_SCOPE = "https://www.googleapis.com/auth/calendar.events"
 
-# Google Drive scopes
-DRIVE_SCOPE = "https://www.googleapis.com/auth/drive"
-DRIVE_READONLY_SCOPE = "https://www.googleapis.com/auth/drive.readonly"
-DRIVE_FILE_SCOPE = "https://www.googleapis.com/auth/drive.file"
-
 # Google Docs scopes
 DOCS_READONLY_SCOPE = "https://www.googleapis.com/auth/documents.readonly"
 DOCS_WRITE_SCOPE = "https://www.googleapis.com/auth/documents"
@@ -45,15 +40,17 @@ SHEETS_WRITE_SCOPE = "https://www.googleapis.com/auth/spreadsheets"
 SLIDES_SCOPE = "https://www.googleapis.com/auth/presentations"
 SLIDES_READONLY_SCOPE = "https://www.googleapis.com/auth/presentations.readonly"
 
+# Apps Script API scopes
+SCRIPT_PROJECTS_SCOPE = "https://www.googleapis.com/auth/script.projects"
+SCRIPT_EXTERNAL_REQUEST_SCOPE = "https://www.googleapis.com/auth/script.external_request"
+
 # Base OAuth scopes required for user identification
 BASE_SCOPES = [USERINFO_EMAIL_SCOPE, USERINFO_PROFILE_SCOPE, OPENID_SCOPE]
 
 # Service-specific scope groups
-DOCS_SCOPES = [DOCS_READONLY_SCOPE, DOCS_WRITE_SCOPE]
+DOCS_SCOPES = [DOCS_READONLY_SCOPE, DOCS_WRITE_SCOPE, SCRIPT_PROJECTS_SCOPE, SCRIPT_EXTERNAL_REQUEST_SCOPE]
 
 CALENDAR_SCOPES = [CALENDAR_SCOPE, CALENDAR_READONLY_SCOPE, CALENDAR_EVENTS_SCOPE]
-
-DRIVE_SCOPES = [DRIVE_SCOPE, DRIVE_READONLY_SCOPE, DRIVE_FILE_SCOPE]
 
 GMAIL_SCOPES = [
     GMAIL_READONLY_SCOPE,
@@ -68,10 +65,11 @@ SHEETS_SCOPES = [SHEETS_READONLY_SCOPE, SHEETS_WRITE_SCOPE]
 
 SLIDES_SCOPES = [SLIDES_SCOPE, SLIDES_READONLY_SCOPE]
 
+SCRIPT_SCOPES = [SCRIPT_PROJECTS_SCOPE, SCRIPT_EXTERNAL_REQUEST_SCOPE]
+
 # Tool-to-scopes mapping
 TOOL_SCOPES_MAP = {
     "gmail": GMAIL_SCOPES,
-    "drive": DRIVE_SCOPES,
     "calendar": CALENDAR_SCOPES,
     "docs": DOCS_SCOPES,
     "sheets": SHEETS_SCOPES,
@@ -81,7 +79,6 @@ TOOL_SCOPES_MAP = {
 # Tool-to-read-only-scopes mapping
 TOOL_READONLY_SCOPES_MAP = {
     "gmail": [GMAIL_READONLY_SCOPE],
-    "drive": [DRIVE_READONLY_SCOPE],
     "calendar": [CALENDAR_READONLY_SCOPE],
     "docs": [DOCS_READONLY_SCOPE],
     "sheets": [SHEETS_READONLY_SCOPE],

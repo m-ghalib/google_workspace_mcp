@@ -61,7 +61,6 @@ class EnhancedLogFormatter(logging.Formatter):
             "auth.google_auth": "[OAUTH]",
             "auth.credential_store": "[CREDS]",
             "gcalendar.calendar_tools": "[CALENDAR]",
-            "gdrive.drive_tools": "[DRIVE]",
             "gmail.gmail_tools": "[GMAIL]",
             "gdocs.docs_tools": "[DOCS]",
             "gsheets.sheets_tools": "[SHEETS]",

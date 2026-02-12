@@ -114,7 +114,6 @@ def main():
         nargs="*",
         choices=[
             "gmail",
-            "drive",
             "calendar",
             "docs",
             "sheets",
@@ -225,7 +224,6 @@ def main():
     # Import tool modules to register them with the MCP server via decorators
     tool_imports = {
         "gmail": lambda: import_module("gmail.gmail_tools"),
-        "drive": lambda: import_module("gdrive.drive_tools"),
         "calendar": lambda: import_module("gcalendar.calendar_tools"),
         "docs": lambda: import_module("gdocs.docs_tools"),
         "sheets": lambda: import_module("gsheets.sheets_tools"),
@@ -234,7 +232,6 @@ def main():
 
     tool_icons = {
         "gmail": "📧",
-        "drive": "📁",
         "calendar": "📅",
         "docs": "📄",
         "sheets": "📊",
@@ -272,9 +269,6 @@ def main():
         set_enabled_tool_names(None)
 
     wrap_server_tool_method(server)
-
-    # Import unified comment tools (work across all services via Drive API)
-    import core.comments  # noqa: F401
 
     from auth.scopes import set_enabled_tools, set_read_only
 

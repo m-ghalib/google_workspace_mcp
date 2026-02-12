@@ -1,177 +1,20 @@
 """
-Google Docs Document Structure Parsing and Analysis
+Google Docs Document Structure — REST API structure parsing
 
-This module provides utilities for parsing and analyzing the structure
-of Google Docs documents, including finding tables, cells, and other elements.
+Provides functions to parse Google Docs API JSON responses into structured
+element data with byte offsets, enabling tools to translate between
+user-facing element indices and the byte-offset addressing the REST API requires.
 """
 
 import logging
-from typing import Any, Optional
+from typing import Any
 
 logger = logging.getLogger(__name__)
 
 
-def parse_document_structure(doc_data: dict[str, Any]) -> dict[str, Any]:
-    """
-    Parse the full document structure into a navigable format.
-
-    Args:
-        doc_data: Raw document data from Google Docs API
-
-    Returns:
-        Dictionary containing parsed structure with elements and their positions
-    """
-    structure = {
-        "title": doc_data.get("title", ""),
-        "body": [],
-        "tables": [],
-        "headers": {},
-        "footers": {},
-        "total_length": 0,
-    }
-
-    body = doc_data.get("body", {})
-    content = body.get("content", [])
-
-    for element in content:
-        element_info = _parse_element(element)
-        if element_info:
-            structure["body"].append(element_info)
-            if element_info["type"] == "table":
-                structure["tables"].append(element_info)
-
-    # Calculate total document length
-    if structure["body"]:
-        last_element = structure["body"][-1]
-        structure["total_length"] = last_element.get("end_index", 0)
-
-    # Parse headers and footers
-    for header_id, header_data in doc_data.get("headers", {}).items():
-        structure["headers"][header_id] = _parse_segment(header_data)
-
-    for footer_id, footer_data in doc_data.get("footers", {}).items():
-        structure["footers"][footer_id] = _parse_segment(footer_data)
-
-    return structure
-
-
-def _parse_element(element: dict[str, Any]) -> Optional[dict[str, Any]]:
-    """
-    Parse a single document element.
-
-    Args:
-        element: Element data from document
-
-    Returns:
-        Parsed element information or None
-    """
-    element_info = {
-        "start_index": element.get("startIndex", 0),
-        "end_index": element.get("endIndex", 0),
-    }
-
-    if "paragraph" in element:
-        paragraph = element["paragraph"]
-        element_info["type"] = "paragraph"
-        element_info["text"] = _extract_paragraph_text(paragraph)
-        element_info["style"] = paragraph.get("paragraphStyle", {})
-
-    elif "table" in element:
-        table = element["table"]
-        element_info["type"] = "table"
-        element_info["rows"] = len(table.get("tableRows", []))
-        element_info["columns"] = len(
-            table.get("tableRows", [{}])[0].get("tableCells", [])
-        )
-        element_info["cells"] = _parse_table_cells(table)
-        element_info["table_style"] = table.get("tableStyle", {})
-
-    elif "sectionBreak" in element:
-        element_info["type"] = "section_break"
-        element_info["section_style"] = element["sectionBreak"].get("sectionStyle", {})
-
-    elif "tableOfContents" in element:
-        element_info["type"] = "table_of_contents"
-
-    else:
-        return None
-
-    return element_info
-
-
-def _parse_table_cells(table: dict[str, Any]) -> list[list[dict[str, Any]]]:
-    """
-    Parse table cells with their positions and content.
-
-    Args:
-        table: Table element data
-
-    Returns:
-        2D list of cell information
-    """
-    cells = []
-    for row_idx, row in enumerate(table.get("tableRows", [])):
-        row_cells = []
-        for col_idx, cell in enumerate(row.get("tableCells", [])):
-            # Find the first paragraph in the cell for insertion
-            insertion_index = cell.get("startIndex", 0) + 1  # Default fallback
-
-            # Look for the first paragraph in cell content
-            content_elements = cell.get("content", [])
-            for element in content_elements:
-                if "paragraph" in element:
-                    paragraph = element["paragraph"]
-                    # Get the first element in the paragraph
-                    para_elements = paragraph.get("elements", [])
-                    if para_elements:
-                        first_element = para_elements[0]
-                        if "startIndex" in first_element:
-                            insertion_index = first_element["startIndex"]
-                            break
-
-            cell_info = {
-                "row": row_idx,
-                "column": col_idx,
-                "start_index": cell.get("startIndex", 0),
-                "end_index": cell.get("endIndex", 0),
-                "insertion_index": insertion_index,  # Where to insert text in this cell
-                "content": _extract_cell_text(cell),
-                "content_elements": content_elements,
-            }
-            row_cells.append(cell_info)
-        cells.append(row_cells)
-    return cells
-
-
-def _extract_paragraph_text(paragraph: dict[str, Any]) -> str:
-    """Extract text from a paragraph element."""
-    text_parts = []
-    for element in paragraph.get("elements", []):
-        if "textRun" in element:
-            text_parts.append(element["textRun"].get("content", ""))
-    return "".join(text_parts)
-
-
-def _extract_cell_text(cell: dict[str, Any]) -> str:
-    """Extract text content from a table cell."""
-    text_parts = []
-    for element in cell.get("content", []):
-        if "paragraph" in element:
-            text_parts.append(_extract_paragraph_text(element["paragraph"]))
-    return "".join(text_parts)
-
-
-def _parse_segment(segment_data: dict[str, Any]) -> dict[str, Any]:
-    """Parse a document segment (header/footer)."""
-    return {
-        "content": segment_data.get("content", []),
-        "start_index": segment_data.get("content", [{}])[0].get("startIndex", 0)
-        if segment_data.get("content")
-        else 0,
-        "end_index": segment_data.get("content", [{}])[-1].get("endIndex", 0)
-        if segment_data.get("content")
-        else 0,
-    }
+# =============================================================================
+# TABLE FINDING (original — used by TableOperationManager + new tools)
+# =============================================================================
 
 
 def find_tables(doc_data: dict[str, Any]) -> list[dict[str, Any]]:
@@ -182,176 +25,380 @@ def find_tables(doc_data: dict[str, Any]) -> list[dict[str, Any]]:
         doc_data: Raw document data from Google Docs API
 
     Returns:
-        List of table information dictionaries
+        List of table information dictionaries with start_index, rows, columns
     """
     tables = []
-    structure = parse_document_structure(doc_data)
+    body = doc_data.get("body", {})
+    content = body.get("content", [])
 
-    for idx, table_info in enumerate(structure["tables"]):
-        tables.append(
-            {
-                "index": idx,
-                "start_index": table_info["start_index"],
-                "end_index": table_info["end_index"],
-                "rows": table_info["rows"],
-                "columns": table_info["columns"],
-                "cells": table_info["cells"],
-            }
-        )
+    for element in content:
+        if "table" not in element:
+            continue
+
+        table = element["table"]
+        table_rows = table.get("tableRows", [])
+
+        tables.append({
+            "index": len(tables),
+            "start_index": element.get("startIndex", 0),
+            "end_index": element.get("endIndex", 0),
+            "rows": len(table_rows),
+            "columns": len(table_rows[0].get("tableCells", [])) if table_rows else 0,
+        })
 
     return tables
 
 
-def get_table_cell_indices(
-    doc_data: dict[str, Any], table_index: int = 0
-) -> Optional[list[list[tuple[int, int]]]]:
+# =============================================================================
+# BODY ELEMENT PARSING
+# =============================================================================
+
+
+def get_body_elements(doc_data: dict[str, Any]) -> list[dict[str, Any]]:
     """
-    Get content indices for all cells in a specific table.
+    Parse document body into a flat list of elements with types and byte offsets.
+
+    Each element in body.content[] becomes one entry. Paragraphs include their
+    text content and named style; tables include dimensions; list items include
+    bullet metadata.
 
     Args:
         doc_data: Raw document data from Google Docs API
-        table_index: Index of the table (0-based)
 
     Returns:
-        2D list of (start_index, end_index) tuples for each cell, or None if table not found
+        List of element dicts with keys: element_index, type, start_index, end_index, ...
     """
-    tables = find_tables(doc_data)
+    elements = []
+    body = doc_data.get("body", {})
+    content = body.get("content", [])
 
-    if table_index >= len(tables):
-        logger.warning(
-            f"Table index {table_index} not found. Document has {len(tables)} tables."
-        )
-        return None
+    table_counter = 0
+    for i, element in enumerate(content):
+        start = element.get("startIndex", 0)
+        end = element.get("endIndex", 0)
 
-    table = tables[table_index]
-    cell_indices = []
+        if "paragraph" in element:
+            para = element["paragraph"]
+            style = para.get("paragraphStyle", {})
+            named_style = style.get("namedStyleType", "NORMAL_TEXT")
+            bullet = para.get("bullet")
 
-    for row in table["cells"]:
-        row_indices = []
-        for cell in row:
-            # Each cell contains at least one paragraph
-            # Find the first paragraph in the cell for content insertion
-            cell_content = cell.get("content_elements", [])
+            elem_info: dict[str, Any] = {
+                "element_index": i,
+                "type": "list_item" if bullet else "paragraph",
+                "start_index": start,
+                "end_index": end,
+                "named_style": named_style,
+            }
+            if bullet:
+                elem_info["list_id"] = bullet.get("listId", "")
+                elem_info["nesting_level"] = bullet.get("nestingLevel", 0)
+
+            # Extract text content
+            text_parts = []
+            for pe in para.get("elements", []):
+                if "textRun" in pe:
+                    text_parts.append(pe["textRun"].get("content", ""))
+            elem_info["text"] = "".join(text_parts)
+
+            elements.append(elem_info)
+
+        elif "table" in element:
+            table = element["table"]
+            table_rows = table.get("tableRows", [])
+            elements.append({
+                "element_index": i,
+                "type": "table",
+                "start_index": start,
+                "end_index": end,
+                "table_index": table_counter,
+                "rows": len(table_rows),
+                "columns": len(table_rows[0].get("tableCells", [])) if table_rows else 0,
+            })
+            table_counter += 1
+
+        elif "sectionBreak" in element:
+            elements.append({
+                "element_index": i,
+                "type": "section_break",
+                "start_index": start,
+                "end_index": end,
+            })
+
+        elif "tableOfContents" in element:
+            elements.append({
+                "element_index": i,
+                "type": "table_of_contents",
+                "start_index": start,
+                "end_index": end,
+            })
+
+        else:
+            elements.append({
+                "element_index": i,
+                "type": "unknown",
+                "start_index": start,
+                "end_index": end,
+            })
+
+    return elements
+
+
+def find_paragraphs(doc_data: dict[str, Any]) -> list[dict[str, Any]]:
+    """
+    Find all paragraphs in the document with their byte offsets and styles.
+
+    Args:
+        doc_data: Raw document data from Google Docs API
+
+    Returns:
+        List of paragraph dicts: {element_index, start_index, end_index, named_style}
+    """
+    paragraphs = []
+    body = doc_data.get("body", {})
+    content = body.get("content", [])
+
+    for i, element in enumerate(content):
+        if "paragraph" not in element:
+            continue
+
+        para = element["paragraph"]
+        style = para.get("paragraphStyle", {})
+
+        paragraphs.append({
+            "element_index": i,
+            "start_index": element.get("startIndex", 0),
+            "end_index": element.get("endIndex", 0),
+            "named_style": style.get("namedStyleType", "NORMAL_TEXT"),
+        })
+
+    return paragraphs
+
+
+# =============================================================================
+# TABLE CELL ADDRESSING
+# =============================================================================
+
+
+def get_table_cell_range(
+    doc_data: dict[str, Any], table_index: int, row: int, col: int
+) -> tuple[int, int]:
+    """
+    Get the byte offset range for a specific table cell's content area.
+
+    The content area starts at the first paragraph inside the cell
+    (typically cell.startIndex + 1) and ends at cell.endIndex.
+
+    Args:
+        doc_data: Raw document data from Google Docs API
+        table_index: Which table (0-based)
+        row: Row index (0-based)
+        col: Column index (0-based)
+
+    Returns:
+        Tuple of (content_start_index, cell_end_index)
+
+    Raises:
+        IndexError: If table, row, or column index is out of range
+    """
+    body = doc_data.get("body", {})
+    content = body.get("content", [])
+
+    current_table = 0
+    for element in content:
+        if "table" not in element:
+            continue
+        if current_table == table_index:
+            table = element["table"]
+            table_rows = table.get("tableRows", [])
+            if row >= len(table_rows):
+                raise IndexError(
+                    f"Row {row} out of range (table has {len(table_rows)} rows)"
+                )
+            cells = table_rows[row].get("tableCells", [])
+            if col >= len(cells):
+                raise IndexError(
+                    f"Column {col} out of range (row has {len(cells)} columns)"
+                )
+            cell = cells[col]
+            cell_end = cell.get("endIndex", 0)
+            # Content starts at first paragraph's startIndex inside the cell
+            cell_content = cell.get("content", [])
             if cell_content:
-                # Look for the first paragraph in cell content
-                first_para = None
-                for element in cell_content:
-                    if "paragraph" in element:
-                        first_para = element["paragraph"]
-                        break
+                content_start = cell_content[0].get("startIndex", cell.get("startIndex", 0) + 1)
+            else:
+                content_start = cell.get("startIndex", 0) + 1
+            return (content_start, cell_end)
+        current_table += 1
 
-                if first_para and "elements" in first_para and first_para["elements"]:
-                    # Insert at the start of the first text run in the paragraph
-                    first_text_element = first_para["elements"][0]
-                    if "textRun" in first_text_element:
-                        start_idx = first_text_element.get(
-                            "startIndex", cell["start_index"] + 1
-                        )
-                        end_idx = first_text_element.get("endIndex", start_idx + 1)
-                        row_indices.append((start_idx, end_idx))
-                        continue
-
-            # Fallback: use cell boundaries with safe margins
-            content_start = cell["start_index"] + 1
-            content_end = cell["end_index"] - 1
-            row_indices.append((content_start, content_end))
-        cell_indices.append(row_indices)
-
-    return cell_indices
+    raise IndexError(f"Table {table_index} not found (document has {current_table} tables)")
 
 
-def find_element_at_index(
-    doc_data: dict[str, Any], index: int
-) -> Optional[dict[str, Any]]:
+# =============================================================================
+# HEADER / FOOTER
+# =============================================================================
+
+
+def find_header_footer_ids(doc_data: dict[str, Any]) -> dict[str, str | None]:
     """
-    Find what element exists at a given index in the document.
-
-    Args:
-        doc_data: Raw document data from Google Docs API
-        index: Position in the document
-
-    Returns:
-        Information about the element at that position, or None
-    """
-    structure = parse_document_structure(doc_data)
-
-    for element in structure["body"]:
-        if element["start_index"] <= index < element["end_index"]:
-            element_copy = element.copy()
-
-            # If it's a table, find which cell contains the index
-            if element["type"] == "table" and "cells" in element:
-                for row_idx, row in enumerate(element["cells"]):
-                    for col_idx, cell in enumerate(row):
-                        if cell["start_index"] <= index < cell["end_index"]:
-                            element_copy["containing_cell"] = {
-                                "row": row_idx,
-                                "column": col_idx,
-                                "cell_start": cell["start_index"],
-                                "cell_end": cell["end_index"],
-                            }
-                            break
-
-            return element_copy
-
-    return None
-
-
-def get_next_paragraph_index(doc_data: dict[str, Any], after_index: int = 0) -> int:
-    """
-    Find the next safe position to insert content after a given index.
-
-    Args:
-        doc_data: Raw document data from Google Docs API
-        after_index: Index after which to find insertion point
-
-    Returns:
-        Safe index for insertion
-    """
-    structure = parse_document_structure(doc_data)
-
-    # Find the first paragraph element after the given index
-    for element in structure["body"]:
-        if element["type"] == "paragraph" and element["start_index"] > after_index:
-            # Insert at the end of the previous element or start of this paragraph
-            return element["start_index"]
-
-    # If no paragraph found, return the end of document
-    return structure["total_length"] - 1 if structure["total_length"] > 0 else 1
-
-
-def analyze_document_complexity(doc_data: dict[str, Any]) -> dict[str, Any]:
-    """
-    Analyze document complexity and provide statistics.
+    Extract header and footer IDs from the document style.
 
     Args:
         doc_data: Raw document data from Google Docs API
 
     Returns:
-        Dictionary with document statistics
+        Dict with keys: default_header_id, default_footer_id,
+        first_page_header_id, first_page_footer_id,
+        even_page_header_id, even_page_footer_id
     """
-    structure = parse_document_structure(doc_data)
+    doc_style = doc_data.get("documentStyle", {})
 
-    stats = {
-        "total_elements": len(structure["body"]),
-        "tables": len(structure["tables"]),
-        "paragraphs": sum(1 for e in structure["body"] if e.get("type") == "paragraph"),
-        "section_breaks": sum(
-            1 for e in structure["body"] if e.get("type") == "section_break"
-        ),
-        "total_length": structure["total_length"],
-        "has_headers": bool(structure["headers"]),
-        "has_footers": bool(structure["footers"]),
+    return {
+        "default_header_id": doc_style.get("defaultHeaderId"),
+        "default_footer_id": doc_style.get("defaultFooterId"),
+        "first_page_header_id": doc_style.get("firstPageHeaderId"),
+        "first_page_footer_id": doc_style.get("firstPageFooterId"),
+        "even_page_header_id": doc_style.get("evenPageHeaderId"),
+        "even_page_footer_id": doc_style.get("evenPageFooterId"),
     }
 
-    # Add table statistics
-    if structure["tables"]:
-        total_cells = sum(
-            table["rows"] * table["columns"] for table in structure["tables"]
-        )
-        stats["total_table_cells"] = total_cells
-        stats["largest_table"] = max(
-            (t["rows"] * t["columns"] for t in structure["tables"]), default=0
-        )
 
-    return stats
+# =============================================================================
+# TEXT EXTRACTION
+# =============================================================================
+
+
+def _extract_text_from_elements(elements: list[dict[str, Any]]) -> str:
+    """Recursively extract text from structural elements."""
+    parts: list[str] = []
+    for element in elements:
+        if "paragraph" in element:
+            para = element["paragraph"]
+            for pe in para.get("elements", []):
+                if "textRun" in pe:
+                    parts.append(pe["textRun"].get("content", ""))
+                elif "inlineObjectElement" in pe:
+                    parts.append("[image]")
+        elif "table" in element:
+            table = element["table"]
+            for row in table.get("tableRows", []):
+                for cell in row.get("tableCells", []):
+                    parts.append(_extract_text_from_elements(cell.get("content", [])))
+        elif "tableOfContents" in element:
+            toc_content = element["tableOfContents"].get("content", [])
+            parts.append(_extract_text_from_elements(toc_content))
+    return "".join(parts)
+
+
+def extract_doc_text(doc_data: dict[str, Any]) -> str:
+    """
+    Extract all text content from the document body.
+
+    Walks body.content[] and concatenates all textRun content.
+    Table cell text is included inline.
+
+    Args:
+        doc_data: Raw document data from Google Docs API
+
+    Returns:
+        Full text content of the document
+    """
+    body = doc_data.get("body", {})
+    content = body.get("content", [])
+    return _extract_text_from_elements(content)
+
+
+# =============================================================================
+# TABLE DEBUG INFO
+# =============================================================================
+
+
+def get_table_debug_info(
+    doc_data: dict[str, Any], table_index: int
+) -> dict[str, Any]:
+    """
+    Get detailed debug information about a specific table.
+
+    Returns cell-by-cell content, positions, and merge spans.
+
+    Args:
+        doc_data: Raw document data from Google Docs API
+        table_index: Which table to inspect (0-based)
+
+    Returns:
+        Dict with table dimensions and per-cell details
+
+    Raises:
+        IndexError: If table_index is out of range
+    """
+    body = doc_data.get("body", {})
+    content = body.get("content", [])
+
+    current_table = 0
+    for element in content:
+        if "table" not in element:
+            continue
+        if current_table == table_index:
+            table = element["table"]
+            table_rows = table.get("tableRows", [])
+            num_rows = len(table_rows)
+            num_cols = len(table_rows[0].get("tableCells", [])) if table_rows else 0
+
+            cells: list[list[dict[str, Any]]] = []
+            for r, row in enumerate(table_rows):
+                row_cells: list[dict[str, Any]] = []
+                for c, cell in enumerate(row.get("tableCells", [])):
+                    cell_text = _extract_text_from_elements(cell.get("content", []))
+                    cell_style = cell.get("tableCellStyle", {})
+                    row_cells.append({
+                        "row": r,
+                        "col": c,
+                        "content": cell_text.rstrip("\n"),
+                        "start_index": cell.get("startIndex", 0),
+                        "end_index": cell.get("endIndex", 0),
+                        "row_span": cell_style.get("rowSpan", 1),
+                        "col_span": cell_style.get("columnSpan", 1),
+                    })
+                cells.append(row_cells)
+
+            return {
+                "table_index": table_index,
+                "start_index": element.get("startIndex", 0),
+                "end_index": element.get("endIndex", 0),
+                "rows": num_rows,
+                "columns": num_cols,
+                "cells": cells,
+            }
+        current_table += 1
+
+    raise IndexError(f"Table {table_index} not found (document has {current_table} tables)")
+
+
+# =============================================================================
+# COLOR CONVERSION
+# =============================================================================
+
+
+def hex_to_rgb_color(hex_str: str) -> dict[str, Any]:
+    """
+    Convert hex color string to Google Docs API OptionalColor format.
+
+    Args:
+        hex_str: Color as "#RRGGBB" (e.g., "#FF0000" for red)
+
+    Returns:
+        OptionalColor dict: {"color": {"rgbColor": {"red": float, "green": float, "blue": float}}}
+    """
+    hex_str = hex_str.lstrip("#")
+    if len(hex_str) != 6:
+        raise ValueError(f"Invalid hex color: #{hex_str}. Expected #RRGGBB format.")
+
+    r = int(hex_str[0:2], 16) / 255.0
+    g = int(hex_str[2:4], 16) / 255.0
+    b = int(hex_str[4:6], 16) / 255.0
+
+    return {
+        "color": {
+            "rgbColor": {"red": r, "green": g, "blue": b}
+        }
+    }

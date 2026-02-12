@@ -1,6 +1,6 @@
 # Google Workspace MCP Server Helm Chart
 
-This Helm chart deploys the Google Workspace MCP Server on a Kubernetes cluster. The Google Workspace MCP Server provides comprehensive integration with Google Workspace services including Gmail, Calendar, Drive, Docs, Sheets, Slides, Forms, Tasks, and Chat.
+This Helm chart deploys the Google Workspace MCP Server on a Kubernetes cluster. The Google Workspace MCP Server provides comprehensive integration with Google Workspace services including Gmail, Calendar, Docs, Sheets, Slides, Forms, Tasks, and Chat.
 
 Disclaimer - this is a user submitted feature and not one that the maintainer uses personally. It may be out of date - use at your own risk! 
 
@@ -62,7 +62,7 @@ Before deploying, you need to set up Google OAuth credentials:
 helm install workspace-mcp ./helm-chart/workspace-mcp \
   --set secrets.googleOAuth.clientId="your-client-id" \
   --set secrets.googleOAuth.clientSecret="your-secret" \
-  --set tools.enabled="{gmail,calendar,drive}"
+  --set tools.enabled="{gmail,calendar,docs}"
 ```
 
 ### Production deployment with ingress:
@@ -109,7 +109,6 @@ helm delete workspace-mcp
 You can selectively enable tools using the `tools.enabled` parameter:
 
 - `gmail` - Gmail integration
-- `drive` - Google Drive integration  
 - `calendar` - Google Calendar integration
 - `docs` - Google Docs integration
 - `sheets` - Google Sheets integration

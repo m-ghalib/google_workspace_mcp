@@ -8,12 +8,12 @@
 [![PyPI Downloads](https://static.pepy.tech/personalized-badge/workspace-mcp?period=total&units=INTERNATIONAL_SYSTEM&left_color=BLACK&right_color=BLUE&left_text=downloads)](https://pepy.tech/projects/workspace-mcp)
 [![Website](https://img.shields.io/badge/Website-workspacemcp.com-green.svg)](https://workspacemcp.com)
 
-*Full natural language control over Google Calendar, Drive, Gmail, Docs, Sheets, Slides, Forms, Tasks, Contacts, and Chat through all MCP clients, AI assistants and developer tools. Also features CLI for use with tools like Claude Code and Codex*
+*Full natural language control over Google Calendar, Gmail, Docs, Sheets, Slides, Forms, Tasks, Contacts, and Chat through all MCP clients, AI assistants and developer tools. Also features CLI for use with tools like Claude Code and Codex*
 
 **The most feature-complete Google Workspace MCP server**, with Remote OAuth2.1 multi-user support and 1-click Claude installation.
 
 
-###### Support for all free Google accounts (Gmail, Docs, Drive etc) & Google Workspace plans (Starter, Standard, Plus, Enterprise, Non Profit) with expanded app options like Chat & Spaces. <br/><br /> Interested in a private, managed cloud instance? [That can be arranged.](https://workspacemcp.com/workspace-mcp-cloud)
+###### Support for all free Google accounts (Gmail, Docs, etc) & Google Workspace plans (Starter, Standard, Plus, Enterprise, Non Profit) with expanded app options like Chat & Spaces. <br/><br /> Interested in a private, managed cloud instance? [That can be arranged.](https://workspacemcp.com/workspace-mcp-cloud)
 
 
 </div>
@@ -60,7 +60,7 @@ A production-ready MCP server that integrates all major Google Workspace service
 <tr>
 <td width="50%" valign="top">
 
-**<span style="color:#72898f">@</span> Gmail** • **<span style="color:#72898f">≡</span> Drive** • **<span style="color:#72898f">⧖</span> Calendar** **<span style="color:#72898f">≡</span> Docs**
+**<span style="color:#72898f">@</span> Gmail** • **<span style="color:#72898f">⧖</span> Calendar** • **<span style="color:#72898f">≡</span> Docs**
 - Complete Gmail management, end to end coverage
 - Full calendar management with advanced features
 - File operations with Office format support
@@ -109,7 +109,7 @@ export GOOGLE_OAUTH_CLIENT_SECRET="..."
 **Launch Commands**
 ```bash
 uvx workspace-mcp --tool-tier core
-uv run main.py --tools gmail drive
+uv run main.py --tools gmail docs
 ```
 [More options →](#start-the-server)
 
@@ -221,7 +221,7 @@ APIs & Services → Credentials
 APIs & Services → Library
 
 Search & enable:
-Calendar, Drive, Gmail,
+Calendar, Gmail,
 Docs, Sheets, Slides
 ```
 <sub>See quick links below</sub>
@@ -266,7 +266,6 @@ Docs, Sheets, Slides
   You can enable each one by clicking the links below (make sure you're logged into the Google Cloud Console and have the correct project selected):
 
 * [Enable Google Calendar API](https://console.cloud.google.com/flows/enableapi?apiid=calendar-json.googleapis.com)
-* [Enable Google Drive API](https://console.cloud.google.com/flows/enableapi?apiid=drive.googleapis.com)
 * [Enable Gmail API](https://console.cloud.google.com/flows/enableapi?apiid=gmail.googleapis.com)
 * [Enable Google Docs API](https://console.cloud.google.com/flows/enableapi?apiid=docs.googleapis.com)
 * [Enable Google Sheets API](https://console.cloud.google.com/flows/enableapi?apiid=sheets.googleapis.com)
@@ -426,7 +425,7 @@ uv run main.py \
 **▶ Selective Tool Loading**
 ```bash
 # Load specific services only
-uv run main.py --tools gmail drive calendar
+uv run main.py --tools gmail docs calendar
 uv run main.py --tools sheets docs
 
 # Combine with other flags
@@ -440,11 +439,11 @@ uv run main.py --single-user --tools gmail
 uv run main.py --read-only
 
 # Combine with specific tools or tiers
-uv run main.py --tools gmail drive --read-only
+uv run main.py --tools gmail docs --read-only
 uv run main.py --tool-tier core --read-only
 ```
 Read-only mode provides secure, restricted access by:
-- Requesting only `*.readonly` OAuth scopes (e.g., `gmail.readonly`, `drive.readonly`)
+- Requesting only `*.readonly` OAuth scopes (e.g., `gmail.readonly`, `documents.readonly`)
 - Automatically filtering out tools that require write permissions at startup
 - Allowing read operations: list, get, search, and export across all services
 
@@ -463,10 +462,10 @@ docker run -p 8000:8000 -v $(pwd):/app \
 
 # With tool selection via environment variables
 docker run -e TOOL_TIER=core workspace-mcp
-docker run -e TOOLS="gmail drive calendar" workspace-mcp
+docker run -e TOOLS="gmail calendar docs" workspace-mcp
 ```
 
-**Available Services**: `gmail` • `drive` • `calendar` • `docs` • `sheets` • `slides`
+**Available Services**: `gmail` • `calendar` • `docs` • `sheets` • `slides`
 
 </details>
 
@@ -563,9 +562,6 @@ workspace-mcp --cli search_gmail_messages --args '{"query": "is:unread", "max_re
 # Get calendar events for today
 workspace-mcp --cli get_events --args '{"calendar_id": "primary", "time_min": "2024-01-15T00:00:00Z"}'
 
-# Create a Drive file from a URL
-workspace-mcp --cli create_drive_file --args '{"name": "doc.pdf", "source_url": "https://example.com/file.pdf"}'
-
 # Combine with jq for processing
 workspace-mcp --cli list --json | jq '.tools[] | select(.name | contains("gmail"))'
 ```
@@ -623,7 +619,7 @@ uv run main.py --tool-tier extended                        # Expand to include m
 uv run main.py --tool-tier complete                        # Enable all available functionality
 
 # Selective service loading with tiers
-uv run main.py --tools gmail drive --tool-tier core        # Core tools for specific services
+uv run main.py --tools gmail docs --tool-tier core        # Core tools for specific services
 uv run main.py --tools gmail --tool-tier extended          # Extended Gmail functionality only
 uv run main.py --tools docs sheets --tool-tier complete    # Full access to Docs and Sheets
 ```
@@ -722,23 +718,8 @@ cp .env.oauth21 .env
 </td>
 <td width="50%" valign="top">
 
-### 📁 **Google Drive** <sub>[`drive_tools.py`](gdrive/drive_tools.py)</sub>
-
-| Tool | Tier | Description |
-|------|------|-------------|
-| `search_drive_files` | **Core** | Search files with query syntax |
-| `get_drive_file_content` | **Core** | Read file content (Office formats) |
-| `get_drive_file_download_url` | **Core** | Get download URL for Drive files |
-| `create_drive_file` | **Core** | Create files or fetch from URLs |
-| `import_to_google_doc` | **Core** | Import files (MD, DOCX, HTML, etc.) as Google Docs |
-| `list_drive_items` | Extended | List folder contents |
-| `copy_drive_file` | Extended | Copy existing files (templates) with optional renaming |
-| `update_drive_file` | Extended | Update file metadata, move between folders |
-
 </td>
 </tr>
-<tr>
-
 <tr>
 <td width="50%" valign="top">
 
@@ -790,16 +771,13 @@ attachments=[{
 | `get_doc_content` | **Core** | Extract document text |
 | `create_doc` | **Core** | Create new documents |
 | `modify_doc_text` | **Core** | Modify document text |
-| `search_docs` | Extended | Find documents by name |
 | `find_and_replace_doc` | Extended | Find and replace text |
-| `list_docs_in_folder` | Extended | List docs in folder |
 | `insert_doc_elements` | Extended | Add tables, lists, page breaks |
 | `update_paragraph_style` | Extended | Apply heading styles (H1-H6) and paragraph formatting |
-| `insert_doc_image` | Complete | Insert images from Drive/URLs |
+| `insert_doc_image` | Complete | Insert images from URLs |
 | `update_doc_headers_footers` | Complete | Modify headers and footers |
 | `batch_update_doc` | Complete | Execute multiple operations |
 | `inspect_doc_structure` | Complete | Analyze document structure |
-| `export_doc_to_pdf` | Extended | Export document to PDF |
 | `create_table_with_data` | Complete | Create data tables |
 | `debug_table_structure` | Complete | Debug table issues |
 | `*_document_comments` | Complete | Read, Reply, Create, Resolve |
@@ -817,7 +795,6 @@ attachments=[{
 | `read_sheet_values` | **Core** | Read cell ranges |
 | `modify_sheet_values` | **Core** | Write/update/clear cells |
 | `create_spreadsheet` | **Core** | Create new spreadsheets |
-| `list_spreadsheets` | Extended | List accessible spreadsheets |
 | `get_spreadsheet_info` | Extended | Get spreadsheet metadata |
 | `create_sheet` | Complete | Add sheets to existing files |
 | `*_sheet_comment` | Complete | Read/create/reply/resolve comments |
@@ -920,7 +897,7 @@ If you’re developing, deploying to servers, or using another MCP-capable clien
 ```bash
 # Requires Python 3.10+ and uvx
 # First, set credentials (see Credential Configuration above)
-uvx workspace-mcp --tool-tier core  # or --tools gmail drive calendar
+uvx workspace-mcp --tool-tier core  # or --tools gmail calendar docs
 ```
 
 > **Note**: Configure [OAuth credentials](#credential-configuration) before running. Supports environment variables, `.env` file, or `client_secret.json`.
@@ -1187,7 +1164,7 @@ You also have options for:
 # Configure credentials first (see Credential Configuration section)
 
 # Start with specific tools only
-uvx workspace-mcp --tools gmail drive calendar
+uvx workspace-mcp --tools gmail calendar docs
 
 # Start with tool tiers (recommended for most users)
 uvx workspace-mcp --tool-tier core      # Essential tools
@@ -1290,7 +1267,7 @@ google_workspace_mcp/
 ```python
 from auth.service_decorator import require_google_service
 
-@require_google_service("drive", "drive_read")  # Service + scope group
+@require_google_service("docs", "docs_read")  # Service + scope group
 async def your_new_tool(service, param1: str, param2: int = 10):
     """Tool description"""
     # service is automatically injected and cached
